@@ -42,7 +42,7 @@
     }
   
     const lightSwitches = document.querySelectorAll('.light-switch');
-    console.log(lightSwitches.length)
+    
     if (lightSwitches.length > 0) {
       lightSwitches.forEach((lightSwitch, i) => {
         if (localStorage.getItem('dark-mode') === 'true') {
