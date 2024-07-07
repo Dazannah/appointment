@@ -1,36 +1,69 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="en" >
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  
+  <title>{{ config('app.name', 'Appointment') }}</title>
+  @vite(['resources/css/app.css', 'resources/js/app.js'])
+  <style>
+    /*.rotate-45 {
+        --transform-rotate: 45deg;
+        transform: rotate(45deg);
+    }
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
-
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @include('layouts.navigation')
-
-            <!-- Page Heading -->
-            @isset($header)
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+    .group:hover .group-hover\:flex {
+        display: flex;
+    }*/
+</style>
+</head>
+<body>
+  <div class="h-screen flex text-gray-700 dark:text-gray-400 dark:bg-gray-900">
+      @include('components/sidebar')
+      <div class="w-max min-h-screen flex flex-col flex-grow">
+        @include('components/menu')
+        <div class="flex overflow-y-auto">
+          {{ $slot }}
         </div>
-    </body>
+      </div>
+    </div>
+  </body>
+
+  <script>
+    if(!localStorage.getItem('dark-mode')){
+      localStorage.setItem('dark-mode', window.matchMedia('(prefers-color-scheme: dark)').matches)
+    }
+
+    if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.querySelector('html').classList.add('dark');
+    } else {
+      document.querySelector('html').classList.remove('dark');
+    }
+  
+    const lightSwitches = document.querySelectorAll('.light-switch');
+    console.log(lightSwitches.length)
+    if (lightSwitches.length > 0) {
+      lightSwitches.forEach((lightSwitch, i) => {
+        if (localStorage.getItem('dark-mode') === 'true') {
+          lightSwitch.checked = true;
+        }
+        lightSwitch.addEventListener('change', () => {
+          const { checked } = lightSwitch;
+          lightSwitches.forEach((el, n) => {
+            if (n !== i) {
+              el.checked = checked;
+            }
+          });
+          if (lightSwitch.checked) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('dark-mode', true);
+          } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('dark-mode', false);
+          }
+        });
+      });
+    }
+  </script>
 </html>
