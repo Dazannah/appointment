@@ -3,7 +3,7 @@
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', async function() {
       var calendarEl = document.getElementById('calendar');
       var calendar = new FullCalendar.Calendar(calendarEl, {
         locale: "hu",
@@ -53,25 +53,12 @@
           daysOfWeek: [ 1, 2, 3, 4, 5],
           startTime: '08:00',
           endTime: '16:00'
-        }
+        },
+
+        events: '/get-events',
       });
 
-      calendar.render();
-
-      const calendarButtons = document.getElementsByClassName('fc-button-primary');
-      setColorForButtons(calendarButtons)
-      
+      calendar.render();      
     });
-
-
-    function setColorForButtons(buttons){
-
-      for (let i = 0; i < buttons.length; i++) {
-        buttons[i].style.backgroundColor = "white";
-        buttons[i].style.color = "black";
-        buttons[i].style.borderColor = "grey";
-        buttons[i].style.hover = "red";
-      }
-    }
   </script>
 </x-app-layout>

@@ -15,6 +15,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
 
     Route::get('/calendar', [CalendarController::class, 'show'])->name('calendar');
+    Route::get('/get-events', [CalendarController::class, 'getEvents'])->name('getEvents');
 });
 
 Route::middleware('auth')->group(function () {
