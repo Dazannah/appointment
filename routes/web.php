@@ -10,10 +10,7 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-
+    Route::get('/dashboard', [ProfileController::class, 'getDashboard'])->name('dashboard');
     Route::get('/calendar', [CalendarController::class, 'show'])->name('calendar');
     Route::get('/get-events', [CalendarController::class, 'getEvents'])->name('getEvents');
 });
