@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
 class CalendarController extends Controller {
+    public function getCreateEvent(Request $req) {
+        return view('create-event');
+    }
+
     public function show(Request $req) {
         return view('calendar');
     }
@@ -27,15 +31,25 @@ class CalendarController extends Controller {
     }
 
     public function createEvent(Request $req) {
+        $validated = $req->validate([
+            'title' => 'required',
+            'start' => 'required|date',
+            'end' => 'required|date'
+        ]);
+
+        $validated['start'] = $this->formateDate($validated['start']);
+        $validated['end'] = $this->formateDate($validated['end']);
+
         $event = [
             'user_id' => auth()->id(),
-            'title' => 'title1',
-            'start' => now(),
-            'end' => now()
+            'title' => $validated['title'],
+            'start' => $validated['start'],
+            'end' => $validated['end']
         ];
 
-        //Event::create($event);
+        Event::create($event);
 
+        return redirect('/dashboard')->with('success', 'Foglalás sikeresen mentve');
         // $exampleEvents = [
         //     [
         //         'id' => 'id2',
@@ -50,5 +64,11 @@ class CalendarController extends Controller {
         //         'end' => '2024-07-11T10:00:00'
         //     ],
         // ];
+    }
+
+    private function formateDate($dateTime) {
+        $result = explode('T', $dateTime)[0] . ' ' . explode('T', $dateTime)[1];
+
+        return $result;
     }
 }
