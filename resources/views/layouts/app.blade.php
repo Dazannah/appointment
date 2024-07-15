@@ -23,6 +23,7 @@
       @include('components/sidebar')
       <div class="w-max min-h-screen flex flex-col flex-grow">
         @include('components/menu')
+        @include('components/flash-message')
         <div class="flex overflow-y-auto">
           {{ $slot }}
         </div>
