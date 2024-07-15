@@ -23,47 +23,11 @@
       @include('components/sidebar')
       <div class="w-max min-h-screen flex flex-col flex-grow">
         @include('components/menu')
+        @include('components/flash-message')
         <div class="flex overflow-y-auto">
           {{ $slot }}
         </div>
       </div>
     </div>
   </body>
-
-  <script>
-    if(!localStorage.getItem('dark-mode')){
-      localStorage.setItem('dark-mode', window.matchMedia('(prefers-color-scheme: dark)').matches)
-    }
-
-    if (localStorage.getItem('dark-mode') === 'true' || (!('dark-mode' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      document.querySelector('html').classList.add('dark');
-    } else {
-      document.querySelector('html').classList.remove('dark');
-    }
-  
-    const lightSwitches = document.querySelectorAll('.light-switch');
-    console.log(lightSwitches.length)
-    if (lightSwitches.length > 0) {
-      lightSwitches.forEach((lightSwitch, i) => {
-        if (localStorage.getItem('dark-mode') === 'true') {
-          lightSwitch.checked = true;
-        }
-        lightSwitch.addEventListener('change', () => {
-          const { checked } = lightSwitch;
-          lightSwitches.forEach((el, n) => {
-            if (n !== i) {
-              el.checked = checked;
-            }
-          });
-          if (lightSwitch.checked) {
-            document.documentElement.classList.add('dark');
-            localStorage.setItem('dark-mode', true);
-          } else {
-            document.documentElement.classList.remove('dark');
-            localStorage.setItem('dark-mode', false);
-          }
-        });
-      });
-    }
-  </script>
-</html>
+@include('components/footer')
