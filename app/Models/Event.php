@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Event extends Model {
     use HasFactory;
-    use Searchable;
+    //use Searchable;
 
     protected $fillable = ['start', 'end', 'title', 'user_id'];
 
