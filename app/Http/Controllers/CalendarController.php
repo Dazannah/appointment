@@ -50,20 +50,12 @@ class CalendarController extends Controller {
         Event::create($event);
 
         return redirect('/dashboard')->with('success', 'Foglalás sikeresen mentve');
-        // $exampleEvents = [
-        //     [
-        //         'id' => 'id2',
-        //         'title' => 'title2',
-        //         'start' => '2024-07-10T09:00:00',
-        //         'end' => '2024-07-10T10:00:00'
-        //     ],
-        //     [
-        //         'id' => 'id3',
-        //         'title' => 'title3',
-        //         'start' => '2024-07-11T09:00:00',
-        //         'end' => '2024-07-11T10:00:00'
-        //     ],
-        // ];
+    }
+
+    private function formateDate($dateTime) {
+        $result = explode('T', $dateTime)[0] . ' ' . explode('T', $dateTime)[1];
+
+        return $result;
     }
 
     private function formateDate($dateTime) {
