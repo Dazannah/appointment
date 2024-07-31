@@ -57,4 +57,10 @@ class CalendarController extends Controller {
 
         return $result;
     }
+
+    private function formateDate($dateTime) {
+        $result = explode('T', $dateTime)[0] . ' ' . explode('T', $dateTime)[1];
+
+        return $result;
+    }
 }
