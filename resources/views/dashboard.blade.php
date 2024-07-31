@@ -6,7 +6,7 @@
             <h3 class="text-gray-800 dark:text-gray-400 dark:bg-gray-900 text-xl font-bold sm:text-2xl">All reservation</h3>
         </div>
         <div class="mt-3 md:mt-0">
-            <a href="make-reservation" class="inline-block px-4 py-2 border text-gray-600 dark:text-white font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-800 md:text-sm">Make reservation</a>
+            <a href="calendar" class="inline-block px-4 py-2 border text-gray-600 dark:text-white font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-800 md:text-sm">Make reservation</a>
         </div>
     </div>
     <div class="mt-12 relative h-max overflow-auto">
@@ -37,6 +37,7 @@
   
                 </tbody>
               </table>
+              {{$reservations->links()}}
               @else
               There is no previous reservations.
               @endif
