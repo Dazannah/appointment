@@ -2,63 +2,57 @@
   <div id='calendar' class="w-3/4 mx-auto"></div>
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
 
+  <div id="make-reserve-form" class="hidden fixed inset-0 z-10 overflow-y-auto">
+    <div
+      class="fixed inset-0 w-full h-full bg-black bg-opacity-40"
+    >
+
+      <div
+        class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg mx-auto px-4"
+      >
+        <div class="text-gray-800 dark:text-gray-400 dark:bg-gray-900 rounded-md shadow-lg px-4 py-6">
+          <div class="flex items-center justify-end">
+            <button
+              onclick="closeReserveFormDiv()"
+              class="p-2 text-gray-400 rounded-md hover:bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5 mx-auto"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="max-w-sm mx-auto space-y-3 text-center">
+            <form action="/make-reservation" method="post">
+              @csrf
+              <select id="title" name="title" required>
+                <option value="">Válasz</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select><br>
+              <input id="start-date" type="datetime-local" name="start" readonly required>
+              <input id="end-date" type="datetime-local" name="end" readonly required><br>
+              <input onclick="" class="inline-block px-4 py-2 border text-gray-600 dark:text-white font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-800 md:text-sm" type="submit" value="Küldés">
+          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    document.addEventListener('DOMContentLoaded', async function() {
-      var calendarEl = document.getElementById('calendar');
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: "hu",
-        firstDay: 1,
-        handleWindowResize: true,
-
-        initialView: 'timeGridWeek',
-
-        headerToolbar: {
-          start: 'title',
-          center: 'dayGridDay,timeGridWeek,dayGridMonth',
-          end: 'today prev,next'
-        },
-
-        buttonText:{
-          today: 'ma',
-          month: 'hónap',
-          week: 'hét',
-          day: 'nap',
-        },
-
-        weekends: false,
-
-        dayHeaderFormat:{
-          weekday: 'long'
-        },
-
-        slotDuration: '00:15:00',
-        slotLabelInterval: '00:15:00',
-        slotLabelFormat:{
-          hour: 'numeric',
-          minute: '2-digit',
-          meridiem: 'long'
-        },
-
-        slotMinTime: '08:00:00',
-        slotMaxTime: '16:00:00',
-        
-        navLinks: true,
-        weekNumbers: true,
-        weekText: "",
-
-        selectable: true,
-        selectOverlap: false,
-
-        businessHours: {
-          daysOfWeek: [ 1, 2, 3, 4, 5],
-          startTime: '08:00',
-          endTime: '16:00'
-        },
-
-        events: '/get-events',
-      });
-
-      calendar.render();      
-    });
+    function closeReserveFormDiv() {
+      document.getElementById('make-reserve-form').classList.add('hidden')
+    }
   </script>
 </x-app-layout>
