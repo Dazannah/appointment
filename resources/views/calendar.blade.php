@@ -35,10 +35,9 @@
               @csrf
               <select id="title" name="title" required>
                 <option value="">Válasz</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
+                @foreach ($workTypes as $type)
+                  <option value="{{$type->id}}">{{$type->name}} Időtartam: {{$type->duration . ' ' . config('constants.durationName')}}  Ár: {{$type->price->price . ' ' . config('constants.currency')}}</option>
+                @endforeach
               </select><br>
               <input id="start-date" type="datetime-local" name="start" readonly required>
               <input id="end-date" type="datetime-local" name="end" readonly required><br>
