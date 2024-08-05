@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\Models\WorkTypes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 
@@ -12,7 +13,9 @@ class CalendarController extends Controller {
     }
 
     public function show(Request $req) {
-        return view('calendar');
+        $workTypes = WorkTypes::with("price")->get();
+
+        return view('calendar', ["workTypes" => $workTypes]);
     }
 
     public function getEvents(Request $req) {
