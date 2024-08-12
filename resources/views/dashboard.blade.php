@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="mt-12 relative h-max overflow-auto">
-              @if (count($reservations) > 1)
+              @if (count($reservations) > 0)
               <table class="w-full table-auto text-sm text-left">
                 <thead class="text-gray-600 dark:text-gray-400 dark:bg-gray-900 font-medium border-b">
                     <tr>
