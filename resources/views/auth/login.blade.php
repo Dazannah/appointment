@@ -44,4 +44,8 @@
             </x-primary-button>
         </div>
     </form>
+    <h2 class="ms-2 text-sm text-gray-600 dark:text-gray-400">
+        Test user:</br>
+        teszt@davidfabian.hu/Teszt1234
+    </h2>
 </x-guest-layout>
