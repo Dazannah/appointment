@@ -10,70 +10,136 @@ Alpine.start();
 
 const reserveFormDiv = document.getElementById("make-reserve-form");
 
-document.addEventListener("DOMContentLoaded", async function () {
-    var calendarEl = document.getElementById("calendar");
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: "hu",
-        firstDay: 1,
-        handleWindowResize: true,
+if (document.getElementById("calendar")) {
+    document.addEventListener("DOMContentLoaded", async function () {
+        var calendarEl = document.getElementById("calendar");
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: "hu",
+            firstDay: 1,
+            handleWindowResize: true,
 
-        initialView: "timeGridWeek",
+            initialView: "timeGridWeek",
 
-        headerToolbar: {
-            start: "title",
-            center: "dayGridDay,timeGridWeek,dayGridMonth",
-            end: "today prev,next",
-        },
+            headerToolbar: {
+                start: "title",
+                center: "",
+                end: "today prev,next",
+            },
 
-        buttonText: {
-            today: "ma",
-            month: "hónap",
-            week: "hét",
-            day: "nap",
-        },
+            buttonText: {
+                today: "ma",
+                month: "hónap",
+                week: "hét",
+                day: "nap",
+            },
 
-        weekends: false,
+            weekends: false,
 
-        dayHeaderFormat: {
-            weekday: "long",
-        },
+            dayHeaderFormat: {
+                weekday: "long",
+            },
 
-        slotDuration: "00:15:00",
-        slotLabelInterval: "00:15:00",
-        slotLabelFormat: {
-            hour: "numeric",
-            minute: "2-digit",
-            meridiem: "long",
-        },
+            slotDuration: "00:15:00",
+            slotLabelInterval: "00:15:00",
+            slotLabelFormat: {
+                hour: "numeric",
+                minute: "2-digit",
+                meridiem: "long",
+            },
 
-        slotMinTime: "08:00:00",
-        slotMaxTime: "16:00:00",
+            slotMinTime: "08:00:00",
+            slotMaxTime: "16:00:00",
 
-        navLinks: true,
-        weekNumbers: true,
-        weekText: "",
+            navLinks: true,
+            weekNumbers: true,
+            weekText: "",
 
-        selectable: true,
-        selectOverlap: false,
-        select: select,
+            selectable: true,
+            selectOverlap: false,
+            select: select,
 
-        businessHours: {
-            daysOfWeek: [1, 2, 3, 4, 5],
-            startTime: "08:00",
-            endTime: "16:00",
-        },
+            businessHours: {
+                daysOfWeek: [1, 2, 3, 4, 5],
+                startTime: "08:00",
+                endTime: "16:00",
+            },
 
-        events: "/get-events",
+            events: "/get-events",
+        });
+
+        calendar.render();
     });
+}
 
-    calendar.render();
-});
+async function select(selectInfo) {
+    const startDate = document.getElementById("start-date");
+    startDate.value = selectInfo.startStr.substring(0, 19);
 
-function select(selectInfo) {
+    const availableWorkTypes = await getAvailableWorkTypes(startDate.value);
+
+    if (availableWorkTypes.length === 0) {
+        const noAvailableDiv = document.getElementById("no-available-div");
+        noAvailableDiv.innerHTML = `Ezzel a kezdő időponttal nem érhető el munka:<br>${startDate.value.replace(
+            "T",
+            " "
+        )}`;
+        noAvailableDiv.classList.remove("hidden");
+    } else {
+        let optionsHTML = `<option value="">Válasz</option>`;
+
+        availableWorkTypes.forEach((workType) => {
+            optionsHTML += `<option id="${workType.id}" value="${workType.duration}">${workType.name} ${workType.duration} min ${workType.price.price} HUF</option>`;
+        });
+
+        const options = document.getElementById("title");
+        options.innerHTML = optionsHTML;
+
+        const optionsDiv = document.getElementById("options-div");
+        optionsDiv.classList.remove("hidden");
+    }
+    reserveFormDiv.classList.remove("hidden");
+}
+
+async function getAvailableWorkTypes(startDate) {
+    const getAvailableWorkTypes = await fetch(
+        `/get-available-work-types?startDate=${startDate}`
+    );
+
+    const availableWorkTypes = await getAvailableWorkTypes.json();
+
+    return availableWorkTypes;
+}
+
+function closeReserveFormDiv() {
+    document.getElementById("make-reserve-form").classList.add("hidden");
+    document.getElementById("options-div").classList.add("hidden");
+    document.getElementById("no-available-div").classList.add("hidden");
+}
+
+function setEndDate() {
+    const selected = document.getElementById("title");
+
     const startDate = document.getElementById("start-date");
     const endDate = document.getElementById("end-date");
-    reserveFormDiv.classList.remove("hidden");
+    const startDateDate = new Date(startDate.value);
 
-    startDate.value = selectInfo.startStr.substring(0, 19);
-    endDate.value = selectInfo.endStr.substring(0, 19);
+    const newEndDateRaw = new Date(
+        startDateDate.getTime() + selected.value * 60000
+    );
+    let newEndDate = newEndDateRaw
+        .toLocaleDateString()
+        .replaceAll(". ", "-")
+        .substring(0, 10);
+
+    let hours = String(newEndDateRaw.getHours()).padStart(2, "0");
+    let minute = String(newEndDateRaw.getMinutes()).padStart(2, "0");
+    let newEndTime = `${hours}:${minute}`;
+
+    endDate.value = `${newEndDate}T${newEndTime}`;
+
+    document.getElementById("workId").value =
+        selected.options[selected.options.selectedIndex].id;
 }
+
+window.closeReserveFormDiv = closeReserveFormDiv;
+window.setEndDate = setEndDate;
