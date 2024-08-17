@@ -65,7 +65,8 @@ class CalendarController extends Controller {
             'title' => 'required',
             'start' => 'required|date',
             'end' => 'required|date',
-            'workId' => 'required|numeric'
+            'workId' => 'required|numeric',
+            'note' => 'min:0|max:255'
         ]);
 
 
@@ -81,7 +82,8 @@ class CalendarController extends Controller {
             'title' => $work['name'],
             'start' => $start,
             'end' => $end,
-            'work_type_id' => $work['id']
+            'work_type_id' => $work['id'],
+            'note' => $validated['note'],
         ];
 
         Event::create($event);

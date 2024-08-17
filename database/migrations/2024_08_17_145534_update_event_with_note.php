@@ -10,11 +10,7 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::table('events', function (Blueprint $table) {
-            $table->unsignedBigInteger('work_type_id');
-            $table->foreign('work_type_id')
-                ->references('id')
-                ->on('work_types')
-                ->onDelete('cascade');
+            $table->text('note')->nullable();
         });
     }
 
@@ -23,7 +19,7 @@ return new class extends Migration {
      */
     public function down(): void {
         Schema::table('events', function (Blueprint $table) {
-            $table->dropColumn('work_type_id');
+            $table->dropColumn('note');
         });
     }
 };

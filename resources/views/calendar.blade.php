@@ -38,6 +38,7 @@
               <input id="start-date" type="datetime-local" name="start" readonly required>
               <input id="end-date" type="datetime-local" name="end" readonly required><br>
               <input id="workId" type="text" name="workId" readonly required hidden><br>
+              <textarea id="note" name="note" cols="30" rows="10" placeholder="Megyjegyzés ide írható"></textarea><br>
               <input onclick="" class="inline-block px-4 py-2 border text-gray-600 dark:text-white font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-800 md:text-sm" type="submit" value="Küldés">
             </form>
           </div>

@@ -79,7 +79,10 @@ async function select(selectInfo) {
 
     if (availableWorkTypes.length === 0) {
         const noAvailableDiv = document.getElementById("no-available-div");
-        noAvailableDiv.innerHTML = `No work available with this start time:<br>${startDate.value}`;
+        noAvailableDiv.innerHTML = `Ezzel a kezdő időponttal nem érhető el munka:<br>${startDate.value.replace(
+            "T",
+            " "
+        )}`;
         noAvailableDiv.classList.remove("hidden");
     } else {
         let optionsHTML = `<option value="">Válasz</option>`;
@@ -104,7 +107,6 @@ async function getAvailableWorkTypes(startDate) {
 
     const availableWorkTypes = await getAvailableWorkTypes.json();
 
-    console.log(availableWorkTypes);
     return availableWorkTypes;
 }
 
