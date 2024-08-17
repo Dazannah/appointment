@@ -30,21 +30,22 @@
               </svg>
             </button>
           </div>
-          <div class="max-w-sm mx-auto space-y-3 text-center">
+          <div id="options-div" class="max-w-sm mx-auto space-y-3 text-center hidden">
             <form action="/make-reservation" method="post">
               @csrf
               <select onchange="setEndDate()" id="title" name="title" required>
-                <option value="">Válasz</option>
-                @foreach ($workTypes as $type) <!-- $workTypes-ot valahogy majd javascripttel lekérni -->
-                  <option id="{{$type->id}}" value="{{$type->duration}}">{{$type->name}} {{$type->duration . config('constants.durationName')}} {{$type->price->price . ' ' . config('constants.currency')}}</option>
-                @endforeach
               </select><br>
               <input id="start-date" type="datetime-local" name="start" readonly required>
               <input id="end-date" type="datetime-local" name="end" readonly required><br>
               <input id="workId" type="text" name="workId" readonly required hidden><br>
               <input onclick="" class="inline-block px-4 py-2 border text-gray-600 dark:text-white font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-800 md:text-sm" type="submit" value="Küldés">
-          </form>
+            </form>
           </div>
+
+          <div id="no-available-div" class="max-w-sm mx-auto space-y-3 text-center hidden">
+
+          </div>
+
         </div>
       </div>
     </div>

@@ -13,9 +13,9 @@ class CalendarController extends Controller {
     }
 
     public function show(Request $req) {
-        $workTypes = WorkTypes::with("price")->get();
+        //$workTypes = WorkTypes::with("price")->get();
 
-        return view('calendar', ["workTypes" => $workTypes]);
+        return view('calendar'/*, ["workTypes" => $workTypes]*/);
     }
 
     public function getEvents(Request $req) {
@@ -33,6 +33,33 @@ class CalendarController extends Controller {
         return response()->json($events);
     }
 
+    public function getAvailableWorkTypes(Request $req) {
+        $validatedData = $req->validate([
+            'startDate' => 'required|date',
+        ]);
+
+        $event = Event::where([['start', '>=', $validatedData['startDate']]])->orderBy('start', 'asc')->first();
+
+        if ($event) {
+            $startDate = date_create($validatedData['startDate']);
+            $nextEventStart = date_create($event['start']);
+            $dateDiff = date_diff($startDate, $nextEventStart);
+
+            $availableMins = 0;
+            $availableMins += $dateDiff->y * 24 * 60 * 30 * 365;
+            $availableMins += $dateDiff->m * 24 * 60 * 30;
+            $availableMins += $dateDiff->d * 24 * 60;
+            $availableMins += $dateDiff->h * 60;
+            $availableMins += $dateDiff->i;
+
+            $result =  WorkTypes::where([['duration', '<=', $availableMins]])->with("price")->get();
+        } else {
+            $result = WorkTypes::with("price")->get();
+        }
+
+        return response()->json($result);
+    }
+
     public function createEvent(Request $req) {
         $validated = $req->validate([
             'title' => 'required',
@@ -43,15 +70,17 @@ class CalendarController extends Controller {
 
 
         $validated['start'] = $this->formateDate($validated['start']);
+        $start = str_replace(" ", "T", $validated['start']);
         $validated['end'] = $this->formateDate($validated['end']);
+        $end = str_replace(" ", "T", $validated['end']);
 
         $work = WorkTypes::where('id', '=', $validated['workId'])->first();
 
         $event = [
             'user_id' => auth()->id(),
             'title' => $work['name'],
-            'start' => $validated['start'],
-            'end' => $validated['end'],
+            'start' => $start,
+            'end' => $end,
             'work_type_id' => $work['id']
         ];
 

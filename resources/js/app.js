@@ -73,18 +73,45 @@ if (document.getElementById("calendar")) {
 
 async function select(selectInfo) {
     const startDate = document.getElementById("start-date");
-    //make a request to check what work type available in the available time
-    const availableWorkTypes = await getAvailableWorkTypes();
-
-    reserveFormDiv.classList.remove("hidden");
-
     startDate.value = selectInfo.startStr.substring(0, 19);
+
+    const availableWorkTypes = await getAvailableWorkTypes(startDate.value);
+
+    if (availableWorkTypes.length === 0) {
+        const noAvailableDiv = document.getElementById("no-available-div");
+        noAvailableDiv.innerHTML = `No work available with this start time:<br>${startDate.value}`;
+        noAvailableDiv.classList.remove("hidden");
+    } else {
+        let optionsHTML = `<option value="">Válasz</option>`;
+
+        availableWorkTypes.forEach((workType) => {
+            optionsHTML += `<option id="${workType.id}" value="${workType.duration}">${workType.name} ${workType.duration} min ${workType.price.price} HUF</option>`;
+        });
+
+        const options = document.getElementById("title");
+        options.innerHTML = optionsHTML;
+
+        const optionsDiv = document.getElementById("options-div");
+        optionsDiv.classList.remove("hidden");
+    }
+    reserveFormDiv.classList.remove("hidden");
 }
 
-async function getAvailableWorkTypes() {}
+async function getAvailableWorkTypes(startDate) {
+    const getAvailableWorkTypes = await fetch(
+        `/get-available-work-types?startDate=${startDate}`
+    );
+
+    const availableWorkTypes = await getAvailableWorkTypes.json();
+
+    console.log(availableWorkTypes);
+    return availableWorkTypes;
+}
 
 function closeReserveFormDiv() {
     document.getElementById("make-reserve-form").classList.add("hidden");
+    document.getElementById("options-div").classList.add("hidden");
+    document.getElementById("no-available-div").classList.add("hidden");
 }
 
 function setEndDate() {
