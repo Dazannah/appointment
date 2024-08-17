@@ -46,7 +46,6 @@
           <div id="no-available-div" class="max-w-sm mx-auto space-y-3 text-center hidden">
 
           </div>
-
         </div>
       </div>
     </div>
