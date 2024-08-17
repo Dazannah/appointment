@@ -10,7 +10,7 @@ class Event extends Model {
     use HasFactory;
     //use Searchable;
 
-    protected $fillable = ['start', 'end', 'title', 'user_id'];
+    protected $fillable = ['start', 'end', 'title', 'user_id', 'work_type_id'];
 
     public function toSearchableArray() {
         return [

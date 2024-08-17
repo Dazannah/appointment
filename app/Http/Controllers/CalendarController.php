@@ -51,7 +51,8 @@ class CalendarController extends Controller {
             'user_id' => auth()->id(),
             'title' => $work['name'],
             'start' => $validated['start'],
-            'end' => $validated['end']
+            'end' => $validated['end'],
+            'work_type_id' => $work['id']
         ];
 
         Event::create($event);

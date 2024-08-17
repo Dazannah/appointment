@@ -22,7 +22,7 @@ if (document.getElementById("calendar")) {
 
             headerToolbar: {
                 start: "title",
-                center: "dayGridDay,timeGridWeek,dayGridMonth",
+                center: "",
                 end: "today prev,next",
             },
 
