@@ -10,70 +10,107 @@ Alpine.start();
 
 const reserveFormDiv = document.getElementById("make-reserve-form");
 
-document.addEventListener("DOMContentLoaded", async function () {
-    var calendarEl = document.getElementById("calendar");
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: "hu",
-        firstDay: 1,
-        handleWindowResize: true,
+if (document.getElementById("calendar")) {
+    document.addEventListener("DOMContentLoaded", async function () {
+        var calendarEl = document.getElementById("calendar");
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            locale: "hu",
+            firstDay: 1,
+            handleWindowResize: true,
 
-        initialView: "timeGridWeek",
+            initialView: "timeGridWeek",
 
-        headerToolbar: {
-            start: "title",
-            center: "dayGridDay,timeGridWeek,dayGridMonth",
-            end: "today prev,next",
-        },
+            headerToolbar: {
+                start: "title",
+                center: "dayGridDay,timeGridWeek,dayGridMonth",
+                end: "today prev,next",
+            },
 
-        buttonText: {
-            today: "ma",
-            month: "hónap",
-            week: "hét",
-            day: "nap",
-        },
+            buttonText: {
+                today: "ma",
+                month: "hónap",
+                week: "hét",
+                day: "nap",
+            },
 
-        weekends: false,
+            weekends: false,
 
-        dayHeaderFormat: {
-            weekday: "long",
-        },
+            dayHeaderFormat: {
+                weekday: "long",
+            },
 
-        slotDuration: "00:15:00",
-        slotLabelInterval: "00:15:00",
-        slotLabelFormat: {
-            hour: "numeric",
-            minute: "2-digit",
-            meridiem: "long",
-        },
+            slotDuration: "00:15:00",
+            slotLabelInterval: "00:15:00",
+            slotLabelFormat: {
+                hour: "numeric",
+                minute: "2-digit",
+                meridiem: "long",
+            },
 
-        slotMinTime: "08:00:00",
-        slotMaxTime: "16:00:00",
+            slotMinTime: "08:00:00",
+            slotMaxTime: "16:00:00",
 
-        navLinks: true,
-        weekNumbers: true,
-        weekText: "",
+            navLinks: true,
+            weekNumbers: true,
+            weekText: "",
 
-        selectable: true,
-        selectOverlap: false,
-        select: select,
+            selectable: true,
+            selectOverlap: false,
+            select: select,
 
-        businessHours: {
-            daysOfWeek: [1, 2, 3, 4, 5],
-            startTime: "08:00",
-            endTime: "16:00",
-        },
+            businessHours: {
+                daysOfWeek: [1, 2, 3, 4, 5],
+                startTime: "08:00",
+                endTime: "16:00",
+            },
 
-        events: "/get-events",
+            events: "/get-events",
+        });
+
+        calendar.render();
     });
+}
 
-    calendar.render();
-});
-
-function select(selectInfo) {
+async function select(selectInfo) {
     const startDate = document.getElementById("start-date");
-    const endDate = document.getElementById("end-date");
+    //make a request to check what work type available in the available time
+    const availableWorkTypes = await getAvailableWorkTypes();
+
     reserveFormDiv.classList.remove("hidden");
 
     startDate.value = selectInfo.startStr.substring(0, 19);
-    endDate.value = selectInfo.endStr.substring(0, 19);
 }
+
+async function getAvailableWorkTypes() {}
+
+function closeReserveFormDiv() {
+    document.getElementById("make-reserve-form").classList.add("hidden");
+}
+
+function setEndDate() {
+    const selected = document.getElementById("title");
+
+    const startDate = document.getElementById("start-date");
+    const endDate = document.getElementById("end-date");
+    const startDateDate = new Date(startDate.value);
+
+    const newEndDateRaw = new Date(
+        startDateDate.getTime() + selected.value * 60000
+    );
+    let newEndDate = newEndDateRaw
+        .toLocaleDateString()
+        .replaceAll(". ", "-")
+        .substring(0, 10);
+
+    let hours = String(newEndDateRaw.getHours()).padStart(2, "0");
+    let minute = String(newEndDateRaw.getMinutes()).padStart(2, "0");
+    let newEndTime = `${hours}:${minute}`;
+
+    endDate.value = `${newEndDate}T${newEndTime}`;
+
+    document.getElementById("workId").value =
+        selected.options[selected.options.selectedIndex].id;
+}
+
+window.closeReserveFormDiv = closeReserveFormDiv;
+window.setEndDate = setEndDate;

@@ -37,15 +37,19 @@ class CalendarController extends Controller {
         $validated = $req->validate([
             'title' => 'required',
             'start' => 'required|date',
-            'end' => 'required|date'
+            'end' => 'required|date',
+            'workId' => 'required|numeric'
         ]);
+
 
         $validated['start'] = $this->formateDate($validated['start']);
         $validated['end'] = $this->formateDate($validated['end']);
 
+        $work = WorkTypes::where('id', '=', $validated['workId'])->first();
+
         $event = [
             'user_id' => auth()->id(),
-            'title' => $validated['title'],
+            'title' => $work['name'],
             'start' => $validated['start'],
             'end' => $validated['end']
         ];
