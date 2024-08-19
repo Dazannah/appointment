@@ -30,6 +30,12 @@ class CalendarController extends Controller {
 
         $events = Event::where([['start', '>=', $start], ['end', '<=', $end]])->get();
 
+        foreach ($events as $event) {
+            if ($event->user_id === auth()->id()) {
+                $event->backgroundColor = "green";
+            }
+        }
+
         return response()->json($events);
     }
 
