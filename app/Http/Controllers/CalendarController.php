@@ -33,6 +33,7 @@ class CalendarController extends Controller {
         foreach ($events as $event) {
             if ($event->user_id === auth()->id()) {
                 $event->backgroundColor = "green";
+                $event->url = "/event/$event->id";
             }
         }
 
