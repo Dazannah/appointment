@@ -14,6 +14,12 @@ class ProfileController extends Controller {
     public function getDashboard(Request $req) {
         $reservations = Event::where([['user_id', '=', auth()->user()->id]])->orderBy('start', 'desc')->simplePaginate(10);
 
+        foreach ($reservations as $reservation) {
+            $reservation->start = str_replace("T", " ", $reservation->start);
+            $reservation->end = str_replace("T", " ", $reservation->end);
+        }
+
+
         return view('dashboard', ['reservations' => $reservations]);
     }
     /**
