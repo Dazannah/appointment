@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder {
             PriceSeeder::class,
             StatusSeeder::class,
             WorkTypesSeeder::class,
+            PenaltyFeePriceSeeder::class,
+            PenaltyFeeStatusSeeder::class,
         ]);
     }
 }

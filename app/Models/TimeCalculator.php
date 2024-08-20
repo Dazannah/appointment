@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use DateInterval;
+use DateTime;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,5 +23,10 @@ class TimeCalculator extends Model {
 
     public static function IsMoreThanADay(int $availableMins): bool {
         return $availableMins > 1440;
+    }
+
+    public static function IsStartInTheFuture(DateTime $now, DateTime $startDate): bool {
+
+        return $startDate > $now;
     }
 }

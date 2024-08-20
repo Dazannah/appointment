@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DateTimeZone;
 use App\Models\Event;
 use App\Models\WorkTypes;
 use Illuminate\Http\Request;
@@ -79,6 +80,14 @@ class CalendarController extends Controller {
         $start = str_replace(" ", "T", $validated['start']);
         $validated['end'] = $this->formateDate($validated['end']);
         $end = str_replace(" ", "T", $validated['end']);
+
+        $startDate = date_create($validated['start']);
+        $now = date_create('now', new DateTimeZone('CEST'));
+        $isStartInTheFuture = TimeCalculator::IsStartInTheFuture($now, $startDate);
+
+        if (!$isStartInTheFuture) {
+            return back()->with('error', "Can't make appointment for the past.");
+        }
 
         $work = WorkTypes::where('id', '=', $validated['workId'])->first();
 
