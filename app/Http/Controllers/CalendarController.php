@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use DateTimeZone;
 use App\Models\Event;
 use App\Models\WorkTypes;
 use Illuminate\Http\Request;
+use App\Models\TimeCalculator;
 use Illuminate\Support\Facades\Response;
 
 class CalendarController extends Controller {
@@ -28,7 +30,16 @@ class CalendarController extends Controller {
         $start = $validatedData['start'];
         $end = $validatedData['end'];
 
-        $events = Event::where([['start', '>=', $start], ['end', '<=', $end]])->get();
+        $events = Event::where([['start', '>=', $start], ['end', '<=', $end], ['status_id', '!=', '3']])->get();
+
+        foreach ($events as $event) {
+            if ($event->user_id === auth()->id()) {
+                $event->backgroundColor = "green";
+                $event->url = "/event/$event->id";
+            } else {
+                $event->title = "";
+            }
+        }
 
         foreach ($events as $event) {
             if ($event->user_id === auth()->id()) {
@@ -47,19 +58,15 @@ class CalendarController extends Controller {
             'startDate' => 'required|date',
         ]);
 
-        $event = Event::where([['start', '>=', $validatedData['startDate']]])->orderBy('start', 'asc')->first();
+
+        $event = Event::where([['start', '>=', $validatedData['startDate']], ['status_id', '!=', '3']])->orderBy('start', 'asc')->first();
 
         if ($event) {
             $startDate = date_create($validatedData['startDate']);
             $nextEventStart = date_create($event['start']);
             $dateDiff = date_diff($startDate, $nextEventStart);
 
-            $availableMins = 0;
-            $availableMins += $dateDiff->y * 24 * 60 * 30 * 365;
-            $availableMins += $dateDiff->m * 24 * 60 * 30;
-            $availableMins += $dateDiff->d * 24 * 60;
-            $availableMins += $dateDiff->h * 60;
-            $availableMins += $dateDiff->i;
+            $availableMins = TimeCalculator::GetMinutsFromDateDiff($dateDiff);
 
             $result =  WorkTypes::where([['duration', '<=', $availableMins]])->with("price")->get();
         } else {
@@ -83,6 +90,14 @@ class CalendarController extends Controller {
         $start = str_replace(" ", "T", $validated['start']);
         $validated['end'] = $this->formateDate($validated['end']);
         $end = str_replace(" ", "T", $validated['end']);
+
+        $startDate = date_create($validated['start']);
+        $now = date_create('now', new DateTimeZone('CEST'));
+        $isStartInTheFuture = TimeCalculator::IsStartInTheFuture($now, $startDate);
+
+        if (!$isStartInTheFuture) {
+            return back()->with('error', "Can't make appointment for the past.");
+        }
 
         $work = WorkTypes::where('id', '=', $validated['workId'])->first();
 

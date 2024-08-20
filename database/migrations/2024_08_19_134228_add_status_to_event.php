@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Database\Seeders\StatusSeeder;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration {
     /**
@@ -10,11 +11,10 @@ return new class extends Migration {
      */
     public function up(): void {
         Schema::table('events', function (Blueprint $table) {
-            $table->unsignedBigInteger('work_type_id');
-            $table->foreign('work_type_id')
+            $table->unsignedBigInteger('status_id')->default(1);
+            $table->foreign('status_id')
                 ->references('id')
-                ->on('work_types')
-                ->onDelete('cascade');
+                ->on('statuses');
         });
     }
 
@@ -23,8 +23,8 @@ return new class extends Migration {
      */
     public function down(): void {
         Schema::table('events', function (Blueprint $table) {
-            $table->dropForeign('events_work_type_id_foreign');
-            $table->dropColumn('work_type_id');
+            $table->dropForeign('events_status_id_foreign');
+            $table->dropColumn('status_id');
         });
     }
 };

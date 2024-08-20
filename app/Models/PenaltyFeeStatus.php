@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Price extends Model {
+class PenaltyFeeStatus extends Model {
     use HasFactory;
 
-    protected $fillable = [
-        'price',
-    ];
+    protected $fillable = ['name'];
 }

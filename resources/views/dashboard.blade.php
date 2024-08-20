@@ -15,6 +15,8 @@
                 <thead class="text-gray-600 dark:text-gray-400 dark:bg-gray-900 font-medium border-b">
                     <tr>
                         <th class="py-3 pr-6">Title</th>
+                        <th class="py-3 pr-6">Status</th>
+                        <th class="py-3 pr-6">Price</th>
                         <th class="py-3 pr-6">Start</th>
                         <th class="py-3 pr-6">End</th>
                         <th class="py-3 pr-6">Reserved at</th>
@@ -26,6 +28,8 @@
                 @foreach ($reservations as $reservation)
                   <tr>
                     <td class="pr-6 py-4 whitespace-nowrap dark:text-gray-400 dark:bg-gray-900">{{$reservation->title}}</td>
+                    <td class="pr-6 py-4 whitespace-nowrap dark:text-gray-400 dark:bg-gray-900">{{$reservation->status->name}}</td>
+                    <td class="pr-6 py-4 whitespace-nowrap dark:text-gray-400 dark:bg-gray-900">{{$reservation->workType->price->price}} HUF</td>
                     <td class="pr-6 py-4 whitespace-nowrap dark:text-gray-400 dark:bg-gray-900">{{$reservation->start}}</td>
                     <td class="pr-6 py-4 whitespace-nowrap dark:text-gray-400 dark:bg-gray-900">{{$reservation->end}}</td>
                     <td class="pr-6 py-4 whitespace-nowrap dark:text-gray-400 dark:bg-gray-900">{{$reservation->created_at}}</td>

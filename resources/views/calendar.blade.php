@@ -6,11 +6,10 @@
     <div
       class="fixed inset-0 w-full h-full bg-black bg-opacity-40"
     >
-
       <div
         class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg mx-auto px-4"
       >
-        <div class="text-gray-800 dark:text-gray-400 dark:bg-gray-900 rounded-md shadow-lg px-4 py-6">
+        <div class="text-gray-800 dark:text-gray-400 bg-white dark:bg-gray-900 rounded-md shadow-lg px-4 py-6">
           <div class="flex items-center justify-end">
             <button
               onclick="closeReserveFormDiv()"
@@ -33,18 +32,26 @@
           <div id="options-div" class="max-w-sm mx-auto space-y-3 text-center hidden">
             <form action="/make-reservation" method="post">
               @csrf
-              <select onchange="setEndDate()" id="title" name="title" required>
-              </select><br>
-              <input id="start-date" type="datetime-local" name="start" readonly required>
-              <input id="end-date" type="datetime-local" name="end" readonly required><br>
+              <div class="mb-5">
+                <select class="mb-2 text-sm font-medium dark:text-gray-400 dark:bg-gray-900" onchange="setEndDate()" id="title" name="title" required>
+                </select><br>
+              </div>           
+              <div class="mb-5">
+                <label for="start-date" class="block mb-2 text-sm font-medium dark:text-gray-400 dark:bg-gray-900">Start time</label>
+                <input type="datetime-local" name="start" id="start-date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Start time" required readonly/>
+              </div>
+              <div class="mb-5">
+                <label for="end-date" class="block mb-2 text-sm font-medium dark:text-gray-400 dark:bg-gray-900">End time</label>
+                <input type="datetime-local" name="end" id="end-date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required readonly/>
+              </div>
+              <div class="mb-5">
+                <textarea class="mb-2 text-sm font-medium dark:text-gray-400 dark:bg-gray-900" id="note" name="note" cols="40" rows="10" placeholder="Note can be write here"></textarea>
+              </div>
               <input id="workId" type="text" name="workId" readonly required hidden><br>
-              <textarea id="note" name="note" cols="30" rows="10" placeholder="Megyjegyzés ide írható"></textarea><br>
-              <input onclick="" class="inline-block px-4 py-2 border text-gray-600 dark:text-white font-medium rounded-lg hover:bg-gray-300 dark:hover:bg-gray-800 md:text-sm" type="submit" value="Küldés">
+              <button type="submit" class="py-1.5 px-3 text-gray-600 hover:bg-gray-300 dark:hover:bg-gray-800 hover:bg-gray-50 border rounded-lg dark:text-white dark:bg-gray-900">Submit</button>
             </form>
           </div>
-
           <div id="no-available-div" class="max-w-sm mx-auto space-y-3 text-center hidden">
-
           </div>
         </div>
       </div>
