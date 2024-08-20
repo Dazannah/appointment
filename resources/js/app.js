@@ -79,7 +79,7 @@ async function select(selectInfo) {
 
     if (availableWorkTypes.length === 0) {
         const noAvailableDiv = document.getElementById("no-available-div");
-        noAvailableDiv.innerHTML = `Ezzel a kezdő időponttal nem érhető el munka:<br>${startDate.value.replace(
+        noAvailableDiv.innerHTML = `Whit this starting time there is not available work types:<br>${startDate.value.replace(
             "T",
             " "
         )}`;
