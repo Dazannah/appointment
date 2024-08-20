@@ -77,8 +77,9 @@ class EventController extends Controller {
 
         $availableMins = TimeCalculator::GetMinutsFromDateDiff($dateDiff);
         $isMoreThanADay = TimeCalculator::IsMoreThanADay($availableMins);
+        $isStartInTheFuture = TimeCalculator::IsStartInTheFuture($now, $startDate);
 
-        if (!$isMoreThanADay) {
+        if (!$isMoreThanADay && $isStartInTheFuture) {
             PenaltyFee::create(['user_id' => auth()->user()->id/*, 'penalty_fee_status_id' => 1, 'penalty_fee_price_id' => 1*/]);
         }
 
