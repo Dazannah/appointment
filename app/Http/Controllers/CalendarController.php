@@ -41,6 +41,15 @@ class CalendarController extends Controller {
             }
         }
 
+        foreach ($events as $event) {
+            if ($event->user_id === auth()->id()) {
+                $event->backgroundColor = "green";
+                $event->url = "/event/$event->id";
+            } else {
+                $event->title = "";
+            }
+        }
+
         return response()->json($events);
     }
 
@@ -48,6 +57,7 @@ class CalendarController extends Controller {
         $validatedData = $req->validate([
             'startDate' => 'required|date',
         ]);
+
 
         $event = Event::where([['start', '>=', $validatedData['startDate']], ['status_id', '!=', '3']])->orderBy('start', 'asc')->first();
 
