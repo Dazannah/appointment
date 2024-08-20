@@ -28,7 +28,7 @@
       const checkBox = document.getElementById('delete')
 
       if(checkBox.checked){
-        if(!confirm("If the appointment within 24H you agre to pay an indemnity of 10.000 HUF Are you sure?")){
+        if(!confirm("If the appointment within 24H you agre to pay a penalty fee of 10.000 HUF Are you sure?")){
           checkBox.checked = false
         }
       }
