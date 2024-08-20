@@ -42,7 +42,7 @@ class EventController extends Controller {
      * Show the form for editing the specified resource.
      */
     public function edit(Event $event) {
-        if ($event->status->id === 3 || 4) {
+        if ($event->status->id === 3 || $event->status->id === 4) {
             return back()->with('error', "Can't edit closed event.");
         }
 
@@ -74,6 +74,10 @@ class EventController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(Event $event) {
+
+        if ($event->status->id === 2) {
+            return back()->with('error', "Can't delete event in progress.");
+        }
 
         $startDate = date_create($event['start']);
         $now = date_create('now', new DateTimeZone('CEST'));
