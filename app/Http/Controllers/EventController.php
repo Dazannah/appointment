@@ -42,6 +42,10 @@ class EventController extends Controller {
      * Show the form for editing the specified resource.
      */
     public function edit(Event $event) {
+        if ($event->status->id === 3 || 4) {
+            return back()->with('error', "Can't edit closed event.");
+        }
+
         return view('manage-event', ['event' => $event]);
     }
 
@@ -80,7 +84,7 @@ class EventController extends Controller {
         $isStartInTheFuture = TimeCalculator::IsStartInTheFuture($now, $startDate);
 
         if (!$isMoreThanADay && $isStartInTheFuture) {
-            PenaltyFee::create(['user_id' => auth()->user()->id/*, 'penalty_fee_status_id' => 1, 'penalty_fee_price_id' => 1*/]);
+            PenaltyFee::create(['user_id' => auth()->user()->id, 'event_id' => $event->id/*, 'penalty_fee_status_id' => 1, 'penalty_fee_price_id' => 1*/]);
         }
 
         $event->status_id = 3;
