@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DateTimeZone;
 use App\Models\Event;
+use App\Models\PenaltyFee;
 use App\Models\TimeCalculator;
 use DateTime;
 use Illuminate\Http\Request;
@@ -78,7 +79,7 @@ class EventController extends Controller {
         $isMoreThanADay = TimeCalculator::IsMoreThanADay($availableMins);
 
         if (!$isMoreThanADay) {
-            //kötbér tábla hozzá adás, a táblához státus id mező
+            PenaltyFee::create(['user_id' => auth()->user()->id/*, 'penalty_fee_status_id' => 1, 'penalty_fee_price_id' => 1*/]);
         }
 
         $event->status_id = 3;
