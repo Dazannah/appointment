@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/get-available-work-types', [CalendarController::class, 'getAvailableWorkTypes'])->name('getAvailableWorkTypes');
     //Route::get('/make-reservation', [CalendarController::class, 'getCreateEvent'])->name('getCreateEvent');
     Route::post('/make-reservation', [CalendarController::class, 'createEvent'])->name('createEvent');
+    Route::get('/event/{event}', [EventController::class, 'edit']);
+    Route::patch('/event/{event}', [EventController::class, 'update']);
+    Route::delete('/event/{event}', [EventController::class, 'destroy']);
 });
 
 Route::middleware('auth')->group(function () {

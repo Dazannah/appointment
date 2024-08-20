@@ -79,7 +79,7 @@ async function select(selectInfo) {
 
     if (availableWorkTypes.length === 0) {
         const noAvailableDiv = document.getElementById("no-available-div");
-        noAvailableDiv.innerHTML = `Ezzel a kezdő időponttal nem érhető el munka:<br>${startDate.value.replace(
+        noAvailableDiv.innerHTML = `Whit this starting time there is not available work types:<br>${startDate.value.replace(
             "T",
             " "
         )}`;
@@ -111,6 +111,8 @@ async function getAvailableWorkTypes(startDate) {
 }
 
 function closeReserveFormDiv() {
+    document.getElementById("start-date").value = null;
+    document.getElementById("end-date").value = null;
     document.getElementById("make-reserve-form").classList.add("hidden");
     document.getElementById("options-div").classList.add("hidden");
     document.getElementById("no-available-div").classList.add("hidden");
