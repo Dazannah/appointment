@@ -18,6 +18,11 @@ return new class extends Migration {
                 ->references('id')
                 ->on('users');
 
+            $table->unsignedBigInteger('event_id');
+            $table->foreign('event_id')
+                ->references('id')
+                ->on('events');
+
             $table->unsignedBigInteger('penalty_fee_status_id')->default(1);
             $table->foreign('penalty_fee_status_id')
                 ->references('id')

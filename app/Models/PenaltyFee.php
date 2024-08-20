@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PenaltyFee extends Model {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'penalty_fee_status_id', 'penalty_fee_price_id'];
+    protected $fillable = ['user_id', 'event_id', 'penalty_fee_status_id', 'penalty_fee_price_id'];
 
     public function penaltyFeeStatus() {
         return $this->hasOne(PenaltyFeeStatus::class, 'id');
@@ -20,5 +20,9 @@ class PenaltyFee extends Model {
 
     public function user() {
         return $this->hasOne(User::class, 'id');
+    }
+
+    public function event() {
+        return $this->hasOne(Event::class, 'id');
     }
 }
