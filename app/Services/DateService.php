@@ -31,7 +31,7 @@ class DateService implements DateInterface {
     return $startDate > $now;
   }
 
-  public function GetDateDiffFromString($startDate, $eventStartDate): DateInterval {
+  public function GetDateDiffFromString(string $startDate, string $eventStartDate): DateInterval {
     $startDate = date_create($startDate);
     $nextEventStart = date_create($eventStartDate);
 
