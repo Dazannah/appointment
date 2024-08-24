@@ -1,4 +1,5 @@
 <x-app-layout>
+  <x-slot:pageTitle>{{ $pageTitle ?? 'Page Title'}}</x-slot>
   <div id='calendar' class="w-3/4 mx-auto"></div>
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
 

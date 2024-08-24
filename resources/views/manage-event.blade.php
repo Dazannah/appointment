@@ -1,4 +1,5 @@
 <x-app-layout>
+  <x-slot:pageTitle>{{ $pageTitle ?? 'Page Title'}}</x-slot>
   <form class="max-w-sm mx-auto" action="/event/{{$event->id}}" method="post">
     @method('patch')
     @csrf
