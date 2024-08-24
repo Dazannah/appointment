@@ -1,11 +1,15 @@
 <?php
 
-use App\Http\Controllers\CalendarController;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CalendarController;
 
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect('/dashboard');
+    }
+
     return view('welcome');
 })->name('welcome');
 

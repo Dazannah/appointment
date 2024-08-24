@@ -1,4 +1,5 @@
 <x-app-layout>
+  <x-slot:pageTitle>{{ $pageTitle ?? 'Page Title'}}</x-slot>
   <div class="max-w-screen-xl mx-auto px-4 md:px-8">
 
     <div class="items-start justify-between md:flex">
@@ -24,7 +25,6 @@
                     </tr>
                 </thead>
                 <tbody class="text-gray-600 divide-y">
-
                 @foreach ($reservations as $reservation)
                   <tr>
                     <td class="pr-6 py-4 whitespace-nowrap dark:text-gray-400 dark:bg-gray-900">{{$reservation->title}}</td>

@@ -2,7 +2,8 @@
 <div
                     class="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300 dark:border-gray-800"
                 >
-                    <h1 class="text-lg font-medium">Page Title</h1>
+                    <h1 class="text-lg font-medium">{{$pageTitle ?? 'Page Title'}}</h1>
+                    @if (auth()->user()->admin)
                     <button
                         class="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium active:bg-gray-200 active:dark:bg-gray-800 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
                     >
@@ -54,4 +55,5 @@
                             >
                         </div>
                     </button>
+                    @endif
                 </div>

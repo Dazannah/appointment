@@ -14,7 +14,7 @@ if (document.getElementById("calendar")) {
     document.addEventListener("DOMContentLoaded", async function () {
         var calendarEl = document.getElementById("calendar");
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            locale: "hu",
+            locale: "en",
             firstDay: 1,
             handleWindowResize: true,
 
@@ -26,12 +26,12 @@ if (document.getElementById("calendar")) {
                 end: "today prev,next",
             },
 
-            buttonText: {
+            /*buttonText: {
                 today: "ma",
                 month: "hónap",
                 week: "hét",
                 day: "nap",
-            },
+            },*/
 
             weekends: false,
 
@@ -144,5 +144,12 @@ function setEndDate() {
         selected.options[selected.options.selectedIndex].id;
 }
 
+function goToDashboard() {
+    event.preventDefault();
+
+    window.location.href = "/dashboard";
+}
+
+window.goToDashboard = goToDashboard;
 window.closeReserveFormDiv = closeReserveFormDiv;
 window.setEndDate = setEndDate;
