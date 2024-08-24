@@ -144,5 +144,12 @@ function setEndDate() {
         selected.options[selected.options.selectedIndex].id;
 }
 
+function goToDashboard() {
+    event.preventDefault();
+
+    window.location.href = "/dashboard";
+}
+
+window.goToDashboard = goToDashboard;
 window.closeReserveFormDiv = closeReserveFormDiv;
 window.setEndDate = setEndDate;

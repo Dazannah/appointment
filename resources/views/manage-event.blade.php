@@ -22,6 +22,7 @@
       <label for="delete" class="ms-2 text-sm font-medium text-red-500 dark:text-red-600">Delete</label>
     </div>
     <button type="submit" class="py-1.5 px-3 text-gray-600 hover:bg-gray-300 dark:hover:bg-gray-800 hover:bg-gray-50 border rounded-lg dark:text-white dark:bg-gray-900">Submit</button>
+    <button onclick="goToDashboard()" class="py-1.5 px-3 text-gray-600 hover:bg-gray-300 dark:hover:bg-gray-800 hover:bg-gray-50 border rounded-lg dark:text-white dark:bg-gray-900">Cancel</button>
   </form>
 
   <script>
