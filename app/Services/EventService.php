@@ -9,6 +9,7 @@ use App\Models\WorkTypes;
 use App\Models\PenaltyFee;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\Paginator;
 
 class EventService implements EventInterface {
 
@@ -88,5 +89,18 @@ class EventService implements EventInterface {
       $event->note = $validatedData['note'];
       $event->save();
     };
+  }
+
+  public function getOwnEvents(int $userId): Paginator {
+    $reservations = Event::where([['user_id', '=', $userId]])->orderBy('start', 'desc')->simplePaginate(10);
+
+    $reservations->transform(function ($reservation) {
+      $reservation->start = str_replace("T", " ", $reservation->start);
+      $reservation->end = str_replace("T", " ", $reservation->end);
+
+      return $reservation;
+    });
+
+    return $reservations;
   }
 }
