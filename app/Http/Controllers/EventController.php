@@ -2,14 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use DateTime;
 use DateTimeZone;
 use App\Models\Event;
+use App\EventInterface;
 use App\Models\PenaltyFee;
-use App\Models\TimeCalculator;
-use DateTime;
 use Illuminate\Http\Request;
+use App\Models\TimeCalculator;
 
 class EventController extends Controller {
+
+    protected EventInterface $eventService;
+
+    public function __construct(EventInterface $eventService) {
+        $this->eventService = $eventService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -59,13 +67,10 @@ class EventController extends Controller {
         ]);
 
         if (isset($validatedData['delete'])) {
-            return $this->destroy($event);
+            return $this->eventService->setStatusDeleted($event);
         }
 
-        if ($validatedData['note'] != $event->note) {
-            $event->note = $validatedData['note'];
-            $event->save();
-        };
+        $this->eventService->updateEvent($event, $validatedData);
 
         return back()->with('success', 'Successfully updated');
     }
@@ -74,26 +79,5 @@ class EventController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(Event $event) {
-
-        if ($event->status->id === 2) {
-            return back()->with('error', "Can't delete event in progress.");
-        }
-
-        $startDate = date_create($event['start']);
-        $now = date_create('now', new DateTimeZone('CEST'));
-        $dateDiff = date_diff($startDate, $now);
-
-        $availableMins = TimeCalculator::GetMinutsFromDateDiff($dateDiff);
-        $isMoreThanADay = TimeCalculator::IsMoreThanADay($availableMins);
-        $isStartInTheFuture = TimeCalculator::IsStartInTheFuture($now, $startDate);
-
-        if (!$isMoreThanADay && $isStartInTheFuture) {
-            PenaltyFee::create(['user_id' => auth()->user()->id, 'event_id' => $event->id/*, 'penalty_fee_status_id' => 1, 'penalty_fee_price_id' => 1*/]);
-        }
-
-        $event->status_id = 3;
-        $event->save();
-
-        return redirect('/dashboard')->with('success', 'Successfully deleted');
     }
 }
