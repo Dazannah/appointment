@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
   
-  <title>{{ config('app.name', 'Appointment') }}</title>
+  <title>{{ $pageTitle }} | Appointment</title>
   @vite(['resources/css/app.css', 'resources/js/app.js'])
   <style>
     /*.rotate-45 {
@@ -22,7 +22,7 @@
   <div class="h-screen flex text-gray-700 dark:text-gray-400 dark:bg-gray-900">
       @include('components/sidebar')
       <div class="w-max min-h-screen flex flex-col flex-grow">
-        @include('components/menu')
+        @include('components/menu', ['pageTitle' => isset($pageTitle) ? $pageTitle : null])
         @include('components/flash-message')
         <div class="flex overflow-y-auto">
           {{ $slot }}

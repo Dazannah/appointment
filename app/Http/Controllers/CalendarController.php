@@ -4,51 +4,39 @@ namespace App\Http\Controllers;
 
 use DateTimeZone;
 use App\Models\Event;
+use App\DateInterface;
+use App\EventInterface;
 use App\Models\WorkTypes;
 use Illuminate\Http\Request;
-use App\Models\TimeCalculator;
+use App\Services\DateService;
+use App\Services\EventService;
 use Illuminate\Support\Facades\Response;
 
 class CalendarController extends Controller {
+    private DateInterface $dateService;
+    private EventInterface $eventService;
+
+    public function __construct(DateInterface $dateService, EventInterface $eventService) {
+        $this->dateService = $dateService;
+        $this->eventService = $eventService;
+    }
+
     public function getCreateEvent(Request $req) {
         return view('create-event');
     }
 
     public function show(Request $req) {
-        //$workTypes = WorkTypes::with("price")->get();
-
-        return view('calendar'/*, ["workTypes" => $workTypes]*/);
+        return view('calendar', ['pageTitle' => 'Calendar']);
     }
 
     public function getEvents(Request $req) {
-        // example get request /myfeed.php?start=2013-12-01T00:00:00-05:00&end=2014-01-12T00:00:00-05:00
         $validatedData = $req->validate([
             'start' => 'required|date',
             'end' => 'required|date'
         ]);
 
-        $start = $validatedData['start'];
-        $end = $validatedData['end'];
-
-        $events = Event::where([['start', '>=', $start], ['end', '<=', $end], ['status_id', '!=', '3']])->get();
-
-        foreach ($events as $event) {
-            if ($event->user_id === auth()->id()) {
-                $event->backgroundColor = "green";
-                $event->url = "/event/$event->id";
-            } else {
-                $event->title = "";
-            }
-        }
-
-        foreach ($events as $event) {
-            if ($event->user_id === auth()->id()) {
-                $event->backgroundColor = "green";
-                $event->url = "/event/$event->id";
-            } else {
-                $event->title = "";
-            }
-        }
+        $events = $this->eventService->getWeeklyEvents($validatedData['start'], $validatedData['end']);
+        $this->eventService->AddGreenBackgroundToOwnEvent($events, auth()->id());
 
         return response()->json($events);
     }
@@ -58,20 +46,7 @@ class CalendarController extends Controller {
             'startDate' => 'required|date',
         ]);
 
-
-        $event = Event::where([['start', '>=', $validatedData['startDate']], ['status_id', '!=', '3']])->orderBy('start', 'asc')->first();
-
-        if ($event) {
-            $startDate = date_create($validatedData['startDate']);
-            $nextEventStart = date_create($event['start']);
-            $dateDiff = date_diff($startDate, $nextEventStart);
-
-            $availableMins = TimeCalculator::GetMinutsFromDateDiff($dateDiff);
-
-            $result =  WorkTypes::where([['duration', '<=', $availableMins]])->with("price")->get();
-        } else {
-            $result = WorkTypes::with("price")->get();
-        }
+        $result = $this->eventService->getAvailableWorkTypes($validatedData['startDate']);
 
         return response()->json($result);
     }
@@ -85,39 +60,14 @@ class CalendarController extends Controller {
             'note' => 'min:0|max:255'
         ]);
 
-
-        $validated['start'] = $this->formateDate($validated['start']);
-        $start = str_replace(" ", "T", $validated['start']);
-        $validated['end'] = $this->formateDate($validated['end']);
-        $end = str_replace(" ", "T", $validated['end']);
-
-        $startDate = date_create($validated['start']);
-        $now = date_create('now', new DateTimeZone('CEST'));
-        $isStartInTheFuture = TimeCalculator::IsStartInTheFuture($now, $startDate);
+        $isStartInTheFuture = $this->dateService->IsStartInTheFuture($validated['start']);
 
         if (!$isStartInTheFuture) {
             return back()->with('error', "Can't make appointment for the past.");
         }
 
-        $work = WorkTypes::where('id', '=', $validated['workId'])->first();
-
-        $event = [
-            'user_id' => auth()->id(),
-            'title' => $work['name'],
-            'start' => $start,
-            'end' => $end,
-            'work_type_id' => $work['id'],
-            'note' => $validated['note'],
-        ];
-
-        Event::create($event);
+        $this->eventService->createEvent($validated, auth()->id());
 
         return redirect('/dashboard')->with('success', 'Foglalás sikeresen mentve');
-    }
-
-    private function formateDate($dateTime) {
-        $result = explode('T', $dateTime)[0] . ' ' . explode('T', $dateTime)[1];
-
-        return $result;
     }
 }
