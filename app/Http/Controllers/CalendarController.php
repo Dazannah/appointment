@@ -26,7 +26,7 @@ class CalendarController extends Controller {
     }
 
     public function show(Request $req) {
-        return view('calendar');
+        return view('calendar', ['pageTitle' => 'Calendar']);
     }
 
     public function getEvents(Request $req) {

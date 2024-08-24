@@ -21,7 +21,7 @@ class ProfileController extends Controller {
     public function getDashboard(Request $req) {
         $reservations = $this->eventService->getOwnEvents(auth()->user()->id);
 
-        return view('dashboard', ['reservations' => $reservations]);
+        return view('dashboard', ['reservations' => $reservations, 'pageTitle' => auth()->user()->name . "'s reservations"]);
     }
     /**
      * Display the user's profile form.

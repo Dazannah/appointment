@@ -54,7 +54,7 @@ class EventController extends Controller {
             return back()->with('error', "Can't edit closed event.");
         }
 
-        return view('manage-event', ['event' => $event]);
+        return view('manage-event', ['event' => $event, 'pageTitle' => 'Manage reservation']);
     }
 
     /**
