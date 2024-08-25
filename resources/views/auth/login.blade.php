@@ -46,6 +46,8 @@
     </form>
     <h2 class="ms-2 text-sm text-gray-600 dark:text-gray-400">
         Test user:</br>
-        teszt@davidfabian.hu/Teszt1234
+        test@davidfabian.hu/Teszt1234</br></br>
+        Test admin:</br>
+        test-admin@davidfabian.hu/Teszt1234</br></br>
     </h2>
 </x-guest-layout>
