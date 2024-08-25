@@ -94,13 +94,28 @@ class EventService implements EventInterface {
   public function getOwnEvents(int $userId): Paginator {
     $reservations = Event::where([['user_id', '=', $userId]])->orderBy('start', 'desc')->simplePaginate(10);
 
-    $reservations->transform(function ($reservation) {
-      $reservation->start = str_replace("T", " ", $reservation->start);
-      $reservation->end = str_replace("T", " ", $reservation->end);
-
-      return $reservation;
-    });
+    $this->dateService->replaceTInStartEnd($reservations);
 
     return $reservations;
+  }
+
+  public function getWeeklyData($which): object {
+    $totalWorkMinutes = $this->dateService->totalWorkMinutes();
+    $weekInterval = $this->dateService->workIterval($which);
+
+    $weekEvents = Event::where([['start', '>=', $weekInterval['start']], ['end', '<=', $weekInterval['end']], ['status_id', '!=', '3']])->get();
+
+    $weekWorkMinutes = 0;
+    foreach ($weekEvents as $weekEvent) {
+      $weekWorkMinutes += $weekEvent->workType->duration;
+    }
+
+    $nextWeekPercent = ($weekWorkMinutes / $totalWorkMinutes) * 100;
+
+    return (object)array('pcs' => count($weekEvents), 'percent' => $nextWeekPercent);
+  }
+
+  public function getLatest10Appointments(): Collection {
+    return Event::all()->sortByDesc('created_at')->take(10);
   }
 }

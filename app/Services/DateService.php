@@ -44,4 +44,27 @@ class DateService implements DateInterface {
 
     return $result;
   }
+
+  public function workIterval($which) {
+    $monday = strtotime("$which monday");
+    $friday = strtotime(date("Y-m-d", $monday) . " +4 days");
+
+    $weekStart = date("Y-m-d", $monday);
+    $weekEnd = date("Y-m-d", $friday);
+
+    return ['start' => $weekStart, 'end' => $weekEnd];
+  }
+
+  public function totalWorkMinutes(): int {
+    return 5 * 8 * 60;
+  }
+
+  public function replaceTInStartEnd($appointments): void {
+    $appointments->transform(function ($appointment) {
+      $appointment->start = str_replace("T", " ", $appointment->start);
+      $appointment->end = str_replace("T", " ", $appointment->end);
+
+      return $appointment;
+    });
+  }
 }
