@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalendarController;
@@ -24,6 +26,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/event/{event}', [EventController::class, 'edit']);
     Route::patch('/event/{event}', [EventController::class, 'update']);
     Route::delete('/event/{event}', [EventController::class, 'destroy']);
+});
+
+Route::prefix('admin')->middleware(['auth', 'verified', Admin::class])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'getDashboard'])->name('adminDashboard');
 });
 
 Route::middleware('auth')->group(function () {

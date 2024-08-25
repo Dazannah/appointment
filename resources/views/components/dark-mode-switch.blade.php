@@ -1,4 +1,4 @@
-<div class="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded hover:bg-gray-300 dark:hover:bg-gray-800">
+<div title="Dark/Light mode" class="flex items-center justify-center flex-shrink-0 w-10 h-10 rounded hover:bg-gray-300 dark:hover:bg-gray-800">
   <input id="light-switch" type="checkbox" name="light-switch" class="light-switch sr-only" />
   <label class="relative cursor-pointer p-2" for="light-switch">
       <svg class="dark:hidden" width="16" height="16" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">

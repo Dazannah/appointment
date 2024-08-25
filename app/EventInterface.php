@@ -15,4 +15,6 @@ interface EventInterface {
     public function setStatusDeleted(Event $event): RedirectResponse;
     public function updateEvent(Event $event, $validatedData): void;
     public function getOwnEvents(int $userId): Paginator;
+    public function getWeeklyData($which): object;
+    public function getLatest10Appointments(): Collection;
 }

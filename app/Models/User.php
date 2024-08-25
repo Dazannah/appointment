@@ -21,6 +21,7 @@ class User extends Authenticatable implements MustVerifyEmail {
         'name',
         'email',
         'password',
+        'isAdmin',
     ];
 
     /**
@@ -43,5 +44,9 @@ class User extends Authenticatable implements MustVerifyEmail {
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public static function getLatest10UsersRegistration() {
+        return User::all()->sortByDesc('created_at')->take(10);
     }
 }
