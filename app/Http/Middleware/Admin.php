@@ -13,7 +13,7 @@ class Admin {
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response {
-        if (auth()->check() && auth()->user()->isAdmin) {
+        if (auth()->check() && auth()->user()->is_admin) {
             return $next($request);
         }
 
