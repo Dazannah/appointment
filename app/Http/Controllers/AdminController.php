@@ -6,6 +6,7 @@ use App\Models\Event;
 use App\DateInterface;
 use App\EventInterface;
 use App\Models\User;
+use App\Models\UserStatus;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller {
@@ -31,5 +32,41 @@ class AdminController extends Controller {
         $latest10Users = User::getLatest10UsersRegistration();
 
         return view('admin-dashboard', ['weeksData' => $weeksData, 'latestAppointments' => $latest10Appointments, 'latest10Users' => $latest10Users, 'pageTitle' => "Admin dashboard"]);
+    }
+
+    public function getEditUser(User $user) {
+        $latest10Appointments = $this->eventService->getLatest10AppointmentsForUser($user->id);
+        $this->dateService->replaceTInStartEnd($latest10Appointments);
+
+        return view('edit-user', ['user' => $user, 'statuses' => UserStatus::get(), 'latestAppointments' => $latest10Appointments, 'pageTitle' => "Edit $user->name"]);
+    }
+
+    public function saveEditUser(User $user, Request $req) {
+        $validated = $req->validate([
+            'fullName' => 'required',
+            'createdAt' => 'required|date',
+            'updatedAt' => 'required|date',
+            'emailAddress' => 'required|email',
+            'status' => 'required',
+            'isEmailVerified' => '',
+            'isAdmin' => ''
+        ]);
+
+        $user->name = $validated['fullName'];
+        $user->created_at = $validated['createdAt'];
+        $user->updated_at = $validated['updatedAt'];
+        $user->email = $validated['emailAddress'];
+        $user->user_status_id = $validated['status'];
+        $user->updated_by = auth()->user()->id;
+
+        if (isset($validated['isAdmin']) && ($validated['isAdmin'] === 'on')) {
+            $user->is_admin = 1;
+        } else {
+            $user->is_admin = 0;
+        }
+
+        $user->save();
+
+        return back()->with('success', 'User successfully updated.');
     }
 }

@@ -99,7 +99,7 @@
                   <span class="pl-2 text-sm font-medium text-black dark:text-white">Registration time</span>
                   <span class="text-xs">{{$user->created_at}}</span>
                   <span class="pl-2 text-sm font-medium text-black dark:text-white">Appointments:</span>
-                  <span class="text-xs">123</span>
+                  <span class="text-xs">{{count($user->event)}}</span>
                 </p>
               </div>
             </div>

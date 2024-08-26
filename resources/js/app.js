@@ -86,7 +86,7 @@ async function select(selectInfo) {
         )}`;
         noAvailableDiv.classList.remove("hidden");
     } else {
-        let optionsHTML = `<option value="">Válasz</option>`;
+        let optionsHTML = `<option value="">Choose</option>`;
 
         availableWorkTypes.forEach((workType) => {
             optionsHTML += `<option id="${workType.id}" value="${workType.duration}">${workType.name} ${workType.duration} min ${workType.price.price} HUF</option>`;

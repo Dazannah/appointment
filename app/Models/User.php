@@ -21,7 +21,9 @@ class User extends Authenticatable implements MustVerifyEmail {
         'name',
         'email',
         'password',
-        'isAdmin',
+        'is_admin',
+        'user_status_id',
+        'updated_by'
     ];
 
     /**
@@ -44,6 +46,18 @@ class User extends Authenticatable implements MustVerifyEmail {
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function event() {
+        return $this->hasMany(Event::class, 'user_id');
+    }
+
+    public function userStatus() {
+        return $this->belongsTo(UserStatus::class, 'user_status_id');
+    }
+
+    public function updatedBy() {
+        return $this->hasOne(User::class, 'id', 'updated_by');
     }
 
     public static function getLatest10UsersRegistration() {
