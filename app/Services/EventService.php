@@ -118,4 +118,8 @@ class EventService implements EventInterface {
   public function getLatest10Appointments(): Collection {
     return Event::all()->sortByDesc('created_at')->take(10);
   }
+
+  public function getLatest10AppointmentsForUser($userId): Collection {
+    return Event::where([['user_id', '=', $userId]])->orderBy('created_at', 'desc')->take(10)->get();
+  }
 }

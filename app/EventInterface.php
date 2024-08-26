@@ -17,4 +17,5 @@ interface EventInterface {
     public function getOwnEvents(int $userId): Paginator;
     public function getWeeklyData($which): object;
     public function getLatest10Appointments(): Collection;
+    public function getLatest10AppointmentsForUser($userId): Collection;
 }

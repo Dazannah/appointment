@@ -30,6 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::prefix('admin')->middleware(['auth', 'verified', Admin::class])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'getDashboard'])->name('adminDashboard');
+    Route::get('/user/{user}', [AdminController::class, 'getEditUser']);
+    Route::patch('/user/{user}', [AdminController::class, 'saveEditUser']);
 });
 
 Route::middleware('auth')->group(function () {
