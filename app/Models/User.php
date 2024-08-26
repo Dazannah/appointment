@@ -46,6 +46,10 @@ class User extends Authenticatable implements MustVerifyEmail {
         ];
     }
 
+    public function event() {
+        return $this->hasMany(Event::class, 'user_id');
+    }
+
     public static function getLatest10UsersRegistration() {
         return User::all()->sortByDesc('created_at')->take(10);
     }
