@@ -150,6 +150,13 @@ function goToDashboard() {
     window.location.href = "/dashboard";
 }
 
+function goBack() {
+    event.preventDefault();
+
+    window.history.back();
+}
+
+window.goBack = goBack;
 window.goToDashboard = goToDashboard;
 window.closeReserveFormDiv = closeReserveFormDiv;
 window.setEndDate = setEndDate;
