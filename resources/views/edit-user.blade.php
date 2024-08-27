@@ -83,7 +83,6 @@
                 </div>
               </div>              
             </div>
-
                 <div class="col-span-8 xl:col-span-8">
                     <div class="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
                       <h4 class="mb-6 text-xl font-bold text-black dark:text-white">
