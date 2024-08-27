@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Event;
 use App\DateInterface;
+use App\Models\Status;
 use App\EventInterface;
-use App\Models\User;
 use App\Models\UserStatus;
 use Illuminate\Http\Request;
 
@@ -16,6 +17,25 @@ class AdminController extends Controller {
     public function __construct(DateInterface $dateService, EventInterface $eventService) {
         $this->dateService = $dateService;
         $this->eventService = $eventService;
+    }
+
+    public function saveEditEvent(Event $event, Request $req) {
+        $validated = $req->validate([
+            'userNote' => '',
+            'adminNote' => '',
+            'status' => 'required'
+        ]);
+
+        $event->note = $validated['userNote'];
+        $event->admin_note = $validated['adminNote'];
+        $event->status_id = $validated['status'];
+        $event->save();
+
+        return back()->with('success', 'Updated successfully!');
+    }
+
+    public function getEditEvent(Event $event) {
+        return view('edit-event', ['event' => $event, 'statuses' => Status::all(), 'pageTitle' => "Edit $event->title"]);
     }
 
     public function getDashboard(Request $req) {

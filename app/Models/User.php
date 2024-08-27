@@ -23,7 +23,8 @@ class User extends Authenticatable implements MustVerifyEmail {
         'password',
         'is_admin',
         'user_status_id',
-        'updated_by'
+        'updated_by',
+        'admin_note'
     ];
 
     /**

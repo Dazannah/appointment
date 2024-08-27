@@ -32,6 +32,8 @@ Route::prefix('admin')->middleware(['auth', 'verified', Admin::class])->group(fu
     Route::get('/dashboard', [AdminController::class, 'getDashboard'])->name('adminDashboard');
     Route::get('/user/{user}', [AdminController::class, 'getEditUser']);
     Route::patch('/user/{user}', [AdminController::class, 'saveEditUser']);
+    Route::get('/event/{event}', [AdminController::class, 'getEditEvent']);
+    Route::patch('/event/{event}', [AdminController::class, 'saveEditEvent']);
 });
 
 Route::middleware('auth')->group(function () {

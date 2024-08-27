@@ -3,8 +3,8 @@
     <div class="mx-auto max-w-screen-2xl md:p-6 2xl:p-10">
         <div class="mx-auto max-w-270 p-4">
           <!-- ====== Settings Section Start -->
-          <div class="grid grid-cols-5 gap-8">
-            <div class="col-span-5 xl:col-span-3">
+          <div class="grid grid-cols-8 gap-8">
+            <div class="col-span-8 xl:col-span-8">
               <div class="rounded-sm border border-stroke bg-white shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white">
                 <div class="p-7">
                   <form action="/admin/user/{{$user->id}}" method="post">
@@ -75,16 +75,15 @@
                         <button class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:text-black dark:hover:bg-green-500 border dark:text-white dark:bg-gray-900" type="submit">
                             Save
                         </button>
-                        <button class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900" type="submit">
-                            Cancel
+                        <button onclick="goBack()" class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900">
+                            Back
                         </button>
                     </div>
                   </form>
                 </div>
               </div>              
             </div>
-
-                <div class="col-span-12 xl:col-span-8">
+                <div class="col-span-8 xl:col-span-8">
                     <div class="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
                       <h4 class="mb-6 text-xl font-bold text-black dark:text-white">
                         Latest 10 appointments
