@@ -51,7 +51,7 @@
                     <div class="p-2 mb-5.5">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="adminNote">Admin note</label>
                         <div class="relative">
-                          <textarea class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" name="adminNote" id="adminNote" placeholder="Admin note">{{$event->note}}</textarea>
+                          <textarea class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" name="adminNote" id="adminNote" placeholder="Admin note">{{$event->admin_note}}</textarea>
                         </div>
                       </div>
 
