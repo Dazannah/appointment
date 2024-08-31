@@ -28,12 +28,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/event/{event}', [EventController::class, 'destroy']);
 });
 
-Route::prefix('admin')->middleware(['auth', 'verified', Admin::class])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'getDashboard'])->name('adminDashboard');
+Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::class])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'getDashboard'])->name('dashboard');
     Route::get('/user/{user}', [AdminController::class, 'getEditUser']);
     Route::patch('/user/{user}', [AdminController::class, 'saveEditUser']);
     Route::get('/event/{event}', [AdminController::class, 'getEditEvent']);
     Route::patch('/event/{event}', [AdminController::class, 'saveEditEvent']);
+
+    Route::name('menu.')->prefix('menu')->group(function () {
+        Route::get('/', [AdminController::class, 'getAdminMenu'])->name('base');
+        Route::get('/users', [AdminController::class, 'getAdminMenuUsers'])->name('users');
+        Route::get('/events', [AdminController::class, 'getAdminMenuEvents'])->name('events');
+    });
+
+    Route::get('/site-settings', [AdminController::class, 'getSiteSettings'])->name('siteSettings');
 });
 
 Route::middleware('auth')->group(function () {
