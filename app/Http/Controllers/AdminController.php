@@ -19,8 +19,43 @@ class AdminController extends Controller {
         $this->eventService = $eventService;
     }
 
+    public function getSiteSettings() {
+        return view('site-settings', ['pageTitle' => 'Site settings']);
+    }
+
     public function getAdminMenuEvents(Request $req) {
-        return view('admin-menu-events', ['pageTitle' => 'Search appointment']);
+        $validated = $req->validate([
+            'appointmentId' => '',
+            'userName' => '',
+            'createdAt' => '',
+            'status' => '',
+        ]);
+
+        $events = Event::when(
+            isset($validated['appointmentId']),
+            function ($querry) use ($validated) {
+                return $querry->where('id', 'REGEXP', $validated['appointmentId']);
+            }
+        )->when(
+            isset($validated['userName']),
+            function ($querry) use ($validated) {
+                $ids = User::getAllIdRegexpFromName($validated['userName']);
+
+                return $querry->where('user_id', 'REGEXP', $ids);
+            }
+        )->when(
+            isset($validated['createdAt']),
+            function ($querry) use ($validated) {
+                return $querry->where('created_at', 'REGEXP', $validated['createdAt']);
+            }
+        )->when(
+            isset($validated['status']) && ($validated['status'] != 0),
+            function ($querry) use ($validated) {
+                return $querry->where('status_id', '=', $validated['status']);
+            }
+        )->paginate(10);
+
+        return view('admin-menu-events', ['pageTitle' => 'Search appointment', 'events' => $events, 'statuses' => Status::all()]);
     }
 
     public function getAdminMenuUsers(Request $req) {
