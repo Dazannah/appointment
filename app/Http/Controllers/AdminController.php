@@ -19,6 +19,18 @@ class AdminController extends Controller {
         $this->eventService = $eventService;
     }
 
+    public function getAdminMenuEvents(Request $req) {
+        return view('admin-menu-events', ['pageTitle' => 'Search appointment']);
+    }
+
+    public function getAdminMenuUsers(Request $req) {
+        return view('admin-menu-users', ['pageTitle' => 'Search users']);
+    }
+
+    public function getAdminMenu() {
+        return view('admin-menu', ['pageTitle' => "Admin menu"]);
+    }
+
     public function saveEditEvent(Event $event, Request $req) {
         $validated = $req->validate([
             'userNote' => '',
