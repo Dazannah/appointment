@@ -41,7 +41,7 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
         Route::get('/events', [AdminController::class, 'getAdminMenuEvents'])->name('events');
     });
 
-    //Route::get('/site-settings', [AdminController::class, 'getSiteSettings'])->name('siteSettings');
+    Route::get('/site-settings', [AdminController::class, 'getSiteSettings'])->name('siteSettings');
 });
 
 Route::middleware('auth')->group(function () {
