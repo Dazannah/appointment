@@ -21,7 +21,7 @@
 <body>
   <div class="h-screen flex text-gray-700 dark:text-gray-400 dark:bg-gray-900">
       @include('components/sidebar')
-      <div class="w-max min-h-screen flex flex-col flex-grow">
+      <div class="w-max h-screen flex flex-col flex-grow">
         @include('components/menu', ['pageTitle' => isset($pageTitle) ? $pageTitle : null])
         @include('components/flash-message')
         <div class="flex overflow-y-auto">
