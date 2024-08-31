@@ -156,6 +156,11 @@ function goBack() {
     window.history.back();
 }
 
+function hideThis(e) {
+    document.getElementById(e).classList.add("hidden");
+}
+
+window.hideThis = hideThis;
 window.goBack = goBack;
 window.goToDashboard = goToDashboard;
 window.closeReserveFormDiv = closeReserveFormDiv;

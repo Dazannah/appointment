@@ -64,4 +64,25 @@ class User extends Authenticatable implements MustVerifyEmail {
     public static function getLatest10UsersRegistration() {
         return User::all()->sortByDesc('created_at')->take(10);
     }
+
+    public static function getAllIdRegexpFromName($userName) {
+        $users = User::where('name', 'REGEXP', $userName)->get();
+
+        $ids = "";
+
+        if (count($users) > 0) {
+            foreach ($users as $user) {
+
+                if (strlen($ids) > 0) {
+                    $ids = $ids . '|';
+                }
+
+                $ids = $ids . $user->id;
+            }
+        } else {
+            $ids = " ";
+        }
+
+        return $ids;
+    }
 }
