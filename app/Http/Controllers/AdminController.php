@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Event;
-use App\DateInterface;
 use App\Models\Status;
-use App\EventInterface;
-use App\Models\UserStatus;
+use App\Interfaces\IDate;
 use App\Models\WorkTypes;
+use App\Interfaces\IEvent;
+use App\Models\UserStatus;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller {
-    private DateInterface $dateService;
-    private EventInterface $eventService;
+    private IDate $dateService;
+    private IEvent $eventService;
 
-    public function __construct(DateInterface $dateService, EventInterface $eventService) {
+    public function __construct(IDate $dateService, IEvent $eventService) {
         $this->dateService = $dateService;
         $this->eventService = $eventService;
     }

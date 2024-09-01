@@ -1,13 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Interfaces;
 
 use App\Models\Event;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Collection;
 
-interface EventInterface {
+interface IEvent {
     public function getWeeklyEvents($start, $end): Collection;
     public function AddGreenBackgroundToOwnEvent($events, $userId): void;
     public function getAvailableWorkTypes($startDate): Collection;

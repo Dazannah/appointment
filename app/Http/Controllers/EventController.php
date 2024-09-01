@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use DateTime;
-use DateTimeZone;
+use App\Interfaces\IEvent;
 use App\Models\Event;
-use App\EventInterface;
-use App\Models\PenaltyFee;
 use Illuminate\Http\Request;
-use App\Models\TimeCalculator;
 
 class EventController extends Controller {
 
-    protected EventInterface $eventService;
+    protected IEvent $eventService;
 
-    public function __construct(EventInterface $eventService) {
+    public function __construct(IEvent $eventService) {
         $this->eventService = $eventService;
     }
 

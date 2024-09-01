@@ -2,21 +2,21 @@
 
 namespace App\Services;
 
+use App\Interfaces\IDate;
 use DateTimeZone;
 use App\Models\Event;
-use App\DateInterface;
-use App\EventInterface;
 use App\Models\WorkTypes;
+use App\Interfaces\IEvent;
 use App\Models\PenaltyFee;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Collection;
 
-class EventService implements EventInterface {
+class EventService implements IEvent {
 
   protected $dateService;
 
-  public function __construct(DateInterface $dateService) {
+  public function __construct(IDate $dateService) {
     $this->dateService = $dateService;
   }
 

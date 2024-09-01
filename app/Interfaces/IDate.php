@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Interfaces;
 
 use DateInterval;
 
-interface DateInterface {
+interface IDate {
     public function GetMinutsFromDateDiff(DateInterval $dateDiff): int;
     public function IsMoreThanADay(int $availableMins): bool;
     public function IsStartInTheFuture($startDate): bool;
