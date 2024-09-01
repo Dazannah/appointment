@@ -4,18 +4,19 @@ namespace App\Services;
 
 use DateTimeZone;
 use App\Models\Event;
+use App\DateInterface;
 use App\EventInterface;
 use App\Models\WorkTypes;
 use App\Models\PenaltyFee;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Pagination\Paginator;
 
 class EventService implements EventInterface {
 
   protected $dateService;
 
-  public function __construct(DateService $dateService) {
+  public function __construct(DateInterface $dateService) {
     $this->dateService = $dateService;
   }
 
