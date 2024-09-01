@@ -42,7 +42,9 @@
                             </label>
                         </div>
                         <div class="col-span-1 row-span-2 mt-3 md:mt-0">
-                            <input type="submit" value="Submit" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-gray-300 dark:hover:bg-gray-800 border dark:text-white dark:bg-gray-900">
+                            <input type="submit" value="Submit" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:bg-green-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">
+                            <a href="/admin/menu/users" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:bg-red-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">Reset</a>
+                        
                         </div>
                         <div class="col-span-1">
                             <input {{Request::get('isAdmin') == 'on' ? 'checked' : '' }} class="hover:cursor-pointer" type="checkbox" name="isAdmin" id="isAdmin">
