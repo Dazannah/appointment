@@ -68,6 +68,6 @@ class CalendarController extends Controller {
 
         $this->eventService->createEvent($validated, auth()->id());
 
-        return redirect('/dashboard')->with('success', 'Foglalás sikeresen mentve');
+        return redirect('/dashboard')->with('success', 'Appointment successfully saved.');
     }
 }
