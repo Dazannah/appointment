@@ -4,20 +4,43 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Event;
+use App\Models\Price;
 use App\Models\Status;
 use App\Interfaces\IDate;
 use App\Models\WorkTypes;
 use App\Interfaces\IEvent;
 use App\Models\UserStatus;
 use Illuminate\Http\Request;
+use App\Interfaces\IUserService;
+use App\Interfaces\IWorktypeService;
+use App\Interfaces\IDataSerialisation;
 
 class AdminController extends Controller {
     private IDate $dateService;
     private IEvent $eventService;
+    private IDataSerialisation $dataSerialisationService;
+    private IUserService $userService;
+    private IWorktypeService $worktypeService;
 
-    public function __construct(IDate $dateService, IEvent $eventService) {
+    public function __construct(IDate $dateService, IEvent $eventService, IDataSerialisation $dataSerialisationService, IUserService $userService, IWorktypeService $worktypeService) {
         $this->dateService = $dateService;
         $this->eventService = $eventService;
+        $this->dataSerialisationService = $dataSerialisationService;
+        $this->userService = $userService;
+        $this->worktypeService = $worktypeService;
+    }
+
+    public function getAdminMenuWorktypes(Request $req) {
+        $validated = $req->validate([
+            'worktypeId' => '',
+            'name' => '',
+            'duration' => '',
+            'priceId' => '',
+        ]);
+
+        $worktypes = $this->worktypeService->getAdminMenuFilterWorktypes($validated);
+
+        return view('admin-menu-worktypes', ['pageTitle' => 'Worktypes', 'worktypes' => $worktypes, 'prices' => Price::all()]);
     }
 
     public function getSiteSettings() {
@@ -33,34 +56,7 @@ class AdminController extends Controller {
             'workType' => '',
         ]);
 
-        $events = Event::when(
-            isset($validated['appointmentId']),
-            function ($querry) use ($validated) {
-                return $querry->where('id', 'REGEXP', $validated['appointmentId']);
-            }
-        )->when(
-            isset($validated['userName']),
-            function ($querry) use ($validated) {
-                $ids = User::getAllIdRegexpFromName($validated['userName']);
-
-                return $querry->where('user_id', 'REGEXP', $ids);
-            }
-        )->when(
-            isset($validated['createdAt']),
-            function ($querry) use ($validated) {
-                return $querry->where('created_at', 'REGEXP', $validated['createdAt']);
-            }
-        )->when(
-            isset($validated['status']) && ($validated['status'] != 0),
-            function ($querry) use ($validated) {
-                return $querry->where('status_id', '=', $validated['status']);
-            }
-        )->when(
-            isset($validated['workType']) && ($validated['workType'] != 0),
-            function ($querry) use ($validated) {
-                return $querry->where('work_type_id', '=', $validated['workType']);
-            }
-        )->paginate(10);
+        $events = $this->eventService->getAdminMenuFilterEvents($validated);
 
         return view('admin-menu-events', ['pageTitle' => 'Search appointment', 'events' => $events, 'statuses' => Status::all(), 'workTypes' => WorkTypes::all()]);
     }
@@ -74,31 +70,7 @@ class AdminController extends Controller {
             'isAdmin' => '',
         ]);
 
-        $users = User::when(
-            isset($validated['userId']),
-            function ($querry) use ($validated) {
-                return $querry->where('id', 'REGEXP', $validated['userId']);
-            }
-        )->when(
-            isset($validated['name']),
-            function ($querry) use ($validated) {
-                return $querry->where('name', 'REGEXP', $validated['name']);
-            }
-        )->when(
-            isset($validated['email']),
-            function ($querry) use ($validated) {
-                return $querry->where('email', 'REGEXP', $validated['email']);
-            }
-        )->when(
-            isset($validated['status']) && ($validated['status'] != 0),
-            function ($querry) use ($validated) {
-                return $querry->where('user_status_id', '=', $validated['status']);
-            }
-        )->where(
-            'is_admin',
-            '=',
-            isset($validated['isAdmin'])
-        )->paginate(10);
+        $users = $this->userService->getAdminMenuFilterUsers($validated);
 
         return view('admin-menu-users', ['pageTitle' => 'Search users', 'users' => $users, 'statuses' => UserStatus::all()]);
     }
@@ -114,9 +86,7 @@ class AdminController extends Controller {
             'status' => 'required'
         ]);
 
-        $event->note = $validated['userNote'];
-        $event->admin_note = $validated['adminNote'];
-        $event->status_id = $validated['status'];
+        $this->dataSerialisationService->serialiseInputForEditEvent($validated, $event);
         $event->save();
 
         return back()->with('success', 'Updated successfully!');
@@ -137,7 +107,7 @@ class AdminController extends Controller {
         $latest10Appointments = $this->eventService->getLatest10Appointments();
         $this->dateService->replaceTInStartEnd($latest10Appointments);
 
-        $latest10Users = User::getLatest10UsersRegistration();
+        $latest10Users = $this->userService->getLatest10UsersRegistration();
 
         return view('admin-dashboard', ['weeksData' => $weeksData, 'latestAppointments' => $latest10Appointments, 'latest10Users' => $latest10Users, 'pageTitle' => "Admin dashboard"]);
     }
@@ -160,18 +130,7 @@ class AdminController extends Controller {
             'isAdmin' => ''
         ]);
 
-        $user->name = $validated['fullName'];
-        $user->created_at = $validated['createdAt'];
-        $user->updated_at = $validated['updatedAt'];
-        $user->email = $validated['emailAddress'];
-        $user->user_status_id = $validated['status'];
-        $user->updated_by = auth()->user()->id;
-
-        if (isset($validated['isAdmin']) && ($validated['isAdmin'] === 'on')) {
-            $user->is_admin = 1;
-        } else {
-            $user->is_admin = 0;
-        }
+        $this->dataSerialisationService->serialiseInputForEditUser($validated, $user);
 
         $user->save();
 
