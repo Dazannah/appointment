@@ -3,7 +3,7 @@
     @include('components/admin-secondary-menu')
     <div class="grid grid-cols-5 gap-3">
         <form class="col-span-5" action="/admin/menu/users" method="GET">
-            <div class="grid grid-cols-5">
+            <div class="grid grid-cols-5 gap-1">
                     <div class="col-span-1">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white">
                             User ID
@@ -52,30 +52,38 @@
                     </div>
             </div>
         </form>
-        <div class="col-span-4">
-            <div class="grid grid-cols-1 gap-3 h-fit py-3 rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
-                @foreach ($users as $user)
-                <a href="/admin/user/{{$user->id}}" class="px-7.5 py-3 border-b hover:bg-gray-300 dark:hover:bg-gray-900">
-                    <div class="grid grid-cols-4 justify-items-center items-center border-stroke hover:bg-gray-300 dark:hover:bg-gray-900 dark:border-strokedark">
-                        <div class="col-span-1">
-                            <span>{{$user->id}}</span>
+        @if (count($users) > 0)
+            <div class="col-span-4">
+                <div class="grid grid-cols-1 gap-3 h-fit py-3 rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
+                    @foreach ($users as $user)
+                    <a href="/admin/user/{{$user->id}}" class="px-7.5 py-3 border-b hover:bg-gray-300 dark:hover:bg-gray-900">
+                        <div class="grid grid-cols-4 justify-items-center items-center border-stroke hover:bg-gray-300 dark:hover:bg-gray-900 dark:border-strokedark">
+                            <div class="col-span-1">
+                                <span>{{$user->id}}</span>
+                            </div>
+                            <div class="col-span-1">
+                                <span>{{$user->name}}</span>
+                            </div>
+                            <div class="col-span-1">
+                                <span>{{$user->email}}</span>
+                            </div>
+                            <div class="col-span-1">
+                                <span>{{$user->userStatus->name}}</span>
+                            </div>
                         </div>
-                        <div class="col-span-1">
-                            <span>{{$user->name}}</span>
-                        </div>
-                        <div class="col-span-1">
-                            <span>{{$user->email}}</span>
-                        </div>
-                        <div class="col-span-1">
-                            <span>{{$user->userStatus->name}}</span>
-                        </div>
-                    </div>
-                </a>
-                @endforeach
-            </div> 
-            <div class="p-2">
-                {{$users->links()}}
+                    </a>
+                    @endforeach
+                </div> 
+                <div class="p-2">
+                    {{$users->links()}}
+                </div>
             </div>
-        </div>
+        @else
+            <div class="col-span-4">
+                <div class="grid grid-cols-1 gap-3 h-fit py-3 rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
+                    <span class="text-2xl justify-self-center self-center">No matching result.</span>
+                </div>
+            </div>
+        @endif
     </div>
   </x-app-layout>
