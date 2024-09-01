@@ -2,22 +2,27 @@
 
 namespace App\Services;
 
-use App\Interfaces\IDate;
 use DateTimeZone;
+use App\Models\User;
 use App\Models\Event;
+use App\Interfaces\IDate;
 use App\Models\WorkTypes;
 use App\Interfaces\IEvent;
+use App\Interfaces\IUserService;
 use App\Models\PenaltyFee;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class EventService implements IEvent {
 
-  protected $dateService;
+  protected IDate $dateService;
+  protected IUserService $userService;
 
-  public function __construct(IDate $dateService) {
+  public function __construct(IDate $dateService, IUserService $userService) {
     $this->dateService = $dateService;
+    $this->userService = $userService;
   }
 
   public function getWeeklyEvents($start, $end): Collection {
@@ -92,8 +97,8 @@ class EventService implements IEvent {
     };
   }
 
-  public function getOwnEvents(int $userId): Paginator {
-    $reservations = Event::where([['user_id', '=', $userId]])->orderBy('start', 'desc')->simplePaginate(10);
+  public function getOwnEvents(int $userId): LengthAwarePaginator {
+    $reservations = Event::where([['user_id', '=', $userId]])->orderBy('start', 'desc')->paginate(10);
 
     $this->dateService->replaceTInStartEnd($reservations);
 
@@ -122,5 +127,38 @@ class EventService implements IEvent {
 
   public function getLatest10AppointmentsForUser($userId): Collection {
     return Event::where([['user_id', '=', $userId]])->orderBy('created_at', 'desc')->take(10)->get();
+  }
+
+  public function getAdminMenuFilterEvents($validated): LengthAwarePaginator {
+    $events = Event::when(
+      isset($validated['appointmentId']),
+      function ($querry) use ($validated) {
+        return $querry->where('id', 'REGEXP', $validated['appointmentId']);
+      }
+    )->when(
+      isset($validated['userName']),
+      function ($querry) use ($validated) {
+        $ids = $this->userService->getAllIdRegexpFromName($validated['userName']);
+
+        return $querry->where('user_id', 'REGEXP', $ids);
+      }
+    )->when(
+      isset($validated['createdAt']),
+      function ($querry) use ($validated) {
+        return $querry->where('created_at', 'REGEXP', $validated['createdAt']);
+      }
+    )->when(
+      isset($validated['status']) && ($validated['status'] != 0),
+      function ($querry) use ($validated) {
+        return $querry->where('status_id', '=', $validated['status']);
+      }
+    )->when(
+      isset($validated['workType']) && ($validated['workType'] != 0),
+      function ($querry) use ($validated) {
+        return $querry->where('work_type_id', '=', $validated['workType']);
+      }
+    )->paginate(10);
+
+    return $events;
   }
 }
