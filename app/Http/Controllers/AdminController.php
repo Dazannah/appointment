@@ -8,6 +8,7 @@ use App\DateInterface;
 use App\Models\Status;
 use App\EventInterface;
 use App\Models\UserStatus;
+use App\Models\WorkTypes;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller {
@@ -29,6 +30,7 @@ class AdminController extends Controller {
             'userName' => '',
             'createdAt' => '',
             'status' => '',
+            'workType' => '',
         ]);
 
         $events = Event::when(
@@ -53,9 +55,14 @@ class AdminController extends Controller {
             function ($querry) use ($validated) {
                 return $querry->where('status_id', '=', $validated['status']);
             }
+        )->when(
+            isset($validated['workType']) && ($validated['workType'] != 0),
+            function ($querry) use ($validated) {
+                return $querry->where('work_type_id', '=', $validated['workType']);
+            }
         )->paginate(10);
 
-        return view('admin-menu-events', ['pageTitle' => 'Search appointment', 'events' => $events, 'statuses' => Status::all()]);
+        return view('admin-menu-events', ['pageTitle' => 'Search appointment', 'events' => $events, 'statuses' => Status::all(), 'workTypes' => WorkTypes::all()]);
     }
 
     public function getAdminMenuUsers(Request $req) {
