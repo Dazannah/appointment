@@ -2,21 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use DateTimeZone;
-use App\Models\Event;
-use App\DateInterface;
-use App\EventInterface;
-use App\Models\WorkTypes;
+use App\Interfaces\IDate;
+use App\Interfaces\IEvent;
 use Illuminate\Http\Request;
-use App\Services\DateService;
-use App\Services\EventService;
-use Illuminate\Support\Facades\Response;
 
 class CalendarController extends Controller {
-    private DateInterface $dateService;
-    private EventInterface $eventService;
+    private IDate $dateService;
+    private IEvent $eventService;
 
-    public function __construct(DateInterface $dateService, EventInterface $eventService) {
+    public function __construct(IDate $dateService, IEvent $eventService) {
         $this->dateService = $dateService;
         $this->eventService = $eventService;
     }
@@ -68,6 +62,6 @@ class CalendarController extends Controller {
 
         $this->eventService->createEvent($validated, auth()->id());
 
-        return redirect('/dashboard')->with('success', 'Foglalás sikeresen mentve');
+        return redirect('/dashboard')->with('success', 'Appointment successfully saved.');
     }
 }

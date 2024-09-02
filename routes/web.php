@@ -39,6 +39,7 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
         Route::get('/', [AdminController::class, 'getAdminMenu'])->name('base');
         Route::get('/users', [AdminController::class, 'getAdminMenuUsers'])->name('users');
         Route::get('/events', [AdminController::class, 'getAdminMenuEvents'])->name('events');
+        Route::get('/worktypes', [AdminController::class, 'getAdminMenuWorktypes'])->name('worktypes');
     });
 
     Route::get('/site-settings', [AdminController::class, 'getSiteSettings'])->name('siteSettings');

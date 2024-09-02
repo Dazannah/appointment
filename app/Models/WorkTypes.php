@@ -15,6 +15,6 @@ class WorkTypes extends Model {
     ];
 
     public function price() {
-        return $this->hasOne(Price::class, 'id');
+        return $this->hasOne(Price::class, 'id', 'price_id');
     }
 }
