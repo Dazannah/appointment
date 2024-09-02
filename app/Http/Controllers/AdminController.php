@@ -79,6 +79,87 @@ class AdminController extends Controller {
         return view('admin-menu', ['pageTitle' => "Admin menu"]);
     }
 
+    public function getSiteSettings() {
+        return view('site-settings', ['pageTitle' => 'Site settings']);
+    }
+
+    public function getAdminMenuEvents(Request $req) {
+        $validated = $req->validate([
+            'appointmentId' => '',
+            'userName' => '',
+            'createdAt' => '',
+            'status' => '',
+        ]);
+
+        $events = Event::when(
+            isset($validated['appointmentId']),
+            function ($querry) use ($validated) {
+                return $querry->where('id', 'REGEXP', $validated['appointmentId']);
+            }
+        )->when(
+            isset($validated['userName']),
+            function ($querry) use ($validated) {
+                $ids = User::getAllIdRegexpFromName($validated['userName']);
+
+                return $querry->where('user_id', 'REGEXP', $ids);
+            }
+        )->when(
+            isset($validated['createdAt']),
+            function ($querry) use ($validated) {
+                return $querry->where('created_at', 'REGEXP', $validated['createdAt']);
+            }
+        )->when(
+            isset($validated['status']) && ($validated['status'] != 0),
+            function ($querry) use ($validated) {
+                return $querry->where('status_id', '=', $validated['status']);
+            }
+        )->paginate(10);
+
+        return view('admin-menu-events', ['pageTitle' => 'Search appointment', 'events' => $events, 'statuses' => Status::all()]);
+    }
+
+    public function getAdminMenuUsers(Request $req) {
+        $validated = $req->validate([
+            'userId' => '',
+            'name' => '',
+            'email' => '',
+            'status' => '',
+            'isAdmin' => '',
+        ]);
+
+        $users = User::when(
+            isset($validated['userId']),
+            function ($querry) use ($validated) {
+                return $querry->where('id', 'REGEXP', $validated['userId']);
+            }
+        )->when(
+            isset($validated['name']),
+            function ($querry) use ($validated) {
+                return $querry->where('name', 'REGEXP', $validated['name']);
+            }
+        )->when(
+            isset($validated['email']),
+            function ($querry) use ($validated) {
+                return $querry->where('email', 'REGEXP', $validated['email']);
+            }
+        )->when(
+            isset($validated['status']) && ($validated['status'] != 0),
+            function ($querry) use ($validated) {
+                return $querry->where('user_status_id', '=', $validated['status']);
+            }
+        )->where(
+            'is_admin',
+            '=',
+            isset($validated['isAdmin'])
+        )->paginate(10);
+
+        return view('admin-menu-users', ['pageTitle' => 'Search users', 'users' => $users, 'statuses' => UserStatus::all()]);
+    }
+
+    public function getAdminMenu() {
+        return view('admin-menu', ['pageTitle' => "Admin menu"]);
+    }
+
     public function saveEditEvent(Event $event, Request $req) {
         $validated = $req->validate([
             'userNote' => '',

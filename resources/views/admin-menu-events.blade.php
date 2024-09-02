@@ -77,7 +77,6 @@
                             <div class="col-span-1">
                                 <span>{{$event->workType->name}}</span>
                             </div>
-
                         </div>
                     </a>
                     @endforeach
