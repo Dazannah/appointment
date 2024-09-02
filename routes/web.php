@@ -6,6 +6,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\PriceController;
+use App\Http\Controllers\WorkTypesController;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -14,7 +16,6 @@ Route::get('/', function () {
 
     return view('welcome');
 })->name('welcome');
-
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [ProfileController::class, 'getDashboard'])->name('dashboard');
@@ -39,6 +40,18 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
         Route::get('/', [AdminController::class, 'getAdminMenu'])->name('base');
         Route::get('/users', [AdminController::class, 'getAdminMenuUsers'])->name('users');
         Route::get('/events', [AdminController::class, 'getAdminMenuEvents'])->name('events');
+        Route::get('/worktypes', [AdminController::class, 'getAdminMenuWorktypes'])->name('worktypes');
+    });
+
+    Route::name('worktype.')->prefix('worktype')->group(function () {
+        Route::get('/{worktype}', [WorkTypesController::class, 'edit'])->name('editWorktype');
+        Route::patch('/{worktype}', [WorkTypesController::class, 'update'])->name('showWorktype');
+    });
+
+    Route::name('price.')->prefix('price')->group(function () {
+        Route::get('/create', [PriceController::class, 'create'])->name('createPrice');
+        Route::post('/create', [PriceController::class, 'store']);
+        Route::get('/isPrice/{price:price}', [PriceController::class, 'isPrice'])->name('isPrice');
     });
 
     Route::get('/site-settings', [AdminController::class, 'getSiteSettings'])->name('siteSettings');

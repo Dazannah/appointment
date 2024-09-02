@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\EventInterface;
 use App\Http\Requests\ProfileUpdateRequest;
-use App\Models\Event;
+use App\Interfaces\IEvent;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,9 +11,9 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class ProfileController extends Controller {
-    protected EventInterface $eventService;
+    protected IEvent $eventService;
 
-    public function __construct(EventInterface $eventService) {
+    public function __construct(IEvent $eventService) {
         $this->eventService = $eventService;
     }
 

@@ -5,9 +5,10 @@ namespace App\Services;
 use DateTime;
 use DateInterval;
 use DateTimeZone;
-use App\DateInterface;
+use App\Interfaces\IDate;
 
-class DateService implements DateInterface {
+class DateService implements IDate {
+
   public function GetMinutsFromDateDiff(DateInterval $dateDiff): int {
     $availableMins = 0;
     $availableMins += $dateDiff->y * 24 * 60 * 30 * 365;

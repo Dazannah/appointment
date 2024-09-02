@@ -2,19 +2,28 @@
 
 namespace App\Providers;
 
-use App\DateInterface;
-use App\EventInterface;
+use App\Interfaces\IDate;
+use App\Interfaces\IEvent;
 use App\Services\DateService;
+use App\Services\UserService;
 use App\Services\EventService;
+use App\Interfaces\IUserService;
+use App\Services\WorktypeService;
+use App\Interfaces\IWorktypeService;
+use App\Interfaces\IDataSerialisation;
 use Illuminate\Support\ServiceProvider;
+use App\Services\DataSerialisationService;
 
 class AppServiceProvider extends ServiceProvider {
     /**
      * Register any application services.
      */
     public function register(): void {
-        $this->app->bind(DateInterface::class, DateService::class);
-        $this->app->bind(EventInterface::class, EventService::class);
+        $this->app->bind(IDate::class, DateService::class);
+        $this->app->bind(IEvent::class, EventService::class);
+        $this->app->bind(IDataSerialisation::class, DataSerialisationService::class);
+        $this->app->bind(IUserService::class, UserService::class);
+        $this->app->bind(IWorktypeService::class, WorktypeService::class);
     }
 
     /**

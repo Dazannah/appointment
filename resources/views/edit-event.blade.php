@@ -13,13 +13,13 @@
                       <div class="p-2 w-full sm:w-1/2">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="workType">Work type</label>
                         <div class="relative">
-                          <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" name="workType" id="workType" placeholder="Name" value="{{$event->workType->name}}" disabled>
+                          <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed" type="text" name="workType" id="workType" placeholder="Name" value="{{$event->workType->name}}" disabled>
                         </div>
                       </div>
                       <div class="p-2 w-full sm:w-1/2">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="fullName">User name</label>
                         <div class="relative">
-                          <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" name="fullName" id="fullName" placeholder="Name" value="{{$event->user->name}}" disabled>
+                          <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed" type="text" name="fullName" id="fullName" placeholder="Name" value="{{$event->user->name}}" disabled>
                         </div>
                       </div>
                     </div>
@@ -27,17 +27,17 @@
                     <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                         <div class="p-2 w-full sm:w-1/2">
                             <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="createdAt">Created at</label>
-                            <input class="w-full rounded border border-stroke bg-gray px-4.5 py-3 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="datetime-local" name="createdAt" id="createdAt" value="{{$event->created_at}}" disabled>
+                            <input class="w-full rounded border border-stroke bg-gray px-4.5 py-3 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed" type="datetime-local" name="createdAt" id="createdAt" value="{{$event->created_at}}" disabled>
                           </div>
 
                         <div class="p-2 w-full sm:w-1/2">
                             <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="start">Start</label>
-                            <input class="w-full rounded border border-stroke bg-gray px-4.5 py-3 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="datetime-local" name="start" id="start" value="{{$event->start}}" disabled>
+                            <input class="w-full rounded border border-stroke bg-gray px-4.5 py-3 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed" type="datetime-local" name="start" id="start" value="{{$event->start}}" disabled>
                         </div>
 
                         <div class="p-2 w-full sm:w-1/2">
                             <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="end">End</label>
-                            <input class="w-full rounded border border-stroke bg-gray px-4.5 py-3 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="datetime-local" name="end" id="end" value="{{$event->end}}" disabled>
+                            <input class="w-full rounded border border-stroke bg-gray px-4.5 py-3 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-not-allowed" type="datetime-local" name="end" id="end" value="{{$event->end}}" disabled>
                         </div>
                     </div>
 
