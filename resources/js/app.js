@@ -160,6 +160,45 @@ function hideThis(e) {
     document.getElementById(e).classList.add("hidden");
 }
 
+let priceTiemout;
+
+function isPrice() {
+    clearTimeout(priceTiemout);
+
+    priceTiemout = setTimeout(async () => {
+        const price = document.getElementById("price").value;
+
+        if (price != "") {
+            const result = await fetch(`/admin/price/isPrice/${price}`);
+
+            if (result.status === 404) {
+                priceNotFound();
+            } else {
+                priceFound();
+            }
+        }
+    }, 500);
+}
+
+function priceFound() {
+    const messagefField = document.getElementById("priceMessage");
+    const submitButton = document.getElementById("submitButton");
+
+    messagefField.innerText = "Price already exist.";
+    submitButton.disabled = true;
+    submitButton.classList.add("cursor-not-allowed");
+}
+
+function priceNotFound() {
+    const messagefField = document.getElementById("priceMessage");
+    const submitButton = document.getElementById("submitButton");
+
+    messagefField.innerText = "";
+    submitButton.disabled = false;
+    submitButton.classList.remove("cursor-not-allowed");
+}
+
+window.isPrice = isPrice;
 window.hideThis = hideThis;
 window.goBack = goBack;
 window.goToDashboard = goToDashboard;
