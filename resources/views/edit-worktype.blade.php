@@ -55,6 +55,11 @@
                         <a href="/admin/price/create?from=/admin/worktype/{{$worktype->id}}" class="flex justify-self-start rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:text-black dark:hover:bg-green-500 border dark:text-white dark:bg-gray-900">Add new price</a>
                     </div>
                   </form>
+                  <form class="flex justify-end" action="/admin/worktype/delete/{{$worktype->id}}" method="post">
+                    @method('delete')
+                    @csrf
+                    <input onclick="confirmWorktypeDelete(event)" type="submit" value="Delete" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900"/>
+                  </form>
                 </div>
               </div>              
             </div>
