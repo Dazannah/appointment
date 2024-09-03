@@ -25,6 +25,10 @@ class EventService implements IEvent {
     $this->userService = $userService;
   }
 
+  public function getAllEventsOfUser(User $user): LengthAwarePaginator {
+    return Event::where('user_id', '=', $user->id)->paginate(10);
+  }
+
   public function getWeeklyEvents($start, $end): Collection {
     return Event::where([['start', '>=', $start], ['end', '<=', $end], ['status_id', '!=', '3']])->get();
   }
