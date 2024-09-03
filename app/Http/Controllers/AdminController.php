@@ -30,6 +30,10 @@ class AdminController extends Controller {
         $this->worktypeService = $worktypeService;
     }
 
+    public function getAllAppointmentsForUser(User $user) {
+        return view('user-all-events', ['pageTitle' => "All appointments of $user->name", 'reservations' => $this->eventService->getAllEventsOfUser($user)]);
+    }
+
     public function getAdminMenuWorktypes(Request $req) {
         $validated = $req->validate([
             'worktypeId' => '',
