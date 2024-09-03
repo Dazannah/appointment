@@ -44,8 +44,11 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
     });
 
     Route::name('worktype.')->prefix('worktype')->group(function () {
+        Route::get('/create', [WorkTypesController::class, 'create'])->name('createWorktype');
+        Route::post('/create', [WorkTypesController::class, 'store']);
         Route::get('/{worktype}', [WorkTypesController::class, 'edit'])->name('editWorktype');
         Route::patch('/{worktype}', [WorkTypesController::class, 'update'])->name('showWorktype');
+        Route::delete('/delete/{worktype}', [WorkTypesController::class, 'destroy'])->name('deleteWorktype');
     });
 
     Route::name('price.')->prefix('price')->group(function () {

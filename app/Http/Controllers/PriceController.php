@@ -31,7 +31,9 @@ class PriceController extends Controller {
     public function store(Request $request) {
         $valideted = $request->validate([
             'price' => 'required|numeric',
-            'from' => ''
+            'from' => '',
+            'worktypeName' => '',
+            'duration' => ''
         ]);
 
         if (Price::where('price', '=', $valideted['price'])->count() > 0)
@@ -39,9 +41,11 @@ class PriceController extends Controller {
 
         Price::create(['price' => $valideted['price']]);
 
-        if (isset($valideted['from']))
-            return redirect($valideted['from'])->with('success', 'Price successfully created.');
+        if (isset($valideted['from'])) {
+            $redirectTo = url()->query($valideted['from'], ['worktypeName' => $valideted['worktypeName'] ?? '', 'duration' => $valideted['duration'] ?? '']);
 
+            return redirect($redirectTo)->with('success', 'Price successfully created.');
+        }
 
         return back()->with('success', 'Price successfully created.');
     }
