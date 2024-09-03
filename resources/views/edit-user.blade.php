@@ -88,7 +88,7 @@
                       <h4 class="mb-6 text-xl font-bold text-black dark:text-white">
                         Latest 10 appointments
                       </h4>
-                      <a href="/admin/user/{{$user->id}}/all-apointments">
+                      <a href="/admin/user/{{$user->id}}/all-appointments">
                       <button class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-gray-300 dark:hover:bg-gray-800 border dark:text-white dark:bg-gray-900" type="submit">
                         All appointments
                     </button>
