@@ -31,8 +31,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::class])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'getDashboard'])->name('dashboard');
-    Route::get('/user/{user}', [AdminController::class, 'getEditUser']);
-    Route::patch('/user/{user}', [AdminController::class, 'saveEditUser']);
+
+    Route::name('user.')->prefix('user')->group(function () {
+        Route::get('/{user}', [AdminController::class, 'getEditUser']);
+        Route::patch('/{user}', [AdminController::class, 'saveEditUser']);
+        Route::get('/{user}/all-appointments', [AdminController::class, 'getAllAppointmentsForUser'])->name('getAllAppointments');
+    });
+
     Route::get('/event/{event}', [AdminController::class, 'getEditEvent']);
     Route::patch('/event/{event}', [AdminController::class, 'saveEditEvent']);
 
