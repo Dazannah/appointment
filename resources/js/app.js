@@ -198,6 +198,26 @@ function priceNotFound() {
     submitButton.classList.remove("cursor-not-allowed");
 }
 
+function redirectToCreatePrice(event, url) {
+    event.preventDefault();
+
+    const worktypeName = document.getElementById("worktypeName").value;
+    const duration = document.getElementById("duration").value;
+
+    if (worktypeName) url += `&worktypeName=${worktypeName}`;
+    if (duration) url += `&duration=${duration}`;
+
+    location.href = url;
+}
+
+function confirmWorktypeDelete(event) {
+    if (!confirm("This will delete all associated appointment!")) {
+        event.preventDefault();
+    }
+}
+
+window.confirmWorktypeDelete = confirmWorktypeDelete;
+window.redirectToCreatePrice = redirectToCreatePrice;
 window.isPrice = isPrice;
 window.hideThis = hideThis;
 window.goBack = goBack;

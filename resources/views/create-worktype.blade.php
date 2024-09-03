@@ -6,20 +6,19 @@
             <div class="col-span-5 xl:col-span-5">
               <div class="rounded-sm border border-stroke bg-white shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white">
                 <div class="p-7">
-                  <form action="/admin/worktype/{{$worktype->id}}" method="post">
-                    @method('patch')
+                  <form action="/admin/worktype/create" method="post">
                     @csrf
                     <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
                       <div class="p-2 w-full sm:w-1/2">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="worktypeName">Worktype</label>
                         <div class="relative">
-                          <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" name="worktypeName" id="worktypeName" placeholder="Worktype Name" value="{{$worktype->name}}">
+                          <input value="{{ Request::get('worktypeName') ?? old('worktypeName') }}" class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="text" name="worktypeName" id="worktypeName" placeholder="Worktype Name" required>
                         </div>
                       </div>
                       <div class="p-2 w-full sm:w-1/2">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="duration">Duration(min)</label>
                             <div class="relative">
-                                <input class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="number" name="duration" id="duration" placeholder="Duration" value="{{$worktype->duration}}">
+                                <input value="{{Request::get('duration') ?? old('duration') }}" class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" type="number" name="duration" id="duration" placeholder="Duration" required>
                             </div>
                       </div>
                     </div>
@@ -32,11 +31,9 @@
                             </label>
                             <div class="relative z-20 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                               <select name="price" class="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 pl-5 pr-12 outline-none transition focus:border-primary active:border-primary dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                                <option value="{{$worktype->price_id}}">{{$worktype->price->price}}</option>
+                                <option value="">Select</option>
                                 @foreach ($prices as $price)
-                                  @if ($price->id != $worktype->price_id)
                                     <option value="{{$price->id}}">{{$price->price}}</option>
-                                  @endif
                                 @endforeach
                                 
                               </select>
@@ -52,13 +49,8 @@
                         <a href="/admin/menu/worktypes" class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900">
                             Back
                         </a>
-                        <a href="/admin/price/create?from=/admin/worktype/{{$worktype->id}}" class="flex justify-self-start rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:text-black dark:hover:bg-green-500 border dark:text-white dark:bg-gray-900">Add new price</a>
+                        <button onclick="redirectToCreatePrice(event, '/admin/price/create?from=/admin/worktype/create')" class="flex justify-self-start rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:text-black dark:hover:bg-green-500 border dark:text-white dark:bg-gray-900">Add new price</button>
                     </div>
-                  </form>
-                  <form class="flex justify-end" action="/admin/worktype/delete/{{$worktype->id}}" method="post">
-                    @method('delete')
-                    @csrf
-                    <input onclick="confirmWorktypeDelete(event)" type="submit" value="Delete" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900"/>
                   </form>
                 </div>
               </div>              

@@ -2,6 +2,7 @@
 
 namespace App\Interfaces;
 
+use App\Models\User;
 use App\Models\Event;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\RedirectResponse;
@@ -20,4 +21,5 @@ interface IEvent {
     public function getLatest10Appointments(): Collection;
     public function getLatest10AppointmentsForUser($userId): Collection;
     public function getAdminMenuFilterEvents($validated): LengthAwarePaginator;
+    public function getAllEventsOfUser(User $user): LengthAwarePaginator;
 }

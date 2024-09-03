@@ -6,7 +6,9 @@
             <div class="col-span-5 xl:col-span-5">
               <div class="rounded-sm border border-stroke bg-white shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white">
                 <div class="p-7">
-                  <form action="/admin/price/create{{ request()->has('from') ? '?from=' . request()->get('from') : '' }}" method="post">
+                  <form action="/admin/price/create{{ request()->has('from') ? '?from=' . request()->get('from') : '/admin/dashboard' }}
+                                  {{ request()->has('worktypeName') ? '&worktypeName=' . request()->get('worktypeName') : '' }}
+                                   {{ request()->has('duration') ? '&duration=' . request()->get('duration') : '' }}" method="post">
                     @csrf
                     <div class="p-2 mb-5.5">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="price">Price</label>
@@ -20,7 +22,10 @@
                         <button id="submitButton" class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:text-black dark:hover:bg-green-500 border dark:text-white dark:bg-gray-900" type="submit">
                             Save
                         </button>
-                        <a href="{{ request()->has('from') ? request()->get('from') : '/admin/dashboard' }}" class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900">
+                        <a href="{{ request()->has('from') ? request()->get('from') . '?' : '/admin/dashboard' }}
+                                  {{ request()->has('worktypeName') ? '&worktypeName=' . request()->get('worktypeName') : '' }}
+                                   {{ request()->has('duration') ? '&duration=' . request()->get('duration') : '' }}
+                                " class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900">
                             Back
                         </a>
                     </div>

@@ -18,14 +18,25 @@ class WorkTypesController extends Controller {
      * Show the form for creating a new resource.
      */
     public function create() {
-        //
+        return view('create-worktype', ['pageTitle' => 'Create worktype', 'prices' => Price::all()]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
-        //
+        $validated = $request->validate([
+            'worktypeName' => 'required',
+            'duration' => 'required|numeric',
+            'price' => 'required|numeric',
+        ]);
+
+        if (Price::where('id', '=', $validated['price'])->count() < 1)
+            return back()->withInput()->with('error', "Price don't exist. First add the price.");
+
+        WorkTypes::create(['name' => $validated['worktypeName'], 'duration' => $validated['duration'], 'price_id' => $validated['price']]);
+
+        return redirect('/admin/menu/worktypes')->with('success', "Successfully created worktype.");
     }
 
     /**
@@ -67,7 +78,9 @@ class WorkTypesController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(WorkTypes $workTypes) {
-        //
+    public function destroy(WorkTypes $worktype) {
+        $worktype->destroy($worktype->id);
+
+        return redirect('/admin/menu/worktypes')->with('success', 'Worktype successfully deleted.');
     }
 }
