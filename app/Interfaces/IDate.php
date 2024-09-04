@@ -13,4 +13,5 @@ interface IDate {
     public function workIterval($which);
     public function totalWorkMinutes(): int;
     public function replaceTInStartEnd($appointments): void;
+    public function getNextEventDate($event = null, $startDate): string;
 }

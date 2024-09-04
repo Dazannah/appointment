@@ -20,6 +20,22 @@ class DateService implements IDate {
     return $availableMins;
   }
 
+  public function getNextEventDate($event = null, $startDate): string {
+    $startDateExploded = explode('T', $startDate);
+
+    if ($event) {
+      $nextEventStartDateExploded = explode('T', $event['start']);
+
+      if ($startDateExploded[0] < $nextEventStartDateExploded[0]) {
+        return $startDateExploded[0] . 'T16:00';
+      }
+
+      return $event['start'];
+    } else {
+      return $startDateExploded[0] . 'T16:00';
+    }
+  }
+
   public function IsMoreThanADay(int $availableMins): bool {
     return $availableMins > 1440;
   }
