@@ -45,11 +45,11 @@
                         </select>
                     </div>
 
-                    <div class="grid grid-cols-2 grid-rows-2 justify-items-center items-center">
-                        <div class="col-span-1 row-span-2 mt-3 md:mt-0 self-end">
-                            <input type="submit" value="Submit" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:bg-green-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">
+                    <div class="grid grid-cols-2 w-max justify-items-center items-center">
+                        <div class="col-span-1">
+                            <input type="submit" value="Submit" class="w-max hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:bg-green-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">
                         </div>
-                        <div class="col-span-1 row-span-2 mt-3 md:mt-0 self-end">
+                        <div class="col-span-1">
                             <a href="/admin/menu/events" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:bg-red-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">Reset</a>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
             <div class="col-span-5">
                 <div class="grid grid-cols-1 gap-1 h-fit py-3 rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
                     @foreach ($events as $event)
-                    <a href="/admin/event/{{$event->id}}" class="px-7.5 py-3 border-b hover:bg-gray-300 dark:hover:bg-gray-900">
+                    <a href="/admin/event/{{$event->id}}" class="px-7.5 py-3 border-b border-black dark:border-white hover:bg-gray-300 dark:hover:bg-gray-900">
                         <div class="grid grid-cols-5 justify-items-center items-center border-stroke hover:bg-gray-300 dark:hover:bg-gray-900 dark:border-strokedark">
                             <div class="col-span-1">
                                 <span>{{$event->id}}</span>
