@@ -1,9 +1,9 @@
 <x-app-layout>
     <x-slot:pageTitle>{{ $pageTitle ?? 'Page Title'}}</x-slot>
     @include('components/admin-secondary-menu')
-    <div class="grid grid-cols-5 gap-3">
-        <form class="col-span-5" action="/admin/menu/users" method="GET">
-            <div class="grid grid-cols-5 gap-1">
+    <div class="grid grid-cols-4 gap-3">
+        <form class="col-span-4" action="/admin/menu/users" method="GET">
+            <div class="grid grid-cols-4 gap-1">
                     <div class="col-span-1">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white">
                             User ID
@@ -34,20 +34,19 @@
                         </select>
                     </div>
 
-
-                    <div class="grid grid-cols-2 grid-rows-2 justify-items-center items-center">
+                    <div class="grid grid-cols-2 w-max justify-items-center items-center">
                         <div class="col-span-1">
-                            <label for="isAdmin" class="hover:cursor-pointer mb-3 block text-sm font-medium text-black dark:text-white">
-                                Admin
-                            </label>
-                        </div>
-                        <div class="col-span-1 row-span-2 mt-3 md:mt-0">
                             <input type="submit" value="Submit" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:bg-green-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">
+                        </div>
+                        <div class="col-span-1">
                             <a href="/admin/menu/users" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:bg-red-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">Reset</a>
                         </div>
-                        <div class="col-span-1">
-                            <input {{Request::get('isAdmin') == 'on' ? 'checked' : '' }} class="hover:cursor-pointer" type="checkbox" name="isAdmin" id="isAdmin">
-                        </div>
+
+                    </div>
+                    <div class="w-max place-self-center">                            <input {{Request::get('isAdmin') == 'on' ? 'checked' : '' }} class="hover:cursor-pointer" type="checkbox" name="isAdmin" id="isAdmin">
+                        <label for="isAdmin" class="hover:cursor-pointer mb-3 text-sm font-medium text-black dark:text-white">
+                            Admin
+                        </label>
                     </div>
             </div>
         </form>
@@ -55,7 +54,7 @@
             <div class="col-span-4">
                 <div class="grid grid-cols-1 gap-3 h-fit py-3 rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
                     @foreach ($users as $user)
-                    <a href="/admin/user/{{$user->id}}" class="px-7.5 py-3 border-b hover:bg-gray-300 dark:hover:bg-gray-900">
+                    <a href="/admin/user/{{$user->id}}" class="px-7.5 py-3 border-b border-black dark:border-white hover:bg-gray-300 dark:hover:bg-gray-900">
                         <div class="grid grid-cols-4 justify-items-center items-center border-stroke hover:bg-gray-300 dark:hover:bg-gray-900 dark:border-strokedark">
                             <div class="col-span-1">
                                 <span>{{$user->id}}</span>

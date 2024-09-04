@@ -47,14 +47,12 @@ class EventService implements IEvent {
   public function getAvailableWorkTypes($startDate): Collection {
     $event = Event::where([['start', '>=', $startDate], ['status_id', '!=', '3']])->orderBy('start', 'asc')->first();
 
-    if ($event) {
-      $dateDiff = $this->dateService->GetDateDiffFromString($startDate, $event['start']);
-      $availableMins = $this->dateService->GetMinutsFromDateDiff($dateDiff);
+    $nextEventDate = $this->dateService->getNextEventDate($event, $startDate);
 
-      $result =  WorkTypes::where([['duration', '<=', $availableMins]])->with("price")->get();
-    } else {
-      $result = WorkTypes::with("price")->get();
-    }
+    $dateDiff = $this->dateService->GetDateDiffFromString($startDate, $nextEventDate);
+    $availableMins = $this->dateService->GetMinutsFromDateDiff($dateDiff);
+
+    $result =  WorkTypes::where([['duration', '<=', $availableMins]])->with("price")->get();
 
     return $result;
   }
