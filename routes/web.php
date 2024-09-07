@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\PriceController;
+use App\Http\Controllers\SiteConfigController;
 use App\Http\Controllers\WorkTypesController;
 
 Route::get('/', function () {
@@ -64,7 +65,7 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
         Route::get('/isPrice/{price:price}', [PriceController::class, 'isPrice'])->name('isPrice');
     });
 
-    Route::get('/site-settings', [AdminController::class, 'getSiteSettings'])->name('siteSettings');
+    Route::get('/site-settings', [SiteConfigController::class, 'index'])->name('siteSettings');
 });
 
 Route::middleware('auth')->group(function () {
