@@ -5,13 +5,33 @@ namespace App\Http\Controllers;
 use App\Models\Price;
 use App\Models\WorkTypes;
 use Illuminate\Http\Request;
+use App\Interfaces\IPriceService;
+use App\Interfaces\IWorktypeService;
 
 class WorkTypesController extends Controller {
+
+    private IWorktypeService $worktypeService;
+    private IPriceService $priceService;
+
+    public function __construct(IWorktypeService $worktypeService, IPriceService $priceService) {
+        $this->worktypeService = $worktypeService;
+        $this->priceService = $priceService;
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index() {
-        //
+    public function index(Request $request) {
+        $validated = $request->validate([
+            'name' => '',
+            'duration' => '',
+            'price' => '',
+        ]);
+
+        $validated['priceId'] = $this->priceService->getPriceIdByPrice($validated['price'] ?? '');
+
+        $worktypes = $this->worktypeService->getFilterWorktypes($validated);
+
+        return view('prices', ['pageTitle' => 'Prices', 'worktypes' => $worktypes]);
     }
 
     /**
