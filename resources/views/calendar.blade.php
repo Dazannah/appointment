@@ -1,5 +1,7 @@
 <x-app-layout>
   <x-slot:pageTitle>{{ $pageTitle ?? 'Page Title'}}</x-slot>
+  <input id="slotMinTime" type="hidden" name="slotMinTime" value="{{$calendarTimes['slotMinTime']}}">
+  <input id="slotMaxTime" type="hidden" name="slotMaxTime" value="{{$calendarTimes['slotMaxTime']}}">
   <div id='calendar' class="h-5/6 w-3/4 m-auto"></div>
   <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.14/index.global.min.js'></script>
 
