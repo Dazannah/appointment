@@ -5,14 +5,17 @@ namespace App\Http\Controllers;
 use App\Interfaces\IDate;
 use App\Interfaces\IEvent;
 use Illuminate\Http\Request;
+use App\Interfaces\ISiteConfig;
 
 class CalendarController extends Controller {
     private IDate $dateService;
     private IEvent $eventService;
+    private ISiteConfig $siteConfigService;
 
-    public function __construct(IDate $dateService, IEvent $eventService) {
+    public function __construct(IDate $dateService, IEvent $eventService, ISiteConfig $siteConfigService) {
         $this->dateService = $dateService;
         $this->eventService = $eventService;
+        $this->siteConfigService = $siteConfigService;
     }
 
     public function getCreateEvent(Request $req) {
@@ -20,7 +23,10 @@ class CalendarController extends Controller {
     }
 
     public function show(Request $req) {
-        return view('calendar', ['pageTitle' => 'Calendar']);
+        $config = $this->siteConfigService->getConfig();
+        $calendartime = $config['calendarTimes'];
+
+        return view('calendar', ['pageTitle' => 'Calendar', 'calendarTimes' => $calendartime]);
     }
 
     public function getEvents(Request $req) {
