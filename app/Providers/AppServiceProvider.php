@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\PriceService;
 use App\Interfaces\IDate;
 use App\Interfaces\IEvent;
 use App\Services\DateService;
@@ -28,7 +29,6 @@ class AppServiceProvider extends ServiceProvider {
         $this->app->bind(IDataSerialisation::class, DataSerialisationService::class);
         $this->app->bind(IUserService::class, UserService::class);
         $this->app->bind(IWorktypeService::class, WorktypeService::class);
-        $this->app->bind(IPriceService::class, PriceService::class);
         $this->app->bind(ISiteConfig::class, SiteConfigService::class);
     }
 
