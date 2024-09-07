@@ -17,6 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 })->name('welcome');
 
+Route::get('/prices', [WorkTypesController::class, 'index'])->name('prices');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [ProfileController::class, 'getDashboard'])->name('dashboard');
     Route::get('/calendar', [CalendarController::class, 'show'])->name('calendar');

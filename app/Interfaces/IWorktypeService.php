@@ -5,5 +5,5 @@ namespace App\Interfaces;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 interface IWorktypeService {
-    public function getAdminMenuFilterWorktypes($validated): LengthAwarePaginator;
+    public function getFilterWorktypes($validated): LengthAwarePaginator;
 }
