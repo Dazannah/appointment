@@ -18,4 +18,17 @@ class SiteConfigController extends Controller {
 
         return view('site-settings', ['pageTitle' => 'Site settings', 'configs' => $configs]);
     }
+
+    public function saveSettings(Request $request) {
+        $validatedInputs = $request->validate([
+            'workdayStart' => 'required|date_format:H:i',
+            'workdayEnd' => 'required|date_format:H:i|after:workdayStart'
+        ]);
+
+        $newValues = $this->siteConfigs->serialiseInputs($validatedInputs);
+        $this->siteConfigs->setConfig($newValues);
+        $this->siteConfigs->save();
+
+        return back()->with('success', 'Sucessfuly updated the site settings');
+    }
 }
