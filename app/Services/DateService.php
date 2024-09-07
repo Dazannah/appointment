@@ -6,8 +6,17 @@ use DateTime;
 use DateInterval;
 use DateTimeZone;
 use App\Interfaces\IDate;
+use App\Interfaces\ISiteConfig;
 
 class DateService implements IDate {
+
+  private ISiteConfig $siteConfigService;
+  private $calendarTimes;
+
+  public function __construct(ISiteConfig $siteConfigService) {
+    $this->siteConfigService = $siteConfigService;
+    $this->calendarTimes = $this->siteConfigService->getConfig()['calendarTimes'];
+  }
 
   public function GetMinutsFromDateDiff(DateInterval $dateDiff): int {
     $availableMins = 0;
@@ -27,12 +36,12 @@ class DateService implements IDate {
       $nextEventStartDateExploded = explode('T', $event['start']);
 
       if ($startDateExploded[0] < $nextEventStartDateExploded[0]) {
-        return $startDateExploded[0] . 'T16:00';
+        return $startDateExploded[0] . 'T' . $this->calendarTimes['slotMaxTime'];
       }
 
       return $event['start'];
     } else {
-      return $startDateExploded[0] . 'T16:00';
+      return $startDateExploded[0] . 'T' . $this->calendarTimes['slotMaxTime'];
     }
   }
 
