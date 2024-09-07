@@ -7,7 +7,7 @@ use App\Models\WorkTypes;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class WorktypeService implements IWorktypeService {
-  public function getAdminMenuFilterWorktypes($validated): LengthAwarePaginator {
+  public function getFilterWorktypes($validated): LengthAwarePaginator {
     $worktypes = WorkTypes::when(
       isset($validated['worktypeId']),
       function ($querry) use ($validated) {

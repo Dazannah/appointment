@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot:pageTitle>{{ $pageTitle ?? 'Page Title'}}</x-slot>
     @include('components/admin-secondary-menu')
-    <div class="grid grid-cols-5 gap-3">
+    <div class="grid grid-cols-5 gap-3 m-auto">
         <form class="col-span-6" action="/admin/menu/events" method="GET">
             <div class="grid grid-cols-5 gap-1">
                     <div class="col-span-1">
