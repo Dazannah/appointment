@@ -47,10 +47,6 @@ class AdminController extends Controller {
         return view('admin-menu-worktypes', ['pageTitle' => 'Worktypes', 'worktypes' => $worktypes, 'prices' => Price::all()]);
     }
 
-    public function getSiteSettings() {
-        return view('site-settings', ['pageTitle' => 'Site settings']);
-    }
-
     public function getAdminMenuEvents(Request $req) {
         $validated = $req->validate([
             'appointmentId' => '',
