@@ -42,7 +42,7 @@ class AdminController extends Controller {
             'priceId' => '',
         ]);
 
-        $worktypes = $this->worktypeService->getAdminMenuFilterWorktypes($validated);
+        $worktypes = $this->worktypeService->getFilterWorktypes($validated);
 
         return view('admin-menu-worktypes', ['pageTitle' => 'Worktypes', 'worktypes' => $worktypes, 'prices' => Price::all()]);
     }
