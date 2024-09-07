@@ -11,6 +11,9 @@ Alpine.start();
 const reserveFormDiv = document.getElementById("make-reserve-form");
 
 if (document.getElementById("calendar")) {
+    const slotMinTime = document.getElementById("slotMinTime").value;
+    const slotMaxTime = document.getElementById("slotMaxTime").value;
+
     document.addEventListener("DOMContentLoaded", async function () {
         var calendarEl = document.getElementById("calendar");
         var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -47,8 +50,8 @@ if (document.getElementById("calendar")) {
                 meridiem: "long",
             },
 
-            slotMinTime: "08:00:00",
-            slotMaxTime: "16:00:00",
+            slotMinTime,
+            slotMaxTime,
 
             navLinks: true,
             weekNumbers: true,
