@@ -18,11 +18,11 @@ Route::get('/', function () {
 })->name('welcome');
 
 Route::get('/prices', [WorkTypesController::class, 'index'])->name('prices');
+Route::get('/calendar', [CalendarController::class, 'show'])->name('calendar');
+Route::get('/get-events', [CalendarController::class, 'getEvents'])->name('getEvents');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [ProfileController::class, 'getDashboard'])->name('dashboard');
-    Route::get('/calendar', [CalendarController::class, 'show'])->name('calendar');
-    Route::get('/get-events', [CalendarController::class, 'getEvents'])->name('getEvents');
     Route::get('/get-available-work-types', [CalendarController::class, 'getAvailableWorkTypes'])->name('getAvailableWorkTypes');
     //Route::get('/make-reservation', [CalendarController::class, 'getCreateEvent'])->name('getCreateEvent');
     Route::post('/make-reservation', [CalendarController::class, 'createEvent'])->name('createEvent');

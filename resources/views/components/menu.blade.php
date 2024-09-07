@@ -1,20 +1,18 @@
 
-<div
-                    class="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300 dark:border-gray-800"
-                >
-                    <h1 class="text-lg font-medium">{{$pageTitle ?? 'Page Title'}}</h1>
-                    @if (auth()->user()->admin)
-                    <button
-                        class="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium active:bg-gray-200 active:dark:bg-gray-800 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
-                    >
-                        Action 1
-                    </button>
-                    <button
-                        class="flex items-center justify-center h-10 px-4 ml-2 text-sm font-medium active:bg-gray-200 active:dark:bg-gray-800 rounded hover:bg-gray-300 dark:hover:bg-gray-800"
-                    >
-                        Action 2
-                    </button>
-                    <button
+<div class="flex items-center flex-shrink-0 h-16 px-8 border-b border-gray-300 dark:border-gray-800">
+    <h1 class="text-lg font-medium">
+        {{$pageTitle ?? 'Page Title'}}
+    </h1>
+
+    @guest
+        <a href="/login" class="flex items-center justify-center h-10 px-4 ml-auto text-sm font-medium active:bg-gray-200 active:dark:bg-gray-800 rounded hover:bg-gray-300 dark:hover:bg-gray-800 {{request()->routeIs('login') ? 'bg-gray-300 dark:bg-gray-800' : ''}}">
+            Login
+        </a>
+        <a href="/register" class="flex items-center justify-center h-10 px-4 ml-2 text-sm font-medium active:bg-gray-200 active:dark:bg-gray-800 rounded hover:bg-gray-300 dark:hover:bg-gray-800 {{request()->routeIs('register') ? 'bg-gray-300 dark:bg-gray-800' : ''}}">
+            Register
+        </a>
+    @endguest
+                    {{--<button
                         class="relative ml-2 text-sm focus:outline-none group"
                     >
                         <div
@@ -54,6 +52,6 @@
                                 >Menu Item 1</a
                             >
                         </div>
-                    </button>
-                    @endif
-                </div>
+                    </button>--}}
+
+</div>
