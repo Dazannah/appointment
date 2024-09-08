@@ -34,8 +34,10 @@ class EventService implements IEvent {
     }
   }
 
-  public function getAllOpenEvent(): Collection {
-    return Event::where('status_id', '=', '1')->orWhere('status_id', '=', '2')->get();
+  public function getAllOpenEndedEvents(): Collection {
+    $now = str_replace("T", " ", date("Y-m-d H:i:s"));
+
+    return Event::where([['status_id', '=', '1'], ['end', '<=', $now]])->orWhere([['status_id', '=', '2'], ['end', '<=', $now]])->get();
   }
 
   public function getAllEventsOfUser(User $user): LengthAwarePaginator {

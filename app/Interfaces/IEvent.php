@@ -22,6 +22,6 @@ interface IEvent {
     public function getLatest10AppointmentsForUser($userId): Collection;
     public function getAdminMenuFilterEvents($validated): LengthAwarePaginator;
     public function getAllEventsOfUser(User $user): LengthAwarePaginator;
-    public function getAllOpenEvent(): Collection;
+    public function getAllOpenEndedEvents(): Collection;
     public function closeGivenEvents($events): void;
 }
