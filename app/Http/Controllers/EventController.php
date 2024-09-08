@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Interfaces\IEvent;
 use App\Models\Event;
+use App\Interfaces\IEvent;
 use Illuminate\Http\Request;
 
 class EventController extends Controller {
@@ -75,5 +75,12 @@ class EventController extends Controller {
      * Remove the specified resource from storage.
      */
     public function destroy(Event $event) {
+    }
+
+    public function closeEventInPastIfNotClosedOrDeleted() {
+        $eventService = app(IEvent::class);
+        $events = $eventService->getAllOpenEvent();
+
+        $eventService->closeGivenEvents($events);
     }
 }
