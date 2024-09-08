@@ -25,6 +25,19 @@ class EventService implements IEvent {
     $this->userService = $userService;
   }
 
+  public function closeGivenEvents($events): void {
+    if (count($events) > 0) {
+      foreach ($events as $event) {
+        $event->status_id = 4;
+        $event->save();
+      }
+    }
+  }
+
+  public function getAllOpenEvent(): Collection {
+    return Event::where('status_id', '=', '1')->orWhere('status_id', '=', '2')->get();
+  }
+
   public function getAllEventsOfUser(User $user): LengthAwarePaginator {
     return Event::where('user_id', '=', $user->id)->paginate(10);
   }
