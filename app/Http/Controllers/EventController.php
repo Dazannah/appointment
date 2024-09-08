@@ -79,7 +79,7 @@ class EventController extends Controller {
 
     public function closeEventInPastIfNotClosedOrDeleted() {
         $eventService = app(IEvent::class);
-        $events = $eventService->getAllOpenEvent();
+        $events = $eventService->getAllOpenEndedEvents();
 
         $eventService->closeGivenEvents($events);
     }
