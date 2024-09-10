@@ -18,6 +18,62 @@ class DateService implements IDate {
     $this->calendarTimes = $this->siteConfigService->getConfig()['calendarTimes'];
   }
 
+  public function ValidateDateForEvent($start, $end, $duration): array {
+    $status = [
+      'isDateWrong' => false,
+      'errorMessage' => ''
+    ];
+
+    if (!$this->IsStartInTheFuture($start)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment for the past.";
+
+      return $status;
+    }
+
+    if ($this->IsStartBeforeOpen($start)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment before open time.";
+
+      return $status;
+    }
+
+    if ($this->IsEndAfterClose($end)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment that end after close.";
+
+      return $status;
+    }
+
+    if (!$this->IsStartAndEndDifferenceEqualWithEventDuration($start, $end, $duration)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment with miss match dates.";
+
+      return $status;
+    }
+
+
+    return $status;
+  }
+
+  public function IsEndAfterClose($end): bool {
+    return $this->calendarTimes['slotMaxTime'] < explode('T', $end)[1];
+  }
+
+  public function IsStartBeforeOpen($start): bool {
+    return $this->calendarTimes['slotMinTime'] > explode('T', $start)[1];
+  }
+
+  public function IsStartAndEndDifferenceEqualWithEventDuration($start, $end, $duration): bool {
+    $dateDiff = $this->GetDateDiffFromString($start, $end);
+    $startEndTimeDifferenceInMinutes = $this->GetMinutsFromDateDiff($dateDiff);
+
+    return $startEndTimeDifferenceInMinutes == $duration;
+  }
+
+
+
+
   public function GetMinutsFromDateDiff(DateInterval $dateDiff): int {
     $availableMins = 0;
     $availableMins += $dateDiff->y * 24 * 60 * 30 * 365;
