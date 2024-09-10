@@ -219,6 +219,33 @@ function confirmWorktypeDelete(event) {
     }
 }
 
+async function recommendNextAvailable(button) {
+    const startDate = document.getElementById("start-date");
+    const endDate = document.getElementById("end-date");
+
+    const nextAvailableTime = await fetch(
+        `/next-available-time-for-appointement/${button.id}`
+    );
+
+    const responseJson = await nextAvailableTime.json();
+
+    startDate.value = responseJson.start;
+    endDate.value = responseJson.end;
+
+    const worktypeSpan = document.getElementById("worktype-title");
+    worktypeSpan.value = button.name;
+
+    const workIdInput = document.getElementById("workId");
+    workIdInput.value = button.id;
+
+    const makeReserveForm = document.getElementById("make-reserve-form");
+    makeReserveForm.classList.remove("hidden");
+
+    const optionsDiv = document.getElementById("options-div");
+    optionsDiv.classList.remove("hidden");
+}
+
+window.recommendNextAvailable = recommendNextAvailable;
 window.confirmWorktypeDelete = confirmWorktypeDelete;
 window.redirectToCreatePrice = redirectToCreatePrice;
 window.isPrice = isPrice;
