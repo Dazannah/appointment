@@ -25,6 +25,7 @@ Route::get('/get-events', [CalendarController::class, 'getEvents'])->name('getEv
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [ProfileController::class, 'getDashboard'])->name('dashboard');
     Route::get('/get-available-work-types', [CalendarController::class, 'getAvailableWorkTypes'])->name('getAvailableWorkTypes');
+    Route::get('/next-available-time-for-appointement/{worktype}', [CalendarController::class, 'getNextAvailableEventTime'])->name('getNextAvailableEventTime');
     //Route::get('/make-reservation', [CalendarController::class, 'getCreateEvent'])->name('getCreateEvent');
     Route::post('/make-reservation', [CalendarController::class, 'createEvent'])->name('createEvent');
     Route::get('/event/{event}', [EventController::class, 'edit']);
