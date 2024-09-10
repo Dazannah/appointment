@@ -10,6 +10,8 @@ use App\Interfaces\IWorktypeService;
 use App\Models\Event;
 use App\Models\WorkTypes;
 
+use function Pest\Laravel\json;
+
 class CalendarController extends Controller {
     private IDate $dateService;
     private IEvent $eventService;
@@ -21,6 +23,12 @@ class CalendarController extends Controller {
         $this->eventService = $eventService;
         $this->siteConfigService = $siteConfigService;
         $this->worktypeService = $worktypeService;
+    }
+
+    public function getNextAvailableEventTime(WorkTypes $worktype) {
+        $result = $this->eventService->getNextAvailableEventTime($worktype, date('Y-m-d') /*'2024-09-11'*/);
+
+        return json_encode($result);
     }
 
     public function getCreateEvent(Request $req) {
