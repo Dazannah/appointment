@@ -14,4 +14,7 @@ interface IDate {
     public function totalWorkMinutes(): int;
     public function replaceTInStartEnd($appointments): void;
     public function getNextEventDate($event = null, $startDate): string;
+    public function ValidateDateForEvent($start, $end, $duration): array;
+    public function IsStartBeforeOpen($start): bool;
+    public function IsEndAfterClose($start): bool;
 }
