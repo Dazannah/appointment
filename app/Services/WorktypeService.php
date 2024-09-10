@@ -7,6 +7,13 @@ use App\Models\WorkTypes;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class WorktypeService implements IWorktypeService {
+
+  public function GetDurationById($worktypeId): int {
+    $worktype = WorkTypes::where('id', '=', $worktypeId)->first();
+
+    return $worktype['duration'];
+  }
+
   public function getFilterWorktypes($validated): LengthAwarePaginator {
     $worktypes = WorkTypes::when(
       isset($validated['worktypeId']),

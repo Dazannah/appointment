@@ -25,6 +25,57 @@ class EventService implements IEvent {
     $this->userService = $userService;
   }
 
+  public function getNextAvailableEventTime(WorkTypes $worktype, string $day): array {
+    $workDayTimes = $this->dateService->getNextWorkdayTimesDate($day);
+    $eventOnTheDay = Event::where([['status_id', '!=', '3'], ['start', '>=', $workDayTimes['start']], ['start', '<=', $workDayTimes['end']]])->orderBy('start', 'asc')->first();
+
+    $isFitStartOfTheDay = isset($eventOnTheDay) ? $this->dateService->isFitStartOfDay($eventOnTheDay['start'], $worktype->duration) : true;
+
+    if ($eventOnTheDay && !$isFitStartOfTheDay) {
+
+      return $this->getNextEventCheckIfFit($eventOnTheDay, $worktype, $workDayTimes);
+    } else {
+
+      return [
+        'start' => $workDayTimes['start'],
+        'end' => date('Y-m-d H:i', strtotime($workDayTimes['start'] . " +$worktype->duration minutes"))
+      ];
+    }
+  }
+
+  public function getNextEventCheckIfFit($eventOnTheDay, $worktype, $workDayTimes) {
+    $nextEventOnTheDay = Event::where([['status_id', '!=', '3'], ['start', '>=', $eventOnTheDay['end']], ['start', '<', $workDayTimes['end']]])->orderBy('start', 'asc')->first();
+
+    if (!isset($nextEventOnTheDay)) {
+
+      $isFit = $this->dateService->isFitEndOfDay($eventOnTheDay['end'], $worktype->duration);
+
+      if ($isFit) {
+        return [
+          'start' => $eventOnTheDay['end'],
+          'end' => date('Y-m-d H:i', strtotime($eventOnTheDay['end'] . " +$worktype->duration minutes"))
+        ];
+      } else {
+
+        return $this->getNextAvailableEventTime($worktype, $workDayTimes['day']);
+      }
+    } else {
+
+      $isFitBetween = $this->dateService->isFitTwoDateTimeDuration($eventOnTheDay['end'], $nextEventOnTheDay['start'], $worktype->duration);
+      $isFitEndOfTheDay = $this->dateService->isFitEndOfDay($eventOnTheDay['end'], $worktype->duration);
+
+      if ($isFitBetween && $isFitEndOfTheDay) {
+
+        return [
+          'start' => $eventOnTheDay['end'],
+          'end' => date('Y-m-d H:i', strtotime($eventOnTheDay['end'] . " +$worktype->duration minutes"))
+        ];
+      } else {
+        return $this->getNextEventCheckIfFit($nextEventOnTheDay, $worktype, $workDayTimes);
+      }
+    }
+  }
+
   public function closeGivenEvents($events): void {
     if (count($events) > 0) {
       foreach ($events as $event) {
