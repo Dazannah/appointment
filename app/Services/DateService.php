@@ -17,6 +17,48 @@ class DateService implements IDate {
     $this->siteConfigService = $siteConfigService;
     $this->calendarTimes = $this->siteConfigService->getConfig()['calendarTimes'];
   }
+  public function isFitTwoDateTimeDuration($firstDateTime, $nextDateTime, $duration): bool {
+    $dateDiff = $this->GetDateDiffFromString($firstDateTime, $nextDateTime);
+    $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
+
+    return $minutesDiff >= $duration;
+  }
+
+  public function isFitEndOfDay($startDateTime, $duration): bool {
+    $startDate = explode('T', $startDateTime)[0];
+    $dateDiff = $this->GetDateDiffFromString($startDateTime, $startDate . 'T' . $this->calendarTimes['slotMaxTime']);
+    $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
+
+    return $minutesDiff >= $duration;
+  }
+
+  public function isFitStartOfDay($eventStartDateTime, $duration): bool {
+    $startDate = explode('T', $eventStartDateTime)[0];
+    $dateDiff = $this->GetDateDiffFromString($startDate . 'T' . $this->calendarTimes['slotMinTime'], $eventStartDateTime);
+    $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
+
+    return $minutesDiff >= $duration;
+  }
+
+  public function getNextWorkdayTimesDate($date): array {
+    $day = date('Y-m-d', strtotime($date . " +1 day"));
+    $dayOfWeek = date('w', strtotime($day));
+
+    if (
+      $dayOfWeek == 6
+      /** szombat */
+      || $dayOfWeek == 0
+      /** vasárnap */
+    ) {
+      return $this->getNextWorkdayTimesDate($day);
+    } else {
+      return [
+        'day' => $day,
+        'start' => $day . 'T' . $this->calendarTimes['slotMinTime'],
+        'end' => $day . 'T' . $this->calendarTimes['slotMaxTime']
+      ];
+    }
+  }
 
   public function ValidateDateForEvent($start, $end, $duration): array {
     $status = [
