@@ -3,6 +3,7 @@
 namespace App\Interfaces;
 
 use DateInterval;
+use Illuminate\Support\Facades\Date;
 
 interface IDate {
     public function GetMinutsFromDateDiff(DateInterval $dateDiff): int;
@@ -17,4 +18,8 @@ interface IDate {
     public function ValidateDateForEvent($start, $end, $duration): array;
     public function IsStartBeforeOpen($start): bool;
     public function IsEndAfterClose($start): bool;
+    public function getNextWorkdayTimesDate($day): array;
+    public function isFitEndOfDay($startDateTime, $duration): bool;
+    public function isFitTwoDateTimeDuration($firstDateTime, $nextDateTime, $duration): bool;
+    public function isFitStartOfDay($eventStartDateTime, $duration): bool;
 }
