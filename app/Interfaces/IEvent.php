@@ -4,6 +4,7 @@ namespace App\Interfaces;
 
 use App\Models\User;
 use App\Models\Event;
+use App\Models\WorkTypes;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Database\Eloquent\Collection;
@@ -24,4 +25,5 @@ interface IEvent {
     public function getAllEventsOfUser(User $user): LengthAwarePaginator;
     public function getAllOpenEndedEvents(): Collection;
     public function closeGivenEvents($events): void;
+    public function getNextAvailableEventTime(WorkTypes $event, string $day): array;
 }

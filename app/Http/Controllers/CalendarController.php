@@ -6,16 +6,29 @@ use App\Interfaces\IDate;
 use App\Interfaces\IEvent;
 use Illuminate\Http\Request;
 use App\Interfaces\ISiteConfig;
+use App\Interfaces\IWorktypeService;
+use App\Models\Event;
+use App\Models\WorkTypes;
+
+use function Pest\Laravel\json;
 
 class CalendarController extends Controller {
     private IDate $dateService;
     private IEvent $eventService;
     private ISiteConfig $siteConfigService;
+    private IWorktypeService $worktypeService;
 
-    public function __construct(IDate $dateService, IEvent $eventService, ISiteConfig $siteConfigService) {
+    public function __construct(IDate $dateService, IEvent $eventService, ISiteConfig $siteConfigService, IWorktypeService $worktypeService) {
         $this->dateService = $dateService;
         $this->eventService = $eventService;
         $this->siteConfigService = $siteConfigService;
+        $this->worktypeService = $worktypeService;
+    }
+
+    public function getNextAvailableEventTime(WorkTypes $worktype) {
+        $result = $this->eventService->getNextAvailableEventTime($worktype, date('Y-m-d') /*'2024-09-11'*/);
+
+        return json_encode($result);
     }
 
     public function getCreateEvent(Request $req) {
@@ -60,10 +73,12 @@ class CalendarController extends Controller {
             'note' => 'min:0|max:255'
         ]);
 
-        $isStartInTheFuture = $this->dateService->IsStartInTheFuture($validated['start']);
+        $duration = $this->worktypeService->GetDurationById($validated['workId']);
 
-        if (!$isStartInTheFuture) {
-            return back()->with('error', "Can't make appointment for the past.");
+        $status = $this->dateService->ValidateDateForEvent($validated['start'], $validated['end'], $duration);
+
+        if ($status['isDateWrong']) {
+            return back()->with('error', $status['errorMessage']);
         }
 
         $this->eventService->createEvent($validated, auth()->id());
