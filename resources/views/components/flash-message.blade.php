@@ -7,7 +7,7 @@
           Success
         </span>
         <p class="text-green-600 mt-1">
-          {{session('success')}}
+          {!!session('success')!!}
         </p>
       </div>
     </div>
@@ -31,7 +31,7 @@
           Error
         </span>
         <p class="text-red-600 mt-1">
-          {{session('error')}}
+          {!!session('error')!!}
         </p>
       </div>
     </div>
@@ -55,7 +55,7 @@
           Warning
         </span>
         <p class="text-amber-600 mt-1">
-          {{session('warning')}}
+          {!!session('warning')!!}
         </p>
       </div>
     </div>

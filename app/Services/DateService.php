@@ -2,21 +2,47 @@
 
 namespace App\Services;
 
+use App\Interfaces\IClosedDay;
 use DateTime;
 use DateInterval;
 use DateTimeZone;
 use App\Interfaces\IDate;
 use App\Interfaces\ISiteConfig;
+use App\Models\ClosedDay;
 
 class DateService implements IDate {
 
   private ISiteConfig $siteConfigService;
+  private IClosedDay $closedDayService;
   private $calendarTimes;
 
-  public function __construct(ISiteConfig $siteConfigService) {
+  public function __construct(ISiteConfig $siteConfigService, IClosedDay $closedDayService) {
     $this->siteConfigService = $siteConfigService;
     $this->calendarTimes = $this->siteConfigService->getConfig()['calendarTimes'];
+
+    $this->closedDayService = $closedDayService;
   }
+
+  public function isItWorkDay($date): bool {
+    echo $date;
+    $day = date('Y-m-d', strtotime($date));
+    echo $day;
+    $dayOfWeek = date('w', strtotime($day));
+    echo $dayOfWeek;
+    exit;
+
+    if (
+      $dayOfWeek == 6
+      /** szombat */
+      || $dayOfWeek == 0
+      /** vasárnap */
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   public function isFitTwoDateTimeDuration($firstDateTime, $nextDateTime, $duration): bool {
     $dateDiff = $this->GetDateDiffFromString($firstDateTime, $nextDateTime);
     $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
@@ -43,12 +69,14 @@ class DateService implements IDate {
   public function getNextWorkdayTimesDate($date): array {
     $day = date('Y-m-d', strtotime($date . " +1 day"));
     $dayOfWeek = date('w', strtotime($day));
+    $isClosedDay = $this->closedDayService->isClosedDay($day);
 
     if (
       $dayOfWeek == 6
       /** szombat */
       || $dayOfWeek == 0
       /** vasárnap */
+      || $isClosedDay
     ) {
       return $this->getNextWorkdayTimesDate($day);
     } else {
@@ -90,6 +118,20 @@ class DateService implements IDate {
     if (!$this->IsStartAndEndDifferenceEqualWithEventDuration($start, $end, $duration)) {
       $status['isDateWrong'] = true;
       $status['errorMessage'] = "Can't make appointment with miss match dates.";
+
+      return $status;
+    }
+
+    if ($this->closedDayService->isClosedDay($start)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment start on closed day.";
+
+      return $status;
+    }
+
+    if ($this->closedDayService->isClosedDay($end)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment end on closed day.";
 
       return $status;
     }

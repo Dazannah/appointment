@@ -28,6 +28,17 @@
                             </div>
                     </div>
                   </div>
+                  <div class="mb-5.5 flex flex-col gap-5.5 sm:flex-row">
+                    <div class="p-2 w-full">
+                      <label class="mb-3 block text-sm font-medium text-black dark:text-white" for="workdayEnd">Closed days name</label>
+                          <div class="relative">
+                              <input value="{{old('closedDaysTitle') ?? $configs['closedDays']['title']}}" text="time" name="closedDaysTitle" id="closedDaysTitle" placeholder="Closed days name" class="w-full rounded border border-stroke bg-gray py-3 pl-11.5 pr-4.5 font-medium text-black focus:border-primary focus-visible:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                                @error('closedDaysTitle')
+                                    {{$message}}
+                                @enderror
+                          </div>
+                    </div>
+                  </div>
 
 
                   {{--<div class="p-2 mb-5.5">

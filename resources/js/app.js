@@ -245,6 +245,15 @@ async function recommendNextAvailable(button) {
     optionsDiv.classList.remove("hidden");
 }
 
+function setEndDateToSameIfEmpty(start) {
+    const endInput = document.getElementById("endDate");
+
+    if (endInput.value == "") {
+        endInput.value = start.value;
+    }
+}
+
+window.setEndDateToSameIfEmpty = setEndDateToSameIfEmpty;
 window.recommendNextAvailable = recommendNextAvailable;
 window.confirmWorktypeDelete = confirmWorktypeDelete;
 window.redirectToCreatePrice = redirectToCreatePrice;
