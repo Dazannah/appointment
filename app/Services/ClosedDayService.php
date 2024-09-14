@@ -6,6 +6,7 @@ use App\Interfaces\IClosedDay;
 use App\Interfaces\ISiteConfig;
 use App\Models\ClosedDay;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ClosedDayService implements IClosedDay {
 
@@ -15,6 +16,27 @@ class ClosedDayService implements IClosedDay {
   public function __construct(ISiteConfig $siteConfigService) {
     $this->siteConfigService = $siteConfigService;
     $this->siteConfig =  $this->siteConfigService->getConfig();
+  }
+
+  public function getFilterClosedDays($validated): LengthAwarePaginator {
+    $closedDays = ClosedDay::when(
+      isset($validated['closedDayId']),
+      function ($querry) use ($validated) {
+        return $querry->where('id', 'REGEXP', $validated['closedDayId']);
+      }
+    )->when(
+      isset($validated['startDate']),
+      function ($querry) use ($validated) {
+        return $querry->where('start', 'REGEXP', $validated['startDate']);
+      }
+    )->when(
+      isset($validated['endDate']),
+      function ($querry) use ($validated) {
+        return $querry->where('end', 'REGEXP', $validated['endDate']);
+      }
+    )->paginate(10);
+
+    return $closedDays;
   }
 
   public function getWeeklyClosedDays($start, $end): Collection {
