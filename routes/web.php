@@ -50,6 +50,7 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
         Route::get('/users', [AdminController::class, 'getAdminMenuUsers'])->name('users');
         Route::get('/events', [AdminController::class, 'getAdminMenuEvents'])->name('events');
         Route::get('/worktypes', [AdminController::class, 'getAdminMenuWorktypes'])->name('worktypes');
+        Route::get('/closed-days', [AdminController::class, 'getAdminMenuClosedDays'])->name('closedDays');
     });
 
     Route::name('worktype.')->prefix('worktype')->group(function () {
