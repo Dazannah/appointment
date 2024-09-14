@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\ClosedDayController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\SiteConfigController;
 use App\Http\Controllers\WorkTypesController;
@@ -59,6 +60,11 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
         Route::get('/{worktype}', [WorkTypesController::class, 'edit'])->name('editWorktype');
         Route::patch('/{worktype}', [WorkTypesController::class, 'update'])->name('showWorktype');
         Route::delete('/delete/{worktype}', [WorkTypesController::class, 'destroy'])->name('deleteWorktype');
+    });
+
+    Route::name('closedDays.')->prefix('closed-days')->group(function () {
+        Route::get('/create', [ClosedDayController::class, 'create'])->name('createClosedDay');
+        Route::post('/create', [ClosedDayController::class, 'store']);
     });
 
     Route::name('price.')->prefix('price')->group(function () {
