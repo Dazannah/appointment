@@ -300,6 +300,141 @@ class DateService implements IDate {
 
 
 
+  public function isItWorkDay($date): bool {
+    echo $date;
+    $day = date('Y-m-d', strtotime($date));
+    echo $day;
+    $dayOfWeek = date('w', strtotime($day));
+    echo $dayOfWeek;
+    exit;
+
+    if (
+      $dayOfWeek == 6
+      /** szombat */
+      || $dayOfWeek == 0
+      /** vasárnap */
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  public function isFitTwoDateTimeDuration($firstDateTime, $nextDateTime, $duration): bool {
+    $dateDiff = $this->GetDateDiffFromString($firstDateTime, $nextDateTime);
+    $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
+
+    return $minutesDiff >= $duration;
+  }
+
+  public function isFitEndOfDay($startDateTime, $duration): bool {
+    $startDate = explode('T', $startDateTime)[0];
+    $dateDiff = $this->GetDateDiffFromString($startDateTime, $startDate . 'T' . $this->calendarTimes['slotMaxTime']);
+    $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
+
+    return $minutesDiff >= $duration;
+  }
+
+  public function isFitStartOfDay($eventStartDateTime, $duration): bool {
+    $startDate = explode('T', $eventStartDateTime)[0];
+    $dateDiff = $this->GetDateDiffFromString($startDate . 'T' . $this->calendarTimes['slotMinTime'], $eventStartDateTime);
+    $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
+
+    return $minutesDiff >= $duration;
+  }
+
+  public function getNextWorkdayTimesDate($date): array {
+    $day = date('Y-m-d', strtotime($date . " +1 day"));
+    $dayOfWeek = date('w', strtotime($day));
+    $isClosedDay = $this->closedDayService->isClosedDay($day);
+
+    if (
+      $dayOfWeek == 6
+      /** szombat */
+      || $dayOfWeek == 0
+      /** vasárnap */
+      || $isClosedDay
+    ) {
+      return $this->getNextWorkdayTimesDate($day);
+    } else {
+      return [
+        'day' => $day,
+        'start' => $day . 'T' . $this->calendarTimes['slotMinTime'],
+        'end' => $day . 'T' . $this->calendarTimes['slotMaxTime']
+      ];
+    }
+  }
+
+  public function ValidateDateForEvent($start, $end, $duration): array {
+    $status = [
+      'isDateWrong' => false,
+      'errorMessage' => ''
+    ];
+
+    if (!$this->IsStartInTheFuture($start)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment for the past.";
+
+      return $status;
+    }
+
+    if ($this->IsStartBeforeOpen($start)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment before open time.";
+
+      return $status;
+    }
+
+    if ($this->IsEndAfterClose($end)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment that end after close.";
+
+      return $status;
+    }
+
+    if (!$this->IsStartAndEndDifferenceEqualWithEventDuration($start, $end, $duration)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment with miss match dates.";
+
+      return $status;
+    }
+
+    if ($this->closedDayService->isClosedDay($start)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment start on closed day.";
+
+      return $status;
+    }
+
+    if ($this->closedDayService->isClosedDay($end)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment end on closed day.";
+
+      return $status;
+    }
+
+
+    return $status;
+  }
+
+  public function IsEndAfterClose($end): bool {
+    return $this->calendarTimes['slotMaxTime'] < explode('T', $end)[1];
+  }
+
+  public function IsStartBeforeOpen($start): bool {
+    return $this->calendarTimes['slotMinTime'] > explode('T', $start)[1];
+  }
+
+  public function IsStartAndEndDifferenceEqualWithEventDuration($start, $end, $duration): bool {
+    $dateDiff = $this->GetDateDiffFromString($start, $end);
+    $startEndTimeDifferenceInMinutes = $this->GetMinutsFromDateDiff($dateDiff);
+
+    return $startEndTimeDifferenceInMinutes == $duration;
+  }
+
+
+
+
   public function GetMinutsFromDateDiff(DateInterval $dateDiff): int {
     $availableMins = 0;
     $availableMins += $dateDiff->y * 24 * 60 * 30 * 365;
