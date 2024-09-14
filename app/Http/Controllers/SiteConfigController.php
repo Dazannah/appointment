@@ -22,7 +22,8 @@ class SiteConfigController extends Controller {
     public function saveSettings(Request $request) {
         $validatedInputs = $request->validate([
             'workdayStart' => 'required|date_format:H:i',
-            'workdayEnd' => 'required|date_format:H:i|after:workdayStart'
+            'workdayEnd' => 'required|date_format:H:i|after:workdayStart',
+            'closedDaysTitle' => 'required'
         ]);
 
         $newValues = $this->siteConfigs->serialiseInputs($validatedInputs);
