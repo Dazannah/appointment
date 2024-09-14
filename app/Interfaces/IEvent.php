@@ -26,4 +26,5 @@ interface IEvent {
     public function getAllOpenEndedEvents(): Collection;
     public function closeGivenEvents($events): void;
     public function getNextAvailableEventTime(WorkTypes $event, string $day): array;
+    public function getAllEventOnTheDay($day): Collection;
 }
