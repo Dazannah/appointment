@@ -22,6 +22,27 @@ class DateService implements IDate {
 
     $this->closedDayService = $closedDayService;
   }
+
+  public function isItWorkDay($date): bool {
+    echo $date;
+    $day = date('Y-m-d', strtotime($date));
+    echo $day;
+    $dayOfWeek = date('w', strtotime($day));
+    echo $dayOfWeek;
+    exit;
+
+    if (
+      $dayOfWeek == 6
+      /** szombat */
+      || $dayOfWeek == 0
+      /** vasárnap */
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   public function isFitTwoDateTimeDuration($firstDateTime, $nextDateTime, $duration): bool {
     $dateDiff = $this->GetDateDiffFromString($firstDateTime, $nextDateTime);
     $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
