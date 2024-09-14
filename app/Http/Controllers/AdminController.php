@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Interfaces\IClosedDay;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Price;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Interfaces\IUserService;
 use App\Interfaces\IWorktypeService;
 use App\Interfaces\IDataSerialisation;
+use App\Models\ClosedDay;
 
 class AdminController extends Controller {
     private IDate $dateService;
@@ -21,13 +23,27 @@ class AdminController extends Controller {
     private IDataSerialisation $dataSerialisationService;
     private IUserService $userService;
     private IWorktypeService $worktypeService;
+    private IClosedDay $closedDaysService;
 
-    public function __construct(IDate $dateService, IEvent $eventService, IDataSerialisation $dataSerialisationService, IUserService $userService, IWorktypeService $worktypeService) {
+    public function __construct(IDate $dateService, IEvent $eventService, IDataSerialisation $dataSerialisationService, IUserService $userService, IWorktypeService $worktypeService, IClosedDay $closedDaysService) {
         $this->dateService = $dateService;
         $this->eventService = $eventService;
         $this->dataSerialisationService = $dataSerialisationService;
         $this->userService = $userService;
         $this->worktypeService = $worktypeService;
+        $this->closedDaysService = $closedDaysService;
+    }
+
+    public function getAdminMenuClosedDays(Request $req) {
+        $validated = $req->validate([
+            'closedDayId' => '',
+            'startDate' => '',
+            'endDate' => '',
+        ]);
+
+        $closedDays = $this->closedDaysService->getFilterClosedDays($validated);
+
+        return view('admin-menu-closedDays', ['pageTitle' => 'Closed days', 'closedDays' => $closedDays]);
     }
 
     public function getAllAppointmentsForUser(User $user) {

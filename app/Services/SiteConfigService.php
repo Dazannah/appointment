@@ -42,6 +42,7 @@ class SiteConfigService implements ISiteConfig {
 
     if ($this->configs['calendarTimes']['slotMinTime'] !== $validatedInputs['workdayStart']) $result['calendarTimes']['slotMinTime'] = $validatedInputs['workdayStart'];
     if ($this->configs['calendarTimes']['slotMaxTime'] !== $validatedInputs['workdayEnd']) $result['calendarTimes']['slotMaxTime'] = $validatedInputs['workdayEnd'];
+    if ($this->configs['closedDays']['title'] !== $validatedInputs['closedDaysTitle']) $result['closedDays']['title'] = $validatedInputs['closedDaysTitle'];
 
     return $result;
   }
