@@ -9,11 +9,9 @@ use App\Interfaces\IEvent;
 use Illuminate\Http\Request;
 use App\Interfaces\IClosedDay;
 use App\Interfaces\ISiteConfig;
-use App\Interfaces\IWorktypeService;
-use App\Models\Event;
-use App\Models\WorkTypes;
 
 use function Pest\Laravel\json;
+use App\Interfaces\IWorktypeService;
 
 use function Pest\Laravel\json;
 use App\Interfaces\IWorktypeService;

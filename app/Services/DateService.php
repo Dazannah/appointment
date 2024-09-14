@@ -22,6 +22,32 @@ class DateService implements IDate {
 
     $this->closedDayService = $closedDayService;
   }
+
+  public function getOpenTimeFromDate($day): array {
+    $times = [
+      'start' => $day . 'T' . $this->calendarTimes['slotMinTime'],
+      'end' => $day . 'T' . $this->calendarTimes['slotMaxTime'],
+    ];
+
+    return $times;
+  }
+
+  public function isItWorkDay($date): bool {
+    $day = date('Y-m-d', strtotime($date));
+    $dayOfWeek = date('w', strtotime($day));
+
+    if (
+      $dayOfWeek == 6
+      /** szombat */
+      || $dayOfWeek == 0
+      /** vasárnap */
+    ) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   public function isFitTwoDateTimeDuration($firstDateTime, $nextDateTime, $duration): bool {
     $dateDiff = $this->GetDateDiffFromString($firstDateTime, $nextDateTime);
     $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
@@ -48,12 +74,14 @@ class DateService implements IDate {
   public function getNextWorkdayTimesDate($date): array {
     $day = date('Y-m-d', strtotime($date . " +1 day"));
     $dayOfWeek = date('w', strtotime($day));
+    $isClosedDay = $this->closedDayService->isClosedDay($day);
 
     if (
       $dayOfWeek == 6
       /** szombat */
       || $dayOfWeek == 0
       /** vasárnap */
+      || $isClosedDay
     ) {
       return $this->getNextWorkdayTimesDate($day);
     } else {
@@ -95,6 +123,22 @@ class DateService implements IDate {
     if (!$this->IsStartAndEndDifferenceEqualWithEventDuration($start, $end, $duration)) {
       $status['isDateWrong'] = true;
       $status['errorMessage'] = "Can't make appointment with miss match dates.";
+
+      return $status;
+    }
+
+    $closedDayService = app(IClosedDay::class);
+
+    if ($closedDayService->isClosedDay($start)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment start on closed day.";
+
+      return $status;
+    }
+
+    if ($closedDayService->isClosedDay($end)) {
+      $status['isDateWrong'] = true;
+      $status['errorMessage'] = "Can't make appointment end on closed day.";
 
       return $status;
     }
