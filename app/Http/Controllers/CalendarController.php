@@ -2,27 +2,31 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Event;
 use App\Interfaces\IDate;
+use App\Models\WorkTypes;
 use App\Interfaces\IEvent;
 use Illuminate\Http\Request;
+use App\Interfaces\IClosedDay;
 use App\Interfaces\ISiteConfig;
-use App\Interfaces\IWorktypeService;
-use App\Models\Event;
-use App\Models\WorkTypes;
 
 use function Pest\Laravel\json;
+use App\Interfaces\IWorktypeService;
 
 class CalendarController extends Controller {
     private IDate $dateService;
     private IEvent $eventService;
     private ISiteConfig $siteConfigService;
     private IWorktypeService $worktypeService;
+    private IClosedDay $closedDayService;
 
-    public function __construct(IDate $dateService, IEvent $eventService, ISiteConfig $siteConfigService, IWorktypeService $worktypeService) {
+
+    public function __construct(IDate $dateService, IEvent $eventService, ISiteConfig $siteConfigService, IWorktypeService $worktypeService, IClosedDay $closedDayService) {
         $this->dateService = $dateService;
         $this->eventService = $eventService;
         $this->siteConfigService = $siteConfigService;
         $this->worktypeService = $worktypeService;
+        $this->closedDayService = $closedDayService;
     }
 
     public function getNextAvailableEventTime(WorkTypes $worktype) {
@@ -51,7 +55,10 @@ class CalendarController extends Controller {
         $events = $this->eventService->getWeeklyEvents($validatedData['start'], $validatedData['end']);
         $this->eventService->AddGreenBackgroundToOwnEvent($events, auth()->id());
 
-        return response()->json($events);
+        $closedDays = $this->closedDayService->getWeeklyClosedDays($validatedData['start'], $validatedData['end']);
+        $response = $this->closedDayService->AddClosedDayToEvents($events, $closedDays);
+
+        return response()->json($response);
     }
 
     public function getAvailableWorkTypes(Request $req) {
