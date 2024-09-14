@@ -22,4 +22,5 @@ interface IDate {
     public function isFitEndOfDay($startDateTime, $duration): bool;
     public function isFitTwoDateTimeDuration($firstDateTime, $nextDateTime, $duration): bool;
     public function isFitStartOfDay($eventStartDateTime, $duration): bool;
+    public function isItWorkDay($date): bool;
 }
