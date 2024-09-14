@@ -31,6 +31,8 @@
                             <a href="/admin/menu/closed-days" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:bg-red-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">Reset</a>
                         </div>
                     </div>
+
+                    <a href="/admin/closed-days/create" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:bg-green-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">Create closed day</a>
             </div>
         </form>
 
