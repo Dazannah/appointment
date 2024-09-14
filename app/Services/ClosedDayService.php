@@ -36,6 +36,8 @@ class ClosedDayService implements IClosedDay {
   }
 
   public function isClosedDay($day): bool {
-    return count(ClosedDay::where('start', '<=', $day)->get()) > 0;
+    $splitedDay = explode('T', $day);
+
+    return count(ClosedDay::where([['start', '<=', $splitedDay[0]], ['end', '>=', $splitedDay[0]]])->get()) > 0;
   }
 }
