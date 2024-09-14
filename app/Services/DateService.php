@@ -16,20 +16,23 @@ class DateService implements IDate {
   private IClosedDay $closedDayService;
   private $calendarTimes;
 
-  public function __construct(ISiteConfig $siteConfigService, IClosedDay $closedDayService) {
+  public function __construct(ISiteConfig $siteConfigService) {
     $this->siteConfigService = $siteConfigService;
     $this->calendarTimes = $this->siteConfigService->getConfig()['calendarTimes'];
+  }
 
-    $this->closedDayService = $closedDayService;
+  public function getOpenTimeFromDate($day): array {
+    $times = [
+      'start' => $day . 'T' . $this->calendarTimes['slotMinTime'],
+      'end' => $day . 'T' . $this->calendarTimes['slotMaxTime'],
+    ];
+
+    return $times;
   }
 
   public function isItWorkDay($date): bool {
-    echo $date;
     $day = date('Y-m-d', strtotime($date));
-    echo $day;
     $dayOfWeek = date('w', strtotime($day));
-    echo $dayOfWeek;
-    exit;
 
     if (
       $dayOfWeek == 6
@@ -122,14 +125,16 @@ class DateService implements IDate {
       return $status;
     }
 
-    if ($this->closedDayService->isClosedDay($start)) {
+    $closedDayService = app(IClosedDay::class);
+
+    if ($closedDayService->isClosedDay($start)) {
       $status['isDateWrong'] = true;
       $status['errorMessage'] = "Can't make appointment start on closed day.";
 
       return $status;
     }
 
-    if ($this->closedDayService->isClosedDay($end)) {
+    if ($closedDayService->isClosedDay($end)) {
       $status['isDateWrong'] = true;
       $status['errorMessage'] = "Can't make appointment end on closed day.";
 
