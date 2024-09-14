@@ -6,6 +6,7 @@ use App\Enums\StartEnd;
 use App\Interfaces\IDate;
 use App\Models\ClosedDay;
 use App\Interfaces\IClosedDay;
+use App\Interfaces\IEvent;
 use App\Interfaces\ISiteConfig;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -16,12 +17,14 @@ class ClosedDayService implements IClosedDay {
   private array $siteConfig;
 
   private IDate $dateService;
+  private IEvent $eventService;
 
-  public function __construct(ISiteConfig $siteConfigService, IDate $dateService) {
+  public function __construct(ISiteConfig $siteConfigService, IDate $dateService, IEvent $eventService) {
     $this->siteConfigService = $siteConfigService;
     $this->siteConfig =  $this->siteConfigService->getConfig();
 
     $this->dateService = $dateService;
+    $this->eventService = $eventService;
   }
 
   public function validateIfCanSave($validated): array {
@@ -35,6 +38,11 @@ class ClosedDayService implements IClosedDay {
     $end = $this->getClosedDayByInput(StartEnd::End, $validated['endDate']);
 
     if (count($start) > 0 || count($end) > 0) return ['canSave' => false, 'message' => "Can't save on this date.<br>There is already closed day on this date."];
+
+    $eventsOnTheStartDate = $this->eventService->getAllEventOnTheDay($validated['startDate']);
+    $eventsOnTheEndDate = $this->eventService->getAllEventOnTheDay($validated['endDate']);
+
+    if (count($eventsOnTheStartDate) > 0 || count($eventsOnTheEndDate) > 0) return ['canSave' => false, 'message' => "Can't save on this date.<br>There is reserved events on the dates."];
 
     return ['canSave' => true];
   }

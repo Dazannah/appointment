@@ -25,6 +25,14 @@ class EventService implements IEvent {
     $this->userService = $userService;
   }
 
+  public function getAllEventOnTheDay($day): Collection {
+    $dayTimes = $this->dateService->getOpenTimeFromDate($day);
+
+    $events = Event::where([['status_id', '!=', '3'], ['start', '>=', $dayTimes['start']], ['start', '<=', $dayTimes['end']]])->get();
+
+    return $events;
+  }
+
   public function getNextAvailableEventTime(WorkTypes $worktype, string $day): array {
     $workDayTimes = $this->dateService->getNextWorkdayTimesDate($day);
     $eventOnTheDay = Event::where([['status_id', '!=', '3'], ['start', '>=', $workDayTimes['start']], ['start', '<=', $workDayTimes['end']]])->orderBy('start', 'asc')->first();

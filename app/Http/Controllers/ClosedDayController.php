@@ -3,14 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Interfaces\IClosedDay;
+use App\Interfaces\IDataSerialisation;
+use App\Models\ClosedDay;
 use Illuminate\Http\Request;
 
 class ClosedDayController extends Controller {
 
     private IClosedDay $closedDayService;
+    private IDataSerialisation $dataSerialisationService;
 
-    public function __construct(IClosedDay $closedDayService) {
+    public function __construct(IClosedDay $closedDayService, IDataSerialisation $dataSerialisationService) {
         $this->closedDayService = $closedDayService;
+        $this->dataSerialisationService = $dataSerialisationService;
     }
 
     /**
@@ -36,10 +40,13 @@ class ClosedDayController extends Controller {
             'endDate' => 'required|date',
         ]);
 
-        $result = $this->closedDayService->validateIfCanSave($validated);
+        $validationResult = $this->closedDayService->validateIfCanSave($validated);
 
-        if (!$result['canSave']) return back()->withInput()->with('error', $result['message']);
-        //save
+        if (!$validationResult['canSave']) return back()->withInput()->with('error', $validationResult['message']);
+
+        $serialised = $this->dataSerialisationService->serialiseInputForCreateClosedDay($validated);
+
+        ClosedDay::create($serialised);
 
         return back()->with('success', 'Closed day successfully saved');
     }
@@ -68,7 +75,9 @@ class ClosedDayController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id) {
-        //
+    public function destroy(ClosedDay $closedDay) {
+        $closedDay->delete();
+
+        return back()->with('success', "Successfully deleted closed day");
     }
 }

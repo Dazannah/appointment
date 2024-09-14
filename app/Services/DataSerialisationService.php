@@ -5,6 +5,14 @@ namespace App\Services;
 use App\Interfaces\IDataSerialisation;
 
 class DataSerialisationService implements IDataSerialisation {
+  public function serialiseInputForCreateClosedDay($validated): array {
+
+    return  [
+      'start' => $validated['startDate'],
+      'end' => $validated['endDate']
+    ];
+  }
+
   public function serialiseInputForEditEvent($validated, $event): void {
     $event->note = $validated['userNote'];
     $event->admin_note = $validated['adminNote'];
