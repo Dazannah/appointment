@@ -17,8 +17,10 @@ use App\Services\ClosedDayService;
 use App\Services\SiteConfigService;
 use App\Interfaces\IWorktypeService;
 use App\Interfaces\IDataSerialisation;
+use App\Interfaces\IRequest;
 use Illuminate\Support\ServiceProvider;
 use App\Services\DataSerialisationService;
+use App\Services\RequestService;
 
 class AppServiceProvider extends ServiceProvider {
     /**
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider {
         $this->app->bind(IPriceService::class, PriceService::class);
         $this->app->bind(ISiteConfig::class, SiteConfigService::class);
         $this->app->bind(IClosedDay::class, ClosedDayService::class);
+        $this->app->bind(IRequest::class, RequestService::class);
     }
 
     /**

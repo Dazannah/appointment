@@ -12,6 +12,7 @@ return new class extends Migration {
         Schema::create('closed_days', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->text('title')->nullable();
             $table->date('start', 0);
             $table->date('end', 0);
         });

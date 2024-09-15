@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class ClosedDay extends Model {
     use HasFactory;
 
-    protected $fillable = ['start', 'end'];
+    protected $fillable = ['start', 'end', 'title'];
 }
