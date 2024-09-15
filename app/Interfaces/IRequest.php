@@ -3,5 +3,5 @@
 namespace App\Interfaces;
 
 interface IRequest {
-    public function __construct(string $uri);
+    public function getHolidays($year): array | false;
 }
