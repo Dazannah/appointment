@@ -37,7 +37,7 @@
                     </div>
         
                   @foreach ($reservations as $latestAppointment)
-                    <a href="/event/{{$latestAppointment->id}}">
+                    <a href="/event/{{$latestAppointment->id}}?from={{Request::path()}}">
                       <div class="grid grid-cols-3 border-b border-black hover:bg-white dark:hover:bg-gray-900 dark:border-strokedark dark:border-white sm:grid-cols-6">
                         <div class="flex items-center gap-3 p-2.5 xl:p-5">
                           <p class="hidden font-medium text-black dark:text-white sm:block">{{$latestAppointment->title}}</p>

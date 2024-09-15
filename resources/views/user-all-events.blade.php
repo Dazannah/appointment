@@ -60,6 +60,9 @@
                 </div>
                 @else
                 There is no previous reservations.
+                <a id="generate-second-level-back-link" href="/admin/dashboard" class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:text-black dark:hover:bg-green-500 border dark:text-white dark:bg-gray-900">
+                  Back
+                </a>
                 @endif
   
       </div>

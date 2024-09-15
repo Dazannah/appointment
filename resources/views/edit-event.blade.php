@@ -85,9 +85,9 @@
                         <button class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:text-black dark:hover:bg-green-500 border dark:text-white dark:bg-gray-900" type="submit">
                             Save
                         </button>
-                        <button onclick="goBack()" class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900">
+                        <a href="/{{Request::get('from') . '?' . http_build_query(Request::query()) ?? 'admin/dashboard'}}" class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900">
                             Back
-                        </button>
+                        </a>
                     </div>
                   </form>
                 </div>
