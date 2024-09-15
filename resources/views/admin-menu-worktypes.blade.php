@@ -50,7 +50,7 @@
             <div class="col-span-4">
                 <div class="grid grid-cols-1 gap-3 h-fit py-3 rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
                     @foreach ($worktypes as $worktype)
-                    <a href="/admin/worktype/{{$worktype->id}}" class="px-7.5 py-3 border-b border-black dark:border-white hover:bg-gray-300 dark:hover:bg-gray-900">
+                    <a href="/admin/worktype/{{$worktype->id}}?from={{Request::path()}}&{{http_build_query(Request::query())}}" class="px-7.5 py-3 border-b border-black dark:border-white hover:bg-gray-300 dark:hover:bg-gray-900">
                         <div class="grid grid-cols-4 justify-items-center items-center border-stroke hover:bg-gray-300 dark:hover:bg-gray-900 dark:border-strokedark">
                             <div class="col-span-1">
                                 <span>{{$worktype->id}}</span>

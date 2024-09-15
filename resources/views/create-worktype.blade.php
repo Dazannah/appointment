@@ -49,7 +49,7 @@
                         <a href="/admin/menu/worktypes" class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900">
                             Back
                         </a>
-                        <button onclick="redirectToCreatePrice(event, '/admin/price/create?from=/admin/worktype/create')" class="flex justify-self-start rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:text-black dark:hover:bg-green-500 border dark:text-white dark:bg-gray-900">Add new price</button>
+                        <button onclick="redirectToCreatePrice(event, '/admin/price/create?from={{Request::path()}}')" class="flex justify-self-start rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:text-black dark:hover:bg-green-500 border dark:text-white dark:bg-gray-900">Add new price</button>
                     </div>
                   </form>
                 </div>

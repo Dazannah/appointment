@@ -75,9 +75,9 @@
                         <button class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:text-black dark:hover:bg-green-500 border dark:text-white dark:bg-gray-900" type="submit">
                             Save
                         </button>
-                        <button onclick="goBack()" class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900">
+                        <a href="/{{Request::get('from') . '?' . http_build_query(Request::query()) ?? 'admin/menu/users'}}" class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:text-black dark:hover:bg-red-500 border dark:text-white dark:bg-gray-900">
                             Back
-                        </button>
+                        </a>
                     </div>
                   </form>
                 </div>
@@ -88,7 +88,7 @@
                       <h4 class="mb-6 text-xl font-bold text-black dark:text-white">
                         Latest 10 appointments
                       </h4>
-                      <a href="/admin/user/{{$user->id}}/all-appointments">
+                      <a href="/admin/user/{{$user->id}}/all-appointments?{{http_build_query(Request::query())}}&from={{Request::path()}}">
                       <button class="flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-gray-300 dark:hover:bg-gray-800 border dark:text-white dark:bg-gray-900" type="submit">
                         All appointments
                     </button>

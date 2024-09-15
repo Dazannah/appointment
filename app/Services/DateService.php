@@ -13,7 +13,6 @@ use App\Models\ClosedDay;
 class DateService implements IDate {
 
   private ISiteConfig $siteConfigService;
-  private IClosedDay $closedDayService;
   private $calendarTimes;
 
   public function __construct(ISiteConfig $siteConfigService) {
@@ -72,7 +71,8 @@ class DateService implements IDate {
   public function getNextWorkdayTimesDate($date): array {
     $day = date('Y-m-d', strtotime($date . " +1 day"));
     $dayOfWeek = date('w', strtotime($day));
-    $isClosedDay = $this->closedDayService->isClosedDay($day);
+    $closedDayService = app(IClosedDay::class);
+    $isClosedDay = $closedDayService->isClosedDay($day);
 
     if (
       $dayOfWeek == 6
