@@ -13,4 +13,5 @@ interface IClosedDay {
     public function getFilterClosedDays($validated): LengthAwarePaginator;
     public function validateIfCanSave($validated): array;
     public function getClosedDayByInput(StartEnd $field, $date): Collection;
+    public function handleHolidays($holidays, $year): void;
 }

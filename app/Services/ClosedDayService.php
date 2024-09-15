@@ -27,6 +27,22 @@ class ClosedDayService implements IClosedDay {
     $this->eventService = $eventService;
   }
 
+  public function handleHolidays($holidays, $year): void {
+    foreach ($holidays as $holiday) {
+      if ($holiday['type'] == 1) {
+        $isClosedDay = $this->isClosedDay($holiday['date']);
+
+        if (!$isClosedDay) {
+          ClosedDay::create([
+            'title' => $holiday['name'],
+            'start' => $holiday['date'],
+            'end' => $holiday['date']
+          ]);
+        }
+      }
+    }
+  }
+
   public function validateIfCanSave($validated): array {
     $startIsWorkDay = $this->dateService->isItWorkDay($validated['startDate']);
     if (!$startIsWorkDay) return ['canSave' => false, 'message' => "Start on weekend. Can't save it."];
@@ -79,7 +95,7 @@ class ClosedDayService implements IClosedDay {
       function ($closedDay) {
         $closedDay['start'] = $closedDay['start'] . 'T' . $this->siteConfig['calendarTimes']['slotMinTime'];
         $closedDay['end'] = $closedDay['end'] . 'T' . $this->siteConfig['calendarTimes']['slotMaxTime'];
-        $closedDay['title'] = $this->siteConfig['closedDays']['title'];
+        if ($closedDay['title'] === null) $closedDay['title'] = $this->siteConfig['closedDays']['title'];
       }
     );
 
