@@ -227,6 +227,29 @@ function confirmWorktypeDelete(event) {
     }
 }
 
+const userAllApointmentsBackLink = document.getElementById(
+    "generate-second-level-back-link"
+);
+
+if (userAllApointmentsBackLink) {
+    let redirectTo = "";
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    let fromWas = true;
+
+    urlParams.forEach((urlParam, index) => {
+        console.log(index, urlParam);
+        if (index === "from" && !fromWas) {
+            redirectTo = `/${urlParam}?` + redirectTo;
+        } else {
+            if (index === "from") fromWas = false;
+            redirectTo += `${index}=${urlParam}&`;
+        }
+    });
+
+    userAllApointmentsBackLink.href = redirectTo;
+}
+
 async function recommendNextAvailable(button) {
     const startDate = document.getElementById("start-date");
     const endDate = document.getElementById("end-date");
