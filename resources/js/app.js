@@ -159,6 +159,14 @@ function goBack() {
     window.history.back();
 }
 
+const flashMessages = document.getElementsByName("flash-message")[0];
+
+if (flashMessages != null) {
+    setTimeout(() => {
+        flashMessages.classList.add("hidden");
+    }, 10000);
+}
+
 function hideThis(e) {
     document.getElementById(e).classList.add("hidden");
 }
@@ -226,6 +234,8 @@ async function recommendNextAvailable(button) {
     const nextAvailableTime = await fetch(
         `/next-available-time-for-appointement/${button.id}`
     );
+
+    console.log(nextAvailableTime);
 
     const responseJson = await nextAvailableTime.json();
 
