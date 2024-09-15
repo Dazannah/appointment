@@ -56,7 +56,7 @@
             </div>
 
           @foreach ($latestAppointments as $latestAppointment)
-            <a href="/admin/event/{{$latestAppointment->id}}">
+            <a href="/admin/event/{{$latestAppointment->id}}?from={{Request::path()}}">
               <div class="grid grid-cols-3 border-b border-stroke border-black hover:bg-white dark:border-white dark:hover:bg-gray-900 dark:border-strokedark sm:grid-cols-5">
                 <div class="flex items-center gap-3 p-2.5 xl:p-5">
                   <div class="flex-shrink-0">
@@ -89,7 +89,7 @@
         <h4 class="mb-6 px-2 text-xl font-bold text-black dark:text-white">Latest 10 registration</h4>
         <div>
           @foreach ($latest10Users as $user)
-          <a href="/admin/user/{{$user->id}}" class="flex items-center border-b border-black dark:border-white gap-5 px-7.5 py-3 hover:bg-white dark:hover:bg-gray-900">
+          <a href="/admin/user/{{$user->id}}?from={{Request::path()}}" class="flex items-center border-b border-black dark:border-white gap-5 px-7.5 py-3 hover:bg-white dark:hover:bg-gray-900">
             <div class="flex flex-1 items-center justify-between">
               <div>
                 <h5 class="px-2 font-medium text-black dark:text-white">

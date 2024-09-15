@@ -60,7 +60,7 @@
             <div class="col-span-5">
                 <div class="grid grid-cols-1 gap-1 h-fit py-3 rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
                     @foreach ($events as $event)
-                    <a href="/admin/event/{{$event->id}}" class="px-7.5 py-3 border-b border-black dark:border-white hover:bg-gray-300 dark:hover:bg-gray-900">
+                    <a href="/admin/event/{{$event->id}}?from={{Request::path()}}&{{http_build_query(Request::query())}}" class="px-7.5 py-3 border-b border-black dark:border-white hover:bg-gray-300 dark:hover:bg-gray-900">
                         <div class="grid grid-cols-5 justify-items-center items-center border-stroke hover:bg-gray-300 dark:hover:bg-gray-900 dark:border-strokedark">
                             <div class="col-span-1">
                                 <span>{{$event->id}}</span>
