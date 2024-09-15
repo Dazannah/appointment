@@ -13,6 +13,19 @@ class SiteConfigController extends Controller {
         $this->siteConfigs = $siteConfigs;
     }
 
+    public function fillHolidays(Request $req) {
+        $validated = $req->validate([
+            'year' => 'required|date_format:Y'
+        ]);
+
+        //make request
+
+        //go through all date and check if it is already saved if not save it, ignore the work days(type: 2)
+
+        echo $validated['year'];
+        exit;
+    }
+
     public function index() {
         $configs = $this->siteConfigs->getConfig();
 

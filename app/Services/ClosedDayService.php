@@ -79,7 +79,7 @@ class ClosedDayService implements IClosedDay {
       function ($closedDay) {
         $closedDay['start'] = $closedDay['start'] . 'T' . $this->siteConfig['calendarTimes']['slotMinTime'];
         $closedDay['end'] = $closedDay['end'] . 'T' . $this->siteConfig['calendarTimes']['slotMaxTime'];
-        $closedDay['title'] = $this->siteConfig['closedDays']['title'];
+        if ($closedDay['title'] === null) $closedDay['title'] = $this->siteConfig['closedDays']['title'];
       }
     );
 

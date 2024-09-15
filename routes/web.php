@@ -76,6 +76,7 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
 
     Route::get('/site-settings', [SiteConfigController::class, 'index'])->name('siteSettings');
     Route::post('/site-settings', [SiteConfigController::class, 'saveSettings']);
+    Route::post('/site-settings/fill-holidays', [SiteConfigController::class, 'fillHolidays']);
 });
 
 Route::middleware('auth')->group(function () {

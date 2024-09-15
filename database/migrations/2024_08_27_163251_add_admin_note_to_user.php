@@ -9,10 +9,8 @@ return new class extends Migration {
      * Run the migrations.
      */
     public function up(): void {
-        Schema::table('user', function (Blueprint $table) {
-            Schema::table('events', function (Blueprint $table) {
-                $table->text('admin_note')->nullable();
-            });
+        Schema::table('events', function (Blueprint $table) {
+            $table->text('admin_note')->nullable();
         });
     }
 
@@ -20,7 +18,7 @@ return new class extends Migration {
      * Reverse the migrations.
      */
     public function down(): void {
-        Schema::table('user', function (Blueprint $table) {
+        Schema::table('events', function (Blueprint $table) {
             $table->dropColumn('admin_note');
         });
     }
