@@ -8,25 +8,25 @@
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white">
                             User ID
                         </label>
-                        <input value="{{Request::get('userId') ?? '' }}" name="userId" type="number" placeholder="User ID" class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
+                        <input value="{{Request::get('userId') ?? '' }}" name="userId" type="number" placeholder="User ID" class="border-black dark:border-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
                     </div>
                     <div class="col-span-1">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white">
                             Name
                         </label>
-                        <input value="{{Request::get('name') ?? '' }}" name="name" type="text" placeholder="Name" class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
+                        <input value="{{Request::get('name') ?? '' }}" name="name" type="text" placeholder="Name" class="border-black dark:border-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
                     </div>
                     <div class="col-span-1">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white">
                             E-mail
                         </label>
-                        <input value="{{Request::get('email') ?? '' }}" name="email" type="text" placeholder="E-mail" class="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
+                        <input value="{{Request::get('email') ?? '' }}" name="email" type="text" placeholder="E-mail" class="border-black dark:border-white w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary">
                     </div>
                     <div class="col-span-1">
                         <label class="mb-3 block text-sm font-medium text-black dark:text-white">
                             Status
                         </label>
-                        <select name="status" class="hover:cursor-pointer w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:hover:bg-gray-800 border dark:text-white dark:bg-gray-900">
+                        <select name="status" class="border-black dark:border-white hover:cursor-pointer w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:hover:bg-gray-800 border dark:text-white dark:bg-gray-900">
                             <option {{Request::get('status') == 0 ? 'selected' : '' }} value="0">All</option>
                             @foreach ($statuses as $status)
                                 <option {{Request::get('status') == $status->id ? 'selected' : '' }} value="{{$status->id}}">{{$status->name}}</option>
@@ -36,10 +36,10 @@
 
                     <div class="grid grid-cols-2 w-max justify-items-center items-center">
                         <div class="col-span-1">
-                            <input type="submit" value="Submit" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:bg-green-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">
+                            <input type="submit" value="Submit" class="border-black dark:border-white hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-green-500 dark:hover:bg-green-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">
                         </div>
                         <div class="col-span-1">
-                            <a href="/admin/menu/users" class="hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:bg-red-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">Reset</a>
+                            <a href="/admin/menu/users" class="border-black dark:border-white hover:cursor-pointer flex justify-center rounded border border-stroke px-6 py-2 font-medium text-black hover:bg-red-500 dark:hover:bg-red-500 hover:dark:text-black border dark:text-white dark:bg-gray-900">Reset</a>
                         </div>
 
                     </div>
@@ -52,10 +52,10 @@
         </form>
         @if (count($users) > 0)
             <div class="col-span-4">
-                <div class="grid grid-cols-1 gap-3 h-fit py-3 rounded-sm border border-stroke bg-white pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
+                <div class="grid grid-cols-1 gap-3 h-fit py-3 rounded-sm border border-stroke border-black bg-white pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-white dark:text-white sm:px-7.5 xl:pb-1">
                     @foreach ($users as $user)
                     <a href="/admin/user/{{$user->id}}?from={{Request::path()}}&{{http_build_query(Request::query())}}" class="px-7.5 py-3 border-b border-black dark:border-white hover:bg-gray-300 dark:hover:bg-gray-900">
-                        <div class="grid grid-cols-4 justify-items-center items-center border-stroke hover:bg-gray-300 dark:hover:bg-gray-900 dark:border-strokedark">
+                        <div class="grid grid-cols-4 justify-items-center items-center border-stroke hover:bg-gray-300 dark:hover:bg-gray-900 dark:border-white">
                             <div class="col-span-1">
                                 <span>{{$user->id}}</span>
                             </div>
@@ -73,7 +73,7 @@
                     @endforeach
                 </div> 
                 <div class="p-2">
-                    {{$users->links()}}
+                    {{$users->appends(request()->query())->links()}}
                 </div>
             </div>
         @else

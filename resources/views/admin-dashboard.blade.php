@@ -7,7 +7,7 @@
 
       @foreach ($weeksData as $weekData)
         <!-- Card Item Start -->
-        <div class="rounded-sm p-2 border border-stroke bg-gray-200 px-7.5 py-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white">
+        <div class="rounded-sm p-2 border border-stroke border-black bg-white px-7.5 py-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white">
           <div class="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
             {{$weekData->title ?? "n/a"}}
           </div>
@@ -32,7 +32,7 @@
 
       <!-- ====== Table One Start -->
       <div class="col-span-12 xl:col-span-8">
-        <div class="rounded-sm border border-stroke bg-gray-200 px-5 pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
+        <div class="rounded-sm border border-stroke border-black bg-white px-5 pb-2.5 pt-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white sm:px-7.5 xl:pb-1">
           <h4 class="mb-6 text-xl font-bold text-black dark:text-white">
             Latest 10 appointment
           </h4>
@@ -57,7 +57,7 @@
 
           @foreach ($latestAppointments as $latestAppointment)
             <a href="/admin/event/{{$latestAppointment->id}}?from={{Request::path()}}">
-              <div class="grid grid-cols-3 border-b border-stroke border-black hover:bg-white dark:border-white dark:hover:bg-gray-900 dark:border-strokedark sm:grid-cols-5">
+              <div class="grid grid-cols-3 border-b border-stroke border-black hover:bg-gray-300 dark:border-white dark:hover:bg-gray-900 dark:border-strokedark sm:grid-cols-5">
                 <div class="flex items-center gap-3 p-2.5 xl:p-5">
                   <div class="flex-shrink-0">
                   </div>
@@ -67,13 +67,13 @@
                   <p class="font-medium text-black dark:text-white">{{$latestAppointment->status->name}}</p>
                 </div>
                 <div class="flex items-center justify-center p-2.5 xl:p-5">
-                  <p class="font-medium text-meta-3">{{$latestAppointment->start}}</p>
+                  <p class="font-medium text-black dark:text-white">{{$latestAppointment->start}}</p>
                 </div>
                 <div class="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
                   <p class="font-medium text-black dark:text-white">{{$latestAppointment->end}}</p>
                 </div>
                 <div class="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-                  <p class="font-medium text-meta-5">{{$latestAppointment->created_at}}</p>
+                  <p class="font-medium text-black dark:text-white">{{$latestAppointment->created_at}}</p>
                 </div>
               </div>
             </a>
@@ -85,11 +85,11 @@
       <!-- ====== Table One End -->
 
       <!-- ====== Chat Card Start -->
-      <div class="col-span-12 rounded-sm border border-stroke bg-gray-200 py-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white xl:col-span-4">
+      <div class="col-span-12 rounded-sm border border-stroke border-black bg-white py-6 shadow-default dark:bg-gray-800 dark:border-gray-800 dark:text-white xl:col-span-4">
         <h4 class="mb-6 px-2 text-xl font-bold text-black dark:text-white">Latest 10 registration</h4>
         <div>
           @foreach ($latest10Users as $user)
-          <a href="/admin/user/{{$user->id}}?from={{Request::path()}}" class="flex items-center border-b border-black dark:border-white gap-5 px-7.5 py-3 hover:bg-white dark:hover:bg-gray-900">
+          <a href="/admin/user/{{$user->id}}?from={{Request::path()}}" class="flex items-center border-b border-black dark:border-white gap-5 px-7.5 py-3 hover:bg-gray-300 dark:hover:bg-gray-900">
             <div class="flex flex-1 items-center justify-between">
               <div>
                 <h5 class="px-2 font-medium text-black dark:text-white">
