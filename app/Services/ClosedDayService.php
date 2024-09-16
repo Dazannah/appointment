@@ -83,6 +83,23 @@ class ClosedDayService implements IClosedDay {
       function ($querry) use ($validated) {
         return $querry->where('end', 'REGEXP', $validated['endDate']);
       }
+    )->when(
+      isset($validated['holidays']),
+      function ($querry) {
+        return $querry->where('title', '!=', null);
+      },
+      function ($querry) use ($validated) {
+        return $querry->where('title', '=', null);
+      }
+    )->when(
+      isset($validated['currentYear']),
+      function ($querry) {
+        $year = date('Y');
+        $yearStart = date('Y-m-d H:i', strtotime($year . '-01-01 00:00'));
+        $yearEnd = date('Y-m-d H:i', strtotime($year . '-12-31 23:59'));
+
+        return $querry->where([['start', '>=', $yearStart], ['start', '<=',  $yearEnd]]);
+      }
     )->paginate(10);
 
     return $closedDays;
