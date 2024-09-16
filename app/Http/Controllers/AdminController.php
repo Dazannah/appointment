@@ -39,6 +39,8 @@ class AdminController extends Controller {
             'closedDayId' => '',
             'startDate' => '',
             'endDate' => '',
+            'holidays' => '',
+            'currentYear' => ''
         ]);
 
         $closedDays = $this->closedDaysService->getFilterClosedDays($validated);
