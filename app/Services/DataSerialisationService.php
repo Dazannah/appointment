@@ -15,7 +15,6 @@ class DataSerialisationService implements IDataSerialisation {
   }
 
   public function serialiseInputForCreateClosedDay($validated): array {
-
     return  [
       'start' => $validated['startDate'],
       'end' => $validated['endDate']
@@ -34,7 +33,7 @@ class DataSerialisationService implements IDataSerialisation {
     $user->updated_at = $validated['updatedAt'];
     $user->email = $validated['emailAddress'];
     $user->user_status_id = $validated['status'];
-    $user->updated_by = auth()->user()->id;
+    $user->updated_by = $this->getUserId();
 
     if (isset($validated['isAdmin']) && ($validated['isAdmin'] === 'on')) {
       $user->is_admin = 1;
@@ -43,15 +42,19 @@ class DataSerialisationService implements IDataSerialisation {
     }
   }
 
+  public function getUserId(): int {
+    return auth()->user()->id;
+  }
+
   public function serialseClosedDaysForCalendar($closedDays): Collection {
-    $closedDays->map(
+    return $closedDays->map(
       function ($closedDay) {
         $closedDay['start'] = $closedDay['start'] . 'T' . $this->siteConfig['calendarTimes']['slotMinTime'];
         $closedDay['end'] = $closedDay['end'] . 'T' . $this->siteConfig['calendarTimes']['slotMaxTime'];
         if ($closedDay['title'] === null) $closedDay['title'] = $this->siteConfig['closedDays']['title'];
+
+        return $closedDay;
       }
     );
-
-    return $closedDays;
   }
 }

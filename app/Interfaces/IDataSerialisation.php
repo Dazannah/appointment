@@ -9,4 +9,5 @@ interface IDataSerialisation {
   public function serialiseInputForEditUser($validated, $user): void;
   public function serialiseInputForCreateClosedDay($validated): array;
   public function serialseClosedDaysForCalendar($closedDays): Collection;
+  public function getUserId(): int;
 }
