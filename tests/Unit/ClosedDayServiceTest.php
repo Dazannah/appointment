@@ -116,7 +116,6 @@ class ClosedDayServiceTest extends TestCase {
         $result = $this->closedDayServiceMock
             ->validateIfCanSave(['startDate' => '2024-09-22', 'endDate' => '2024-09-22']);
 
-        print_r($result);
         $this->assertEquals($result, ['canSave' => false, 'message' => "Can't save on this date.<br>There is already closed day on this date."]);
     }
 
@@ -129,7 +128,6 @@ class ClosedDayServiceTest extends TestCase {
         $result = $this->closedDayServiceMock
             ->validateIfCanSave(['startDate' => '2024-09-22', 'endDate' => '2024-09-22']);
 
-        print_r($result);
         $this->assertEquals($result, ['canSave' => false, 'message' => "Can't save on this date.<br>There is reserved events on the dates."]);
     }
 
@@ -141,7 +139,6 @@ class ClosedDayServiceTest extends TestCase {
         $result = $this->closedDayServiceMock
             ->validateIfCanSave(['startDate' => '2024-09-22', 'endDate' => '2024-09-22']);
 
-        print_r($result);
         $this->assertEquals($result, ['canSave' => true]);
     }
 }
