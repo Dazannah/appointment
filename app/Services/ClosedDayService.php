@@ -6,6 +6,7 @@ use App\Enums\StartEnd;
 use App\Interfaces\IDate;
 use App\Models\ClosedDay;
 use App\Interfaces\IClosedDay;
+use App\Interfaces\IDataSerialisation;
 use App\Interfaces\IEvent;
 use App\Interfaces\ISiteConfig;
 use Illuminate\Database\Eloquent\Collection;
@@ -18,13 +19,20 @@ class ClosedDayService implements IClosedDay {
 
   private IDate $dateService;
   private IEvent $eventService;
+  private IDataSerialisation $dataSerialisation;
 
-  public function __construct(ISiteConfig $siteConfigService, IDate $dateService, IEvent $eventService) {
+  private ClosedDay $closedDay;
+
+  public function __construct(ISiteConfig $siteConfigService, IDate $dateService, IEvent $eventService, ClosedDay $closedDay, IDataSerialisation $dataSerialisation) {
     $this->siteConfigService = $siteConfigService;
     $this->siteConfig =  $this->siteConfigService->getConfig();
 
     $this->dateService = $dateService;
     $this->eventService = $eventService;
+
+    $this->closedDay = $closedDay;
+
+    $this->dataSerialisation = $dataSerialisation;
   }
 
   public function handleHolidays($holidays, $year): void {
@@ -33,7 +41,7 @@ class ClosedDayService implements IClosedDay {
         $isClosedDay = $this->isClosedDay($holiday['date']);
 
         if (!$isClosedDay) {
-          ClosedDay::create([
+          $this->closedDay->create([
             'title' => $holiday['name'],
             'start' => $holiday['date'],
             'end' => $holiday['date']
@@ -64,11 +72,11 @@ class ClosedDayService implements IClosedDay {
   }
 
   public function getClosedDayByInput(StartEnd $field, $date): Collection {
-    return ClosedDay::where($field->value, '=', $date)->get();
+    return $this->closedDay->where($field->value, '=', $date)->get();
   }
 
   public function getFilterClosedDays($validated): LengthAwarePaginator {
-    $closedDays = ClosedDay::when(
+    $closedDays = $this->closedDay->when(
       isset($validated['closedDayId']),
       function ($querry) use ($validated) {
         return $querry->where('id', 'REGEXP', $validated['closedDayId']);
@@ -106,15 +114,8 @@ class ClosedDayService implements IClosedDay {
   }
 
   public function getWeeklyClosedDays($start, $end): Collection {
-    $closedDays = ClosedDay::where([['start', '>=', $start], ['end', '<=', $end]])->get();
-
-    $closedDays->map(
-      function ($closedDay) {
-        $closedDay['start'] = $closedDay['start'] . 'T' . $this->siteConfig['calendarTimes']['slotMinTime'];
-        $closedDay['end'] = $closedDay['end'] . 'T' . $this->siteConfig['calendarTimes']['slotMaxTime'];
-        if ($closedDay['title'] === null) $closedDay['title'] = $this->siteConfig['closedDays']['title'];
-      }
-    );
+    $closedDays = $this->closedDay->where([['start', '>=', $start], ['end', '<=', $end]])->get();
+    $closedDays = $this->dataSerialisation->serialseClosedDaysForCalendaer($closedDays);
 
     return $closedDays;
   }
@@ -126,6 +127,6 @@ class ClosedDayService implements IClosedDay {
   public function isClosedDay($day): bool {
     $splitedDay = explode('T', $day);
 
-    return count(ClosedDay::where([['start', '<=', $splitedDay[0]], ['end', '>=', $splitedDay[0]]])->get()) > 0;
+    return count($this->closedDay->where([['start', '<=', $splitedDay[0]], ['end', '>=', $splitedDay[0]]])->get()) > 0;
   }
 }
