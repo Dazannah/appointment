@@ -115,7 +115,7 @@ class ClosedDayService implements IClosedDay {
 
   public function getWeeklyClosedDays($start, $end): Collection {
     $closedDays = $this->closedDay->where([['start', '>=', $start], ['end', '<=', $end]])->get();
-    $closedDays = $this->dataSerialisation->serialseClosedDaysForCalendaer($closedDays);
+    $closedDays = $this->dataSerialisation->serialseClosedDaysForCalendar($closedDays);
 
     return $closedDays;
   }
