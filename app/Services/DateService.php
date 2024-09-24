@@ -166,6 +166,8 @@ class DateService implements IDate {
   }
 
   public function IsStartAndEndDifferenceEqualWithEventDuration($start, $end, $duration): bool {
+    if ($start > $end) return false;
+
     $dateDiff = $this->GetDateDiffFromString($start, $end);
     $startEndTimeDifferenceInMinutes = $this->GetMinutsFromDateDiff($dateDiff);
 
@@ -192,11 +194,10 @@ class DateService implements IDate {
     if ($event) {
       $nextEventStartDateExploded = explode('T', $event['start']);
 
-      if ($startDateExploded[0] < $nextEventStartDateExploded[0]) {
-        return $startDateExploded[0] . 'T' . $this->calendarTimes['slotMaxTime'];
-      }
+      if ($startDateExploded[0] === $nextEventStartDateExploded[0])
+        return $event['start'];
 
-      return $event['start'];
+      return $startDateExploded[0] . 'T' . $this->calendarTimes['slotMaxTime'];
     } else {
       return $startDateExploded[0] . 'T' . $this->calendarTimes['slotMaxTime'];
     }
@@ -222,8 +223,8 @@ class DateService implements IDate {
   }
 
   public function FormateDateForSave($dateTime): string {
-    $validated['start'] = explode('T', $dateTime)[0] . ' ' . explode('T', $dateTime)[1];
-    $result = str_replace(" ", "T", $validated['start']);
+    $tmp = explode('T', $dateTime)[0] . ' ' . explode('T', $dateTime)[1];
+    $result = str_replace(" ", "T", $tmp);
 
     return $result;
   }
