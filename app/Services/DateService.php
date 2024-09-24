@@ -3,12 +3,10 @@
 namespace App\Services;
 
 use App\Interfaces\IClosedDay;
-use DateTime;
 use DateInterval;
 use DateTimeZone;
 use App\Interfaces\IDate;
 use App\Interfaces\ISiteConfig;
-use App\Models\ClosedDay;
 
 class DateService implements IDate {
 
@@ -46,6 +44,8 @@ class DateService implements IDate {
   }
 
   public function isFitTwoDateTimeDuration($firstDateTime, $nextDateTime, $duration): bool {
+    if ($firstDateTime >= $nextDateTime) return false;
+
     $dateDiff = $this->GetDateDiffFromString($firstDateTime, $nextDateTime);
     $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
 
@@ -53,16 +53,28 @@ class DateService implements IDate {
   }
 
   public function isFitEndOfDay($startDateTime, $duration): bool {
+    if ($duration <= 0) return false;
+
     $startDate = explode('T', $startDateTime)[0];
-    $dateDiff = $this->GetDateDiffFromString($startDateTime, $startDate . 'T' . $this->calendarTimes['slotMaxTime']);
+    $endOfDay = $startDate . 'T' . $this->calendarTimes['slotMaxTime'];
+
+    if ($startDateTime >= $endOfDay) return false;
+
+    $dateDiff = $this->GetDateDiffFromString($startDateTime, $endOfDay);
     $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
 
     return $minutesDiff >= $duration;
   }
 
   public function isFitStartOfDay($eventStartDateTime, $duration): bool {
+    if ($duration <= 0) return false;
+
     $startDate = explode('T', $eventStartDateTime)[0];
-    $dateDiff = $this->GetDateDiffFromString($startDate . 'T' . $this->calendarTimes['slotMinTime'], $eventStartDateTime);
+    $startofDay = $startDate . 'T' . $this->calendarTimes['slotMinTime'];
+
+    if ($eventStartDateTime <= $startofDay) return false;
+
+    $dateDiff = $this->GetDateDiffFromString($startofDay, $eventStartDateTime);
     $minutesDiff = $this->GetMinutsFromDateDiff($dateDiff);
 
     return $minutesDiff >= $duration;
@@ -154,6 +166,8 @@ class DateService implements IDate {
   }
 
   public function IsStartAndEndDifferenceEqualWithEventDuration($start, $end, $duration): bool {
+    if ($start > $end) return false;
+
     $dateDiff = $this->GetDateDiffFromString($start, $end);
     $startEndTimeDifferenceInMinutes = $this->GetMinutsFromDateDiff($dateDiff);
 
@@ -174,17 +188,16 @@ class DateService implements IDate {
     return $availableMins;
   }
 
-  public function getNextEventDate($event = null, $startDate): string {
+  public function getNextEventDate($startDate, $event = null): string {
     $startDateExploded = explode('T', $startDate);
 
     if ($event) {
       $nextEventStartDateExploded = explode('T', $event['start']);
 
-      if ($startDateExploded[0] < $nextEventStartDateExploded[0]) {
-        return $startDateExploded[0] . 'T' . $this->calendarTimes['slotMaxTime'];
-      }
+      if ($startDateExploded[0] === $nextEventStartDateExploded[0])
+        return $event['start'];
 
-      return $event['start'];
+      return $startDateExploded[0] . 'T' . $this->calendarTimes['slotMaxTime'];
     } else {
       return $startDateExploded[0] . 'T' . $this->calendarTimes['slotMaxTime'];
     }
@@ -210,8 +223,8 @@ class DateService implements IDate {
   }
 
   public function FormateDateForSave($dateTime): string {
-    $validated['start'] = explode('T', $dateTime)[0] . ' ' . explode('T', $dateTime)[1];
-    $result = str_replace(" ", "T", $validated['start']);
+    $tmp = explode('T', $dateTime)[0] . ' ' . explode('T', $dateTime)[1];
+    $result = str_replace(" ", "T", $tmp);
 
     return $result;
   }
