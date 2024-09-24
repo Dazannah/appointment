@@ -121,7 +121,7 @@ class EventService implements IEvent {
   public function getAvailableWorkTypes($startDate): Collection {
     $event = Event::where([['start', '>=', $startDate], ['status_id', '!=', '3']])->orderBy('start', 'asc')->first();
 
-    $nextEventDate = $this->dateService->getNextEventDate($event, $startDate);
+    $nextEventDate = $this->dateService->getNextEventDate($startDate, $event);
 
     $dateDiff = $this->dateService->GetDateDiffFromString($startDate, $nextEventDate);
     $availableMins = $this->dateService->GetMinutsFromDateDiff($dateDiff);
