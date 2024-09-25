@@ -6,6 +6,7 @@ use App\Services\SiteConfigService;
 use Illuminate\Database\Eloquent\Collection;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class DateServiceTest extends TestCase {
 
@@ -33,281 +34,153 @@ class DateServiceTest extends TestCase {
     ], $dateTime);
   }
 
-  #[Test]
-  public function isFitTwoDateTimeDuration() {
-    $testCases = [
-      [
-        'firstDateTime' => '2024-09-23T10:00',
-        'nextDateTime' => '2024-09-23T10:15',
-        'duration' => '15',
-        'result' => true
-      ],
-      [
-        'firstDateTime' => '2024-09-23T10:00',
-        'nextDateTime' => '2024-09-23T10:15',
-        'duration' => '0',
-        'result' => true
-      ],
-      [
-        'firstDateTime' => '2024-09-23T10:00',
-        'nextDateTime' => '2024-09-23T10:15',
-        'duration' => '30',
-        'result' => false
-      ],
-      [
-        'firstDateTime' => '2024-09-23T10:00',
-        'nextDateTime' => '2024-09-23T10:00',
-        'duration' => '30',
-        'result' => false
-      ],
-      [
-        'firstDateTime' => '2024-09-23T10:00',
-        'nextDateTime' => '2024-09-23T09:00',
-        'duration' => '30',
-        'result' => false
-      ]
+  public static function isFitTwoDateTimeDurationProvider() {
+    return [
+      ['2024-09-23T10:00', '2024-09-23T10:15', '15', true],
+      ['2024-09-23T10:00', '2024-09-23T10:15', '0', true],
+      ['2024-09-23T10:00','2024-09-23T10:15','30',false],
+      ['2024-09-23T10:00','2024-09-23T10:00','30',false],
+      ['2024-09-23T10:00','2024-09-23T09:00','30',false],
     ];
-
-    foreach ($testCases as $index => $case) {
-      $this->assertEquals(
-        $case['result'],
-        $this->dateService->isFitTwoDateTimeDuration($case['firstDateTime'], $case['nextDateTime'], $case['duration']),
-        "Test case {$index} failed."
-      );
-    }
   }
 
   #[Test]
-  public function isFitEndOfDay() {
-    $testCases = [
-      [
-        'startDateTime' => '2024-09-23T15:30',
-        'duration' => '30',
-        'result' => true
-      ],
-      [
-        'startDateTime' => '2024-09-23T15:00',
-        'duration' => '30',
-        'result' => true
-      ],
-      [
-        'startDateTime' => '2024-09-23T15:00',
-        'duration' => '0',
-        'result' => false
-      ],
-      [
-        'startDateTime' => '2024-09-23T15:00',
-        'duration' => '-1',
-        'result' => false
-      ],
-      [
-        'startDateTime' => '2024-09-23T20:00',
-        'duration' => '30',
-        'result' => false
-      ],
+  #[DataProvider('isFitTwoDateTimeDurationProvider')]
+  public function isFitTwoDateTimeDuration($firstDateTime, $nextDateTime, $duration, $result) {
+    $this->assertEquals(
+      $result,
+      $this->dateService->isFitTwoDateTimeDuration($firstDateTime, $nextDateTime, $duration)
+    );
+  }
 
-      [
-        'startDateTime' => '2024-09-23T' . $this->siteConfig['calendarTimes']['slotMaxTime'],
-        'duration' => '0',
-        'result' => false
-      ],
-    ];
+public static function isFitEndOfDayProvider(){
+  return [
+    ['2024-09-23T15:30','30',true],
+    ['2024-09-23T15:00','30',true],
+    ['2024-09-23T15:00','0',false],
+    ['2024-09-23T15:00','-1',false],
+    ['2024-09-23T20:00','30',false],
+    ['2024-09-23T' . '16:00','0',false],/*$this->siteConfig['calendarTimes']['slotMaxTime'],*/
+  ];
+}
 
-    foreach ($testCases as $index => $case) {
+  #[Test]
+  #[DataProvider('isFitEndOfDayProvider')]
+  public function isFitEndOfDay($startDateTime, $duration, $result) {
       $this->assertEquals(
-        $case['result'],
-        $this->dateService->isFitEndOfDay($case['startDateTime'], $case['duration']),
-        "Test case {$index} failed."
+        $result,
+        $this->dateService->isFitEndOfDay($startDateTime, $duration),
       );
-    }
+
+  }
+
+  public static function isFitStartOfDayProvider() {
+    return [
+      ['2024-09-23T08:30','30',true],
+      ['2024-09-23T09:00','0',false],
+      ['2024-09-23T09:00','-1',false],
+      ['2024-09-23T07:00','30',false],
+      ['2024-09-23T' . '08:00','0',false],/* $this->siteConfig['calendarTimes']['slotMinTime']*/
+    ];
   }
 
   #[Test]
-  public function isFitStartOfDay() {
-    $testCases = [
-      [
-        'eventStartDateTime' => '2024-09-23T08:30',
-        'duration' => '30',
-        'result' => true
-      ],
-      [
-        'eventStartDateTime' => '2024-09-23T09:00',
-        'duration' => '0',
-        'result' => false
-      ],
-      [
-        'eventStartDateTime' => '2024-09-23T09:00',
-        'duration' => '-1',
-        'result' => false
-      ],
-      [
-        'eventStartDateTime' => '2024-09-23T07:00',
-        'duration' => '30',
-        'result' => false
-      ],
-      [
-        'eventStartDateTime' => '2024-09-23T' . $this->siteConfig['calendarTimes']['slotMinTime'],
-        'duration' => '0',
-        'result' => false
-      ]
-    ];
-
-    foreach ($testCases as $index => $case) {
+  #[DataProvider('isFitStartOfDayProvider')]
+  public function isFitStartOfDay($eventStartDateTime, $duration, $result) {
       $this->assertEquals(
-        $case['result'],
-        $this->dateService->isFitStartOfDay($case['eventStartDateTime'], $case['duration']),
-        "Test case {$index} failed."
+        $result,
+        $this->dateService->isFitStartOfDay($eventStartDateTime, $duration)
       );
-    }
+  }
+
+  public static function IsEndAfterCloseProvider() {
+    return [
+      ['2024-09-24T16:00',false],
+      ['2024-09-24T16:01',true],
+      ['2024-09-24T15:59',false],
+    ];
   }
 
   #[Test]
-  public function IsEndAfterClose() {
-    $testCases = [
-      [
-        'end' => '2024-09-24T16:00',
-        'result' => false
-      ],
-      [
-        'end' => '2024-09-24T16:01',
-        'result' => true
-      ],
-      [
-        'end' => '2024-09-24T15:59',
-        'result' => false
-      ],
-    ];
-
-    foreach ($testCases as $index => $case) {
+  #[DataProvider('IsEndAfterCloseProvider')]
+  public function IsEndAfterClose($end, $result) {
       $this->assertEquals(
-        $case['result'],
-        $this->dateService->IsEndAfterClose($case['end']),
-        "Test case {$index} failed."
+        $result,
+        $this->dateService->IsEndAfterClose($end)
       );
-    }
+  }
+
+  public static function IsStartBeforeOpenProvider() {
+    return [
+      ['2024-09-24T08:00',false],
+      ['2024-09-24T07:59',true],
+      ['2024-09-24T08:01',false],
+    ];
   }
 
   #[Test]
-  public function IsStartBeforeOpen() {
-    $testCases = [
-      [
-        'start' => '2024-09-24T08:00',
-        'result' => false
-      ],
-      [
-        'start' => '2024-09-24T07:59',
-        'result' => true
-      ],
-      [
-        'start' => '2024-09-24T08:01',
-        'result' => false
-      ],
-    ];
-
-    foreach ($testCases as $index => $case) {
+  #[DataProvider('IsStartBeforeOpenProvider')]
+  public function IsStartBeforeOpen($start, $result) {
       $this->assertEquals(
-        $case['result'],
-        $this->dateService->IsStartBeforeOpen($case['start']),
-        "Test case {$index} failed."
+        $result,
+        $this->dateService->IsStartBeforeOpen($start)
       );
-    }
+  }
+
+  public static function GetMinutsFromDateDiffProvider() {
+    return [
+      [DateInterval::createFromDateString('1 day'),1440],
+      [DateInterval::createFromDateString('0 day'),0],
+      [DateInterval::createFromDateString('3 hour'),180],
+    ];
   }
 
   #[Test]
-  public function GetMinutsFromDateDiff() {
-    $testCases = [
-      [
-        'dateInteval' => DateInterval::createFromDateString('1 day'),
-        'result' => 1440
-      ],
-      [
-        'dateInteval' => DateInterval::createFromDateString('0 day'),
-        'result' => 0
-      ],
-      [
-        'dateInteval' => DateInterval::createFromDateString('3 hour'),
-        'result' => 180
-      ],
-    ];
-
-    foreach ($testCases as $index => $case) {
+  #[DataProvider('GetMinutsFromDateDiffProvider')]
+  public function GetMinutsFromDateDiff($dateInterval, $result) {
       $this->assertEquals(
-        $case['result'],
-        $this->dateService->GetMinutsFromDateDiff($case['dateInteval']),
-        "Test case {$index} failed."
+        $result,
+        $this->dateService->GetMinutsFromDateDiff($dateInterval),
       );
-    }
+  }
+
+  public static function IsStartAndEndDifferenceEqualWithEventDurationProvider() {
+    return [
+      ['2024-09-24T08:00','2024-09-24T08:30','30',true],
+      ['2024-09-24T09:00','2024-09-24T08:30','30',false],
+      ['2024-09-24T08:00','2024-09-24T08:30','31',false],
+    ];
   }
 
   #[Test]
-  public function IsStartAndEndDifferenceEqualWithEventDuration() {
-    $testCases = [
-      [
-        'start' => '2024-09-24T08:00',
-        'end' => '2024-09-24T08:30',
-        'duration' => '30',
-        'result' => true
-      ],
-      [
-        'start' => '2024-09-24T09:00',
-        'end' => '2024-09-24T08:30',
-        'duration' => '30',
-        'result' => false
-      ],
-      [
-        'start' => '2024-09-24T08:00',
-        'end' => '2024-09-24T08:30',
-        'duration' => '31',
-        'result' => false
-      ],
-    ];
-
-    foreach ($testCases as $index => $case) {
+  #[DataProvider('IsStartAndEndDifferenceEqualWithEventDurationProvider')]
+  public function IsStartAndEndDifferenceEqualWithEventDuration($start, $end, $duration, $result) {
       $this->assertEquals(
-        $case['result'],
-        $this->dateService->IsStartAndEndDifferenceEqualWithEventDuration($case['start'], $case['end'], $case['duration']),
-        "Test case {$index} failed."
+        $result,
+        $this->dateService->IsStartAndEndDifferenceEqualWithEventDuration($start, $end, $duration),
       );
-    }
+  }
+
+  public static function getNextEventDateProvider() {
+    return [
+      ['2024-09-24T08:00',['start' => '2024-09-24T12:00'],'2024-09-24T12:00'],
+      ['2024-09-24T08:00',null,'2024-09-24T16:00'],
+      ['2024-09-24T08:00',['start' => '2024-09-25T12:00'],'2024-09-24T16:00'],
+      ['2024-09-24T08:00',['start' => '2024-09-23T12:00'],'2024-09-24T16:00'],
+    ];
   }
 
   #[Test]
-  public function getNextEventDate() {
-    $testCases = [
-      [
-        'startDate' => '2024-09-24T08:00',
-        'event' => ['start' => '2024-09-24T12:00'],
-        'result' => '2024-09-24T12:00'
-      ],
-      [
-        'startDate' => '2024-09-24T08:00',
-        'event' => null,
-        'result' => '2024-09-24T16:00'
-      ],
-      [
-        'startDate' => '2024-09-24T08:00',
-        'event' => ['start' => '2024-09-25T12:00'],
-        'result' => '2024-09-24T16:00'
-      ],
-      [
-        'startDate' => '2024-09-24T08:00',
-        'event' => ['start' => '2024-09-23T12:00'],
-        'result' => '2024-09-24T16:00'
-      ],
-    ];
-
-    foreach ($testCases as $index => $case) {
+  #[DataProvider('getNextEventDateProvider')]
+  public function getNextEventDate($startDate, $event, $result) {
       $this->assertEquals(
-        $case['result'],
-        $this->dateService->getNextEventDate($case['startDate'], $case['event']),
-        "Test case {$index} failed."
+        $result,
+        $this->dateService->getNextEventDate($startDate, $event),
       );
-    }
   }
 
   #[Test]
   public function replaceTInStartEnd() {
-
     $appointments = new Collection(
       [
         new Event([
