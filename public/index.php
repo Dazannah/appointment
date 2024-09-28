@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\CustomRequest;
+use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
 
@@ -14,4 +14,4 @@ require __DIR__ . '/../vendor/autoload.php';
 
 // Bootstrap Laravel and handle the request...
 (require_once __DIR__ . '/../bootstrap/app.php')
-    ->handleRequest(CustomRequest::capture());
+    ->handleRequest(Request::capture());
