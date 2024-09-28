@@ -31,7 +31,10 @@ class WorkTypesController extends Controller {
 
         $worktypes = $this->worktypeService->getFilterWorktypes($validated);
 
-        return view('prices', ['pageTitle' => 'Prices', 'worktypes' => $worktypes]);
+        if ($request->wantsJson())
+            return response()->json(['pageTitle' => 'Prices', 'worktypes' => $worktypes]);
+        else
+            return view('prices', ['pageTitle' => 'Prices', 'worktypes' => $worktypes]);
     }
 
     /**

@@ -140,15 +140,15 @@ class EventService implements IEvent {
       'start' => $validated['start'],
       'end' => $validated['end'],
       'work_type_id' => $work['id'],
-      'note' => $validated['note'],
+      'note' => $validated['note'] ?? "",
     ];
 
     Event::create($event);
   }
 
-  public function setStatusDeleted(Event $event): RedirectResponse {
+  public function setStatusDeleted(Event $event): array {
     if ($event->status->id === 2) {
-      return back()->with('error', "Can't delete event in progress.");
+      return ['error' => "Can't delete event in progress."];
     }
 
     $dateDiff = $this->dateService->GetDateDiffFromString(date_create('now', new DateTimeZone('CEST'))->format('Y-m-d H:i'), $event['start']);
@@ -163,7 +163,7 @@ class EventService implements IEvent {
     $event->status_id = 3;
     $event->save();
 
-    return redirect('/dashboard')->with('success', 'Successfully deleted');
+    return ['success' => 'Successfully deleted'];
   }
 
   public function updateEvent(Event $event, $validatedData): void {
