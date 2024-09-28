@@ -31,10 +31,10 @@ class WorkTypesController extends Controller {
 
         $worktypes = $this->worktypeService->getFilterWorktypes($validated);
 
-        if ($request->isApi())
-            return response()->json(['worktypes' => $worktypes]);
-
-        return view('prices', ['pageTitle' => 'Prices', 'worktypes' => $worktypes]);
+        if ($request->wantsJson())
+            return response()->json(['pageTitle' => 'Prices', 'worktypes' => $worktypes]);
+        else
+            return view('prices', ['pageTitle' => 'Prices', 'worktypes' => $worktypes]);
     }
 
     /**

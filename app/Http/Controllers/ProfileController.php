@@ -17,11 +17,15 @@ class ProfileController extends Controller {
         $this->eventService = $eventService;
     }
 
-    public function getDashboard(Request $req) {
+    public function getDashboard(Request $request) {
         $reservations = $this->eventService->getOwnEvents(auth()->user()->id);
 
-        return view('dashboard', ['reservations' => $reservations, 'pageTitle' => auth()->user()->name . "'s reservations"]);
+        if ($request->wantsJson())
+            return response()->json(['reservations' => $reservations, 'pageTitle' => auth()->user()->name . "'s reservations"]);
+        else
+            return view('dashboard', ['reservations' => $reservations, 'pageTitle' => auth()->user()->name . "'s reservations"]);
     }
+
     /**
      * Display the user's profile form.
      */
