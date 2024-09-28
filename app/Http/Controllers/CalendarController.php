@@ -71,13 +71,14 @@ class CalendarController extends Controller {
         return response()->json($result);
     }
 
-    public function createEvent(Request $req) {
-        $validated = $req->validate([
+    public function createEvent(Request $request) {
+
+        $validated = $request->validate([
             'title' => 'required',
             'start' => 'required|date',
             'end' => 'required|date',
             'workId' => 'required|numeric',
-            'note' => 'min:0|max:255'
+            'note' => 'max:255'
         ]);
 
         $duration = $this->worktypeService->GetDurationById($validated['workId']);
@@ -85,11 +86,26 @@ class CalendarController extends Controller {
         $status = $this->dateService->ValidateDateForEvent($validated['start'], $validated['end'], $duration);
 
         if ($status['isDateWrong']) {
-            return back()->with('error', $status['errorMessage']);
+            if ($request->wantsJson())
+                return response()->json(['error' => $status['errorMessage']]);
+            else
+                return back()->with('error', $status['errorMessage']);
+        }
+
+        $isWholeTimeSlotFree = count($this->eventService->getWeeklyEvents($validated['start'], $validated['end'])) === 0;
+
+        if (!$isWholeTimeSlotFree) {
+            if ($request->wantsJson())
+                return response()->json(['error' => "There is already appointment in this time frame."]);
+            else
+                return back()->with('error', "There is already appointment in this time frame.");
         }
 
         $this->eventService->createEvent($validated, auth()->id());
 
-        return redirect('/dashboard')->with('success', 'Appointment successfully saved.');
+        if ($request->wantsJson())
+            return response()->json(['result' => 'success']);
+        else
+            return redirect('/dashboard')->with('success', 'Appointment successfully saved.');
     }
 }
