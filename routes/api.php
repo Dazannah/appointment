@@ -1,43 +1,33 @@
 <?php
 
+use App\Models\User;
+use App\Models\Event;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\WorkTypesController;
 
 Route::get('/prices', [WorkTypesController::class, 'index']);
-//Route::get('/calendar', [CalendarController::class, 'show'])->name('calendar');
-//Route::get('/get-events', [CalendarController::class, 'getEvents'])->name('getEvents');
+Route::get('/get-events', [CalendarController::class, 'getEvents']);
+
+
+
+Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+    Route::get('/dashboard', [ProfileController::class, 'getDashboard']);
+    Route::get('/get-available-work-types', [CalendarController::class, 'getAvailableWorkTypes']);
+    Route::get('/next-available-time-for-appointement/{worktype}', [CalendarController::class, 'getNextAvailableEventTime']);
+    Route::post('/make-reservation', [CalendarController::class, 'createEvent']);
+    Route::get('/event/{event}', [EventController::class, 'edit'])->can('edit', 'event');
+    Route::patch('/event/{event}', [EventController::class, 'update'])->can('update', 'event');
+    Route::delete('/event/{event}', [EventController::class, 'destroy'])->can('destroy', 'event');
+});
 
 /*Route::get('/tokens/create', function (Request $request) {
     Auth::attempt(['email' => 'davidfabian@freemail.hu', 'password' => 'PalmaL,648']);
     $token = $request->user()->createToken('test token');
 
     return ['token' => $token->plainTextToken];
-});*/
-
-/*
-
-Route::get('/', function () {
-    if (auth()->check()) {
-        return redirect('/dashboard');
-    }
-
-    return view('welcome');
-})->name('welcome');
-
-Route::get('/prices', [WorkTypesController::class, 'index'])->name('prices');
-Route::get('/calendar', [CalendarController::class, 'show'])->name('calendar');
-Route::get('/get-events', [CalendarController::class, 'getEvents'])->name('getEvents');
-
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/dashboard', [ProfileController::class, 'getDashboard'])->name('dashboard');
-    Route::get('/get-available-work-types', [CalendarController::class, 'getAvailableWorkTypes'])->name('getAvailableWorkTypes');
-    Route::get('/next-available-time-for-appointement/{worktype}', [CalendarController::class, 'getNextAvailableEventTime'])->name('getNextAvailableEventTime');
-    //Route::get('/make-reservation', [CalendarController::class, 'getCreateEvent'])->name('getCreateEvent');
-    Route::post('/make-reservation', [CalendarController::class, 'createEvent'])->name('createEvent');
-    Route::get('/event/{event}', [EventController::class, 'edit']);
-    Route::patch('/event/{event}', [EventController::class, 'update']);
-    Route::delete('/event/{event}', [EventController::class, 'destroy']);
 });
 
 Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::class])->group(function () {
