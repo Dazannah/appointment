@@ -28,14 +28,14 @@ class EventService implements IEvent {
   public function getAllEventOnTheDay($day): Collection {
     $dayTimes = $this->dateService->getOpenTimeFromDate($day);
 
-    $events = Event::where([['status_id', '!=', '3'], ['start', '>=', $dayTimes['start']], ['start', '<=', $dayTimes['end']]])->get();
+    $events = $this->getEventWhere([['status_id', '!=', '3'], ['start', '>=', $dayTimes['start']], ['start', '<=', $dayTimes['end']]]);
 
     return $events;
   }
 
   public function getNextAvailableEventTime(WorkTypes $worktype, string $day): array {
     $workDayTimes = $this->dateService->getNextWorkdayTimesDate($day);
-    $eventOnTheDay = Event::where([['status_id', '!=', '3'], ['start', '>=', $workDayTimes['start']], ['start', '<=', $workDayTimes['end']]])->orderBy('start', 'asc')->first();
+    $eventOnTheDay = $this->getEventWhere([['status_id', '!=', '3'], ['start', '>=', $workDayTimes['start']], ['start', '<=', $workDayTimes['end']]]);
 
     $isFitStartOfTheDay = isset($eventOnTheDay) ? $this->dateService->isFitStartOfDay($eventOnTheDay['start'], $worktype->duration) : true;
 
@@ -82,6 +82,10 @@ class EventService implements IEvent {
         return $this->getNextEventCheckIfFit($nextEventOnTheDay, $worktype, $workDayTimes);
       }
     }
+  }
+
+  public function getEventWhere($where) {
+    return Event::where($where)->orderBy('start', 'asc')->first();
   }
 
   public function closeGivenEvents($events): void {
