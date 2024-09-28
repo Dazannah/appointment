@@ -1,15 +1,17 @@
 <?php
 
+use App\Models\Event;
 use App\Http\Middleware\Admin;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\ClosedDayController;
-use App\Http\Controllers\PriceController;
-use App\Http\Controllers\SiteConfigController;
 use App\Http\Controllers\WorkTypesController;
+use App\Http\Controllers\SiteConfigController;
+use App\Models\User;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -29,9 +31,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/next-available-time-for-appointement/{worktype}', [CalendarController::class, 'getNextAvailableEventTime'])->name('getNextAvailableEventTime');
     //Route::get('/make-reservation', [CalendarController::class, 'getCreateEvent'])->name('getCreateEvent');
     Route::post('/make-reservation', [CalendarController::class, 'createEvent'])->name('createEvent');
-    Route::get('/event/{event}', [EventController::class, 'edit']);
-    Route::patch('/event/{event}', [EventController::class, 'update']);
-    Route::delete('/event/{event}', [EventController::class, 'destroy']);
+    Route::get('/event/{event}', [EventController::class, 'edit'])->can('edit', 'event');
+    Route::patch('/event/{event}', [EventController::class, 'update'])->can('update', 'event');
+    Route::delete('/event/{event}', [EventController::class, 'destroy'])->can('destroy', 'event');
 });
 
 Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::class])->group(function () {
