@@ -24,7 +24,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 });
 
 /*Route::get('/tokens/create', function (Request $request) {
-    Auth::attempt(['email' => 'davidfabian@freemail.hu', 'password' => 'PalmaL,648']);
+    Auth::attempt(['email' => '', 'password' => '']);
     $token = $request->user()->createToken('test token');
 
     return ['token' => $token->plainTextToken];
