@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Models\Event;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\TokenController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\WorkTypesController;
@@ -11,7 +12,11 @@ use App\Http\Controllers\WorkTypesController;
 Route::get('/prices', [WorkTypesController::class, 'index']);
 Route::get('/get-events', [CalendarController::class, 'getEvents']);
 
-
+Route::prefix('token')->group(function () {
+    Route::post('create', [TokenController::class, 'create']);
+    Route::get('get-tokens', [TokenController::class, 'getTokens'])->middleware(['auth:sanctum', 'verified']);
+    Route::delete('delete', [TokenController::class, 'delete'])->middleware(['auth:sanctum', 'verified']);
+});
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/dashboard', [ProfileController::class, 'getDashboard']);
