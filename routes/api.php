@@ -29,16 +29,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::delete('/event/{event}', [EventController::class, 'destroy'])->can('destroy', 'event');
 });
 
-/*Route::get('/tokens/create', function (Request $request) {
-    Auth::attempt(['email' => 'davidfabian@freemail.hu', 'password' => 'PalmaL,648']);
-    $token = $request->user()->createToken('test token');
-
-    return ['token' => $token->plainTextToken];
-});
-
+/*
 Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::class])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'getDashboard'])->name('dashboard');
-
     Route::name('user.')->prefix('user')->group(function () {
         Route::get('/{user}', [AdminController::class, 'getEditUser']);
         Route::patch('/{user}', [AdminController::class, 'saveEditUser']);
