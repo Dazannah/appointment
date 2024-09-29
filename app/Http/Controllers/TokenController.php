@@ -7,6 +7,30 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class TokenController extends Controller {
+
+    public function update(Request $request) {
+        $validator = Validator::make($request->all(), [
+            'tokenId' => 'required|numeric',
+            'tokenName' => 'string',
+            'expiresAt' => 'date_format:Y-m-d H:i'
+        ]);
+
+        if ($validator->fails())
+            return response()->json($validator->errors());
+
+        $validatedData = $validator->safe();
+
+        if (!$token = $request->user()->tokens()->where('id', $validatedData["tokenId"])->first())
+            return response()->json(['error' => "Token don't exist with this ID"]);
+
+        $token->name = $validatedData['tokenName'] ?? $token->name;
+        $token->expires_at = $validatedData['expiresAt'] ?? $token->expires_at;
+
+        $token->save();
+
+        return response()->json(['success' => "Token successfully updated."]);
+    }
+
     public function create(Request $request) {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
