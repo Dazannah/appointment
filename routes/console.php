@@ -16,25 +16,3 @@ Schedule::call(function () {
 })->everyFifteenMinutes();
 
 Schedule::command('sanctum:prune-expired --hours=24')->daily();
-
-Artisan::command('holidays', function () {
-    $apiKey = env('SZUNETNAPOK_API');
-    $year = '2024';
-    $ssl = env('APP_ENV', 'production') == 'local' ? false : true;
-
-    $client = new Client([
-        'base_uri' => "https://szunetnapok.hu",
-        'verify' => $ssl,
-    ]);
-
-
-    $response = $client->request('GET', "/api/$apiKey/$year");
-
-    if ($response->getStatusCode() == 200)
-        print_r(json_decode($response->getBody()->getContents(), true)['days']);
-    /*print_r(json_decode($response->getBody()->getContents(), true)['response']
-             Error 
-        );*/
-    else
-        echo "Unsuccessfull request";
-});
