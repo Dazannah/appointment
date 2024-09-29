@@ -35,7 +35,7 @@ class WorktypeService implements IWorktypeService {
       function ($querry) use ($validated) {
         return $querry->where('price_id', '=', $validated['priceId']);
       }
-    )->paginate(10);
+    )->with('price')->paginate(10);
 
     return $worktypes;
   }
