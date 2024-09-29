@@ -16,6 +16,7 @@ Route::prefix('token')->group(function () {
     Route::post('create', [TokenController::class, 'create']);
     Route::get('get-tokens', [TokenController::class, 'getTokens'])->middleware(['auth:sanctum', 'verified']);
     Route::delete('delete', [TokenController::class, 'delete'])->middleware(['auth:sanctum', 'verified']);
+    Route::patch('update', [TokenController::class, 'update'])->middleware(['auth:sanctum', 'verified']);
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
