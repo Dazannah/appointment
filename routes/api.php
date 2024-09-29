@@ -4,6 +4,7 @@ use App\Models\User;
 use App\Models\Event;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\TokenController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\WorkTypesController;
@@ -11,7 +12,12 @@ use App\Http\Controllers\WorkTypesController;
 Route::get('/prices', [WorkTypesController::class, 'index']);
 Route::get('/get-events', [CalendarController::class, 'getEvents']);
 
-
+Route::prefix('token')->group(function () {
+    Route::post('create', [TokenController::class, 'create']);
+    Route::get('get-tokens', [TokenController::class, 'getTokens'])->middleware(['auth:sanctum', 'verified']);
+    Route::delete('delete', [TokenController::class, 'delete'])->middleware(['auth:sanctum', 'verified']);
+    Route::patch('update', [TokenController::class, 'update'])->middleware(['auth:sanctum', 'verified']);
+});
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('/dashboard', [ProfileController::class, 'getDashboard']);
@@ -23,16 +29,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::delete('/event/{event}', [EventController::class, 'destroy'])->can('destroy', 'event');
 });
 
-/*Route::get('/tokens/create', function (Request $request) {
-    Auth::attempt(['email' => '', 'password' => '']);
-    $token = $request->user()->createToken('test token');
-
-    return ['token' => $token->plainTextToken];
-});
-
+/*
 Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::class])->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'getDashboard'])->name('dashboard');
-
     Route::name('user.')->prefix('user')->group(function () {
         Route::get('/{user}', [AdminController::class, 'getEditUser']);
         Route::patch('/{user}', [AdminController::class, 'saveEditUser']);
