@@ -17,8 +17,8 @@ class SiteConfigController extends Controller {
         $this->closedDayService = $closedDayService;
     }
 
-    public function fillHolidays(Request $req) {
-        $validated = $req->validate([
+    public function fillHolidays(Request $request) {
+        $validated = $request->validate([
             'year' => 'required|date_format:Y'
         ]);
 
@@ -27,18 +27,30 @@ class SiteConfigController extends Controller {
         $holidays = $requestService->getHolidays($validated['year']);
 
         if ($holidays['response'] === 'Error') {
+            if ($request->wantsJson())
+                return response()->json(['error' => $holidays['message']]);
+
             return back()->withInput()->with('error', $holidays['message']);
         } else {
             $this->closedDayService->handleHolidays($holidays['days'], $validated['year']);
             //go through all date and check if it is already saved if not save it, ignore the work days(type: 2)
+
+            if ($request->wantsJson())
+                return response()->json(['success' => 'Holidays successfully updated']);
+
             return back()->with('success', 'Holidays successfully updated');
         }
     }
 
-    public function index() {
+    public function index(Request $request) {
         $configs = $this->siteConfigs->getConfig();
 
-        return view('site-settings', ['pageTitle' => 'Site settings', 'configs' => $configs]);
+        $responseArray = ['pageTitle' => 'Site settings', 'configs' => $configs];
+
+        if ($request->wantsJson())
+            return response()->json($responseArray);
+
+        return view('site-settings', $responseArray);
     }
 
     public function saveSettings(Request $request) {
@@ -51,6 +63,9 @@ class SiteConfigController extends Controller {
         $newValues = $this->siteConfigs->serialiseInputs($validatedInputs);
         $this->siteConfigs->setConfig($newValues);
         $this->siteConfigs->save();
+
+        if ($request->wantsJson())
+            return response()->json(['success' => 'Sucessfuly updated the site settings']);
 
         return back()->with('success', 'Sucessfuly updated the site settings');
     }
