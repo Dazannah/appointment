@@ -49,11 +49,13 @@ class AdminController extends Controller {
     }
 
     public function getAllAppointmentsForUser(User $user, Request $request) {
+        $responseArray = ['pageTitle' => "All appointments of $user->name", 'reservations' => $this->eventService->getAllEventsOfUser($user)];
+
         if ($request->wantsJson()) {
-            return response()->json(['pageTitle' => "All appointments of $user->name", 'reservations' => $this->eventService->getAllEventsOfUser($user)]);
+            return response()->json($responseArray);
         }
 
-        return view('user-all-events', ['pageTitle' => "All appointments of $user->name", 'reservations' => $this->eventService->getAllEventsOfUser($user)]);
+        return view('user-all-events', $responseArray);
     }
 
     public function getAdminMenuWorktypes(Request $req) {
@@ -138,11 +140,12 @@ class AdminController extends Controller {
         $latest10Appointments = $this->eventService->getLatest10AppointmentsForUser($user->id);
         $this->dateService->replaceTInStartEnd($latest10Appointments);
 
+        $responseArray = ['user' => $user, 'statuses' => UserStatus::get(), 'latestAppointments' => $latest10Appointments, 'pageTitle' => "Edit $user->name"];
         if ($request->wantsJson()) {
-            return response()->json(['user' => $user, 'statuses' => UserStatus::get(), 'latestAppointments' => $latest10Appointments, 'pageTitle' => "Edit $user->name"]);
+            return response()->json($responseArray);
         }
 
-        return view('edit-user', ['user' => $user, 'statuses' => UserStatus::get(), 'latestAppointments' => $latest10Appointments, 'pageTitle' => "Edit $user->name"]);
+        return view('edit-user', $responseArray);
     }
 
     public function saveEditUser(User $user, Request $request) {

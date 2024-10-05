@@ -31,10 +31,12 @@ class WorkTypesController extends Controller {
 
         $worktypes = $this->worktypeService->getFilterWorktypes($validated);
 
+        $responseArray = ['pageTitle' => 'Prices', 'worktypes' => $worktypes];
+
         if ($request->wantsJson())
-            return response()->json(['pageTitle' => 'Prices', 'worktypes' => $worktypes]);
+            return response()->json($responseArray);
         else
-            return view('prices', ['pageTitle' => 'Prices', 'worktypes' => $worktypes]);
+            return view('prices', $responseArray);
     }
 
     /**

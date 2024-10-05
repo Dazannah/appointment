@@ -20,10 +20,11 @@ class ProfileController extends Controller {
     public function getDashboard(Request $request) {
         $reservations = $this->eventService->getOwnEvents(auth()->user()->id);
 
+        $responseArray = ['reservations' => $reservations, 'pageTitle' => auth()->user()->name . "'s reservations"];
         if ($request->wantsJson())
-            return response()->json(['reservations' => $reservations, 'pageTitle' => auth()->user()->name . "'s reservations"]);
+            return response()->json($responseArray);
         else
-            return view('dashboard', ['reservations' => $reservations, 'pageTitle' => auth()->user()->name . "'s reservations"]);
+            return view('dashboard', $responseArray);
     }
 
     /**
