@@ -78,9 +78,11 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
         Route::get('/isPrice/{price:price}', [PriceController::class, 'isPrice'])->name('isPrice');
     });
 
-    Route::get('/site-settings', [SiteConfigController::class, 'index'])->name('siteSettings');
-    Route::post('/site-settings', [SiteConfigController::class, 'saveSettings']);
-    Route::post('/site-settings/fill-holidays', [SiteConfigController::class, 'fillHolidays']);
+    Route::name('siteSettings.')->prefix('site-settings')->group(function () {
+        Route::get('/', [SiteConfigController::class, 'index']);
+        Route::post('/', [SiteConfigController::class, 'saveSettings']);
+        Route::post('/fill-holidays', [SiteConfigController::class, 'fillHolidays']);
+    });
 });
 
 Route::middleware('auth')->group(function () {
