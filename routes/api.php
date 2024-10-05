@@ -67,11 +67,10 @@ Route::name('admin.')->prefix('admin')->middleware(['auth:sanctum', 'verified', 
         Route::delete('/{closedDay}', [ClosedDayController::class, 'destroy']);
     });
 
-    // Route::name('price.')->prefix('price')->group(function () {
-    //     Route::get('/create', [PriceController::class, 'create'])->name('createPrice');
-    //     Route::post('/create', [PriceController::class, 'store']);
-    //     Route::get('/isPrice/{price:price}', [PriceController::class, 'isPrice'])->name('isPrice');
-    // });
+    Route::name('price.')->prefix('price')->group(function () {
+        Route::post('/create', [PriceController::class, 'store']);
+        Route::get('/isPrice/{price:price}', [PriceController::class, 'isPrice']);
+    });
 
     // Route::get('/site-settings', [SiteConfigController::class, 'index'])->name('siteSettings');
     // Route::post('/site-settings', [SiteConfigController::class, 'saveSettings']);

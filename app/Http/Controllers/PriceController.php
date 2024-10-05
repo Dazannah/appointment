@@ -36,8 +36,12 @@ class PriceController extends Controller {
             'duration' => ''
         ]);
 
-        if (Price::where('price', '=', $valideted['price'])->count() > 0)
+        if (Price::where('price', '=', $valideted['price'])->count() > 0) {
+            if ($request->wantsJson())
+                return response()->json(['error' => 'Price already exist.']);
+
             return back()->with('error', 'Price already exist.');
+        }
 
         Price::create(['price' => $valideted['price']]);
 
@@ -46,6 +50,9 @@ class PriceController extends Controller {
 
             return redirect($redirectTo)->with('success', 'Price successfully created.');
         }
+
+        if ($request->wantsJson())
+            return response()->json(['success' => 'Price successfully created.']);
 
         return back()->with('success', 'Price successfully created.');
     }
