@@ -63,7 +63,7 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
         Route::post('/create', [WorkTypesController::class, 'store']);
         Route::get('/{worktype}', [WorkTypesController::class, 'edit'])->name('editWorktype');
         Route::patch('/{worktype}', [WorkTypesController::class, 'update'])->name('showWorktype');
-        Route::delete('/delete/{worktype}', [WorkTypesController::class, 'destroy'])->name('deleteWorktype');
+        Route::delete('/{worktype}', [WorkTypesController::class, 'destroy'])->name('deleteWorktype');
     });
 
     Route::name('closedDays.')->prefix('closed-days')->group(function () {
