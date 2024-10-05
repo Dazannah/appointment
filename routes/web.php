@@ -45,8 +45,10 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
         Route::get('/{user}/all-appointments', [AdminController::class, 'getAllAppointmentsForUser'])->name('getAllAppointments');
     });
 
-    Route::get('/event/{event}', [AdminController::class, 'getEditEvent']);
-    Route::patch('/event/{event}', [AdminController::class, 'saveEditEvent']);
+    Route::name('event.')->prefix('event')->group(function () {
+        Route::get('/{event}', [AdminController::class, 'getEditEvent']);
+        Route::patch('/{event}', [AdminController::class, 'saveEditEvent']);
+    });
 
     Route::name('menu.')->prefix('menu')->group(function () {
         Route::get('/', [AdminController::class, 'getAdminMenu'])->name('base');
