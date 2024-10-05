@@ -69,7 +69,7 @@ Route::name('admin.')->prefix('admin')->middleware(['auth', 'verified', Admin::c
     Route::name('closedDays.')->prefix('closed-days')->group(function () {
         Route::get('/create', [ClosedDayController::class, 'create'])->name('createClosedDay');
         Route::post('/create', [ClosedDayController::class, 'store']);
-        Route::delete('/delete/{closedDay}', [ClosedDayController::class, 'destroy']);
+        Route::delete('/{closedDay}', [ClosedDayController::class, 'destroy']);
     });
 
     Route::name('price.')->prefix('price')->group(function () {
