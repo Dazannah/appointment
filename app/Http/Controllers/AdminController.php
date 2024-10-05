@@ -34,8 +34,8 @@ class AdminController extends Controller {
         $this->closedDaysService = $closedDaysService;
     }
 
-    public function getAdminMenuClosedDays(Request $req) {
-        $validated = $req->validate([
+    public function getAdminMenuClosedDays(Request $request) {
+        $validated = $request->validate([
             'closedDayId' => '',
             'startDate' => '',
             'endDate' => '',
@@ -45,7 +45,12 @@ class AdminController extends Controller {
 
         $closedDays = $this->closedDaysService->getFilterClosedDays($validated);
 
-        return view('admin-menu-closedDays', ['pageTitle' => 'Closed days', 'closedDays' => $closedDays]);
+        $responseArray = ['pageTitle' => 'Closed days', 'closedDays' => $closedDays];
+
+        if ($request->wantsJson())
+            return response()->json($responseArray);
+
+        return view('admin-menu-closedDays', $responseArray);
     }
 
     public function getAllAppointmentsForUser(User $user, Request $request) {
@@ -58,8 +63,8 @@ class AdminController extends Controller {
         return view('user-all-events', $responseArray);
     }
 
-    public function getAdminMenuWorktypes(Request $req) {
-        $validated = $req->validate([
+    public function getAdminMenuWorktypes(Request $request) {
+        $validated = $request->validate([
             'worktypeId' => '',
             'name' => '',
             'duration' => '',
@@ -68,11 +73,16 @@ class AdminController extends Controller {
 
         $worktypes = $this->worktypeService->getFilterWorktypes($validated);
 
-        return view('admin-menu-worktypes', ['pageTitle' => 'Worktypes', 'worktypes' => $worktypes, 'prices' => Price::all()]);
+        $responseArray = ['pageTitle' => 'Worktypes', 'worktypes' => $worktypes, 'prices' => Price::all()];
+
+        if ($request->wantsJson())
+            return response()->json($responseArray);
+
+        return view('admin-menu-worktypes', $responseArray);
     }
 
-    public function getAdminMenuEvents(Request $req) {
-        $validated = $req->validate([
+    public function getAdminMenuEvents(Request $request) {
+        $validated = $request->validate([
             'appointmentId' => '',
             'userName' => '',
             'createdAt' => '',
@@ -82,11 +92,16 @@ class AdminController extends Controller {
 
         $events = $this->eventService->getAdminMenuFilterEvents($validated);
 
-        return view('admin-menu-events', ['pageTitle' => 'Search appointment', 'events' => $events, 'statuses' => Status::all(), 'workTypes' => WorkTypes::all()]);
+        $responseArray = ['pageTitle' => 'Search appointment', 'events' => $events, 'statuses' => Status::all(), 'workTypes' => WorkTypes::all()];
+
+        if ($request->wantsJson())
+            return response()->json($responseArray);
+
+        return view('admin-menu-events', $responseArray);
     }
 
-    public function getAdminMenuUsers(Request $req) {
-        $validated = $req->validate([
+    public function getAdminMenuUsers(Request $requets) {
+        $validated = $requets->validate([
             'userId' => '',
             'name' => '',
             'email' => '',
@@ -96,15 +111,20 @@ class AdminController extends Controller {
 
         $users = $this->userService->getAdminMenuFilterUsers($validated);
 
-        return view('admin-menu-users', ['pageTitle' => 'Search users', 'users' => $users, 'statuses' => UserStatus::all()]);
+        $responseArray = ['pageTitle' => 'Search users', 'users' => $users, 'statuses' => UserStatus::all()];
+
+        if ($requets->wantsJson())
+            return response()->json($responseArray);
+
+        return view('admin-menu-users',);
     }
 
     public function getAdminMenu() {
         return view('admin-menu', ['pageTitle' => "Admin menu"]);
     }
 
-    public function saveEditEvent(Event $event, Request $req) {
-        $validated = $req->validate([
+    public function saveEditEvent(Event $event, Request $request) {
+        $validated = $request->validate([
             'userNote' => '',
             'adminNote' => '',
             'status' => 'required'
@@ -113,11 +133,19 @@ class AdminController extends Controller {
         $this->dataSerialisationService->serialiseInputForEditEvent($validated, $event);
         $event->save();
 
+        if ($request->wantsJson())
+            return response()->json(['success' => 'Updated successfully!']);
+
         return back()->with('success', 'Updated successfully!');
     }
 
-    public function getEditEvent(Event $event) {
-        return view('edit-event', ['event' => $event, 'statuses' => Status::all(), 'pageTitle' => "Edit $event->title"]);
+    public function getEditEvent(Event $event, Request $request) {
+        $responseArray = ['event' => $event, 'statuses' => Status::all(), 'pageTitle' => "Edit $event->title"];
+
+        if ($request->wantsJson())
+            return response()->json($responseArray);
+
+        return view('edit-event', $responseArray);
     }
 
     public function getDashboard(Request $req) {

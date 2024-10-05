@@ -34,6 +34,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::delete('/event/{event}', [EventController::class, 'destroy'])->can('destroy', 'event');
 });
 
+// documentation needed
 Route::name('admin.')->prefix('admin')->middleware(['auth:sanctum', 'verified', Admin::class])->group(function () {
     Route::name('user.')->prefix('user')->group(function () {
         Route::get('/{user}', [AdminController::class, 'getEditUser']);
@@ -41,16 +42,18 @@ Route::name('admin.')->prefix('admin')->middleware(['auth:sanctum', 'verified', 
         Route::get('/{user}/all-appointments', [AdminController::class, 'getAllAppointmentsForUser']);
     });
 
-    // Route::get('/event/{event}', [AdminController::class, 'getEditEvent']);
-    // Route::patch('/event/{event}', [AdminController::class, 'saveEditEvent']);
+    Route::name('event.')->prefix('event')->group(function () {
+        Route::get('/{event}', [AdminController::class, 'getEditEvent']);
+        Route::patch('/{event}', [AdminController::class, 'saveEditEvent']);
+    });
 
-    // Route::name('menu.')->prefix('menu')->group(function () {
-    //     Route::get('/', [AdminController::class, 'getAdminMenu'])->name('base');
-    //     Route::get('/users', [AdminController::class, 'getAdminMenuUsers'])->name('users');
-    //     Route::get('/events', [AdminController::class, 'getAdminMenuEvents'])->name('events');
-    //     Route::get('/worktypes', [AdminController::class, 'getAdminMenuWorktypes'])->name('worktypes');
-    //     Route::get('/closed-days', [AdminController::class, 'getAdminMenuClosedDays'])->name('closedDays');
-    // });
+
+    Route::name('menu.')->prefix('menu')->group(function () {
+        Route::get('/users', [AdminController::class, 'getAdminMenuUsers']);
+        Route::get('/events', [AdminController::class, 'getAdminMenuEvents']);
+        Route::get('/worktypes', [AdminController::class, 'getAdminMenuWorktypes']);
+        Route::get('/closed-days', [AdminController::class, 'getAdminMenuClosedDays']);
+    });
 
     // Route::name('worktype.')->prefix('worktype')->group(function () {
     //     Route::get('/create', [WorkTypesController::class, 'create'])->name('createWorktype');
