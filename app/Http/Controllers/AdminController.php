@@ -48,7 +48,11 @@ class AdminController extends Controller {
         return view('admin-menu-closedDays', ['pageTitle' => 'Closed days', 'closedDays' => $closedDays]);
     }
 
-    public function getAllAppointmentsForUser(User $user) {
+    public function getAllAppointmentsForUser(User $user, Request $request) {
+        if ($request->wantsJson()) {
+            return response()->json(['pageTitle' => "All appointments of $user->name", 'reservations' => $this->eventService->getAllEventsOfUser($user)]);
+        }
+
         return view('user-all-events', ['pageTitle' => "All appointments of $user->name", 'reservations' => $this->eventService->getAllEventsOfUser($user)]);
     }
 
@@ -130,15 +134,19 @@ class AdminController extends Controller {
         return view('admin-dashboard', ['weeksData' => $weeksData, 'latestAppointments' => $latest10Appointments, 'latest10Users' => $latest10Users, 'pageTitle' => "Admin dashboard"]);
     }
 
-    public function getEditUser(User $user) {
+    public function getEditUser(User $user, Request $request) {
         $latest10Appointments = $this->eventService->getLatest10AppointmentsForUser($user->id);
         $this->dateService->replaceTInStartEnd($latest10Appointments);
+
+        if ($request->wantsJson()) {
+            return response()->json(['user' => $user, 'statuses' => UserStatus::get(), 'latestAppointments' => $latest10Appointments, 'pageTitle' => "Edit $user->name"]);
+        }
 
         return view('edit-user', ['user' => $user, 'statuses' => UserStatus::get(), 'latestAppointments' => $latest10Appointments, 'pageTitle' => "Edit $user->name"]);
     }
 
-    public function saveEditUser(User $user, Request $req) {
-        $validated = $req->validate([
+    public function saveEditUser(User $user, Request $request) {
+        $validated = $request->validate([
             'fullName' => 'required',
             'createdAt' => 'required|date',
             'updatedAt' => 'required|date',
@@ -151,6 +159,10 @@ class AdminController extends Controller {
         $this->dataSerialisationService->serialiseInputForEditUser($validated, $user);
 
         $user->save();
+
+        if ($request->wantsJson()) {
+            return response()->json(['success' => 'User successfully updated.']);
+        }
 
         return back()->with('success', 'User successfully updated.');
     }
