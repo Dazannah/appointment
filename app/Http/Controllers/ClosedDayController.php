@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Interfaces\IClosedDay;
 use App\Interfaces\IDataSerialisation;
 use App\Models\ClosedDay;
+use Exception;
 use Illuminate\Http\Request;
 
 class ClosedDayController extends Controller {
@@ -42,11 +43,19 @@ class ClosedDayController extends Controller {
 
         $validationResult = $this->closedDayService->validateIfCanSave($validated);
 
-        if (!$validationResult['canSave']) return back()->withInput()->with('error', $validationResult['message']);
+        if (!$validationResult['canSave']) {
+            if ($request->wantsJson())
+                return response()->json(['error' => $validationResult['message']]);
+
+            return back()->withInput()->with('error', $validationResult['message']);
+        }
 
         $serialised = $this->dataSerialisationService->serialiseInputForCreateClosedDay($validated);
 
         ClosedDay::create($serialised);
+
+        if ($request->wantsJson())
+            return response()->json(['success' => 'Closed day successfully saved']);
 
         return back()->with('success', 'Closed day successfully saved');
     }
@@ -75,8 +84,12 @@ class ClosedDayController extends Controller {
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ClosedDay $closedDay) {
+    public function destroy(ClosedDay $closedDay, Request $request) {
+
         $closedDay->delete();
+
+        if ($request->wantsJson())
+            return response()->json(['success' => "Successfully deleted closed day"]);
 
         return back()->with('success', "Successfully deleted closed day");
     }

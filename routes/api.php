@@ -62,11 +62,10 @@ Route::name('admin.')->prefix('admin')->middleware(['auth:sanctum', 'verified', 
         Route::delete('/{worktype}', [WorkTypesController::class, 'destroy']);
     });
 
-    // Route::name('closedDays.')->prefix('closed-days')->group(function () {
-    //     Route::get('/create', [ClosedDayController::class, 'create'])->name('createClosedDay');
-    //     Route::post('/create', [ClosedDayController::class, 'store']);
-    //     Route::delete('/delete/{closedDay}', [ClosedDayController::class, 'destroy']);
-    // });
+    Route::name('closedDays.')->prefix('closed-days')->group(function () {
+        Route::post('/create', [ClosedDayController::class, 'store']);
+        Route::delete('/{closedDay}', [ClosedDayController::class, 'destroy']);
+    });
 
     // Route::name('price.')->prefix('price')->group(function () {
     //     Route::get('/create', [PriceController::class, 'create'])->name('createPrice');
