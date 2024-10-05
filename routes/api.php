@@ -55,13 +55,12 @@ Route::name('admin.')->prefix('admin')->middleware(['auth:sanctum', 'verified', 
         Route::get('/closed-days', [AdminController::class, 'getAdminMenuClosedDays']);
     });
 
-    // Route::name('worktype.')->prefix('worktype')->group(function () {
-    //     Route::get('/create', [WorkTypesController::class, 'create'])->name('createWorktype');
-    //     Route::post('/create', [WorkTypesController::class, 'store']);
-    //     Route::get('/{worktype}', [WorkTypesController::class, 'edit'])->name('editWorktype');
-    //     Route::patch('/{worktype}', [WorkTypesController::class, 'update'])->name('showWorktype');
-    //     Route::delete('/delete/{worktype}', [WorkTypesController::class, 'destroy'])->name('deleteWorktype');
-    // });
+    Route::name('worktype.')->prefix('worktype')->group(function () {
+        Route::post('/create', [WorkTypesController::class, 'store']);
+        Route::get('/{worktype}', [WorkTypesController::class, 'edit']);
+        Route::patch('/{worktype}', [WorkTypesController::class, 'update']);
+        Route::delete('/{worktype}', [WorkTypesController::class, 'destroy']);
+    });
 
     // Route::name('closedDays.')->prefix('closed-days')->group(function () {
     //     Route::get('/create', [ClosedDayController::class, 'create'])->name('createClosedDay');
