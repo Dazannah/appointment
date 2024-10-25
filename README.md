@@ -36,6 +36,7 @@
 <div id="built-with">
     
 [![Laravel][Laravel.com]][Laravel-url]</br>
+[![Tailwind][Tailwindcss.com]][Tailwindcss-url]</br>
 [![MySQL][MySQL.com]][MySQL-url]
 
 </div>
@@ -80,5 +81,7 @@
 
 [Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
 [Laravel-url]: https://laravel.com
+[Tailwindcss.com]: https://img.shields.io/badge/Tailwind_CSS-grey?style=for-the-badge&logo=tailwind-css&logoColor=38B2AC
+[Tailwindcss-url]: https://tailwindcss.com/
 [MySQL.com]: https://shields.io/badge/MySQL-lightgrey?logo=mysql&style=plastic&logoColor=white&labelColor=blue
 [MySQL-url]: https://www.mysql.com/
