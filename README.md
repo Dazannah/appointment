@@ -22,6 +22,13 @@
             <li><a href="#installation">Installation</a></li>
         </ul>
     </li>
+    <li>
+        <a href="#implemented-features">Implemented features</a>
+        <ul>
+            <li><a href="#user-interface">User</a></li>
+            <li><a href="#admin-interface">Admin</a></li>
+        </ul>
+    </li>
 </ol>
 
 
@@ -67,17 +74,54 @@
    npm install
    npm run build
    ```
-3. Set up .env
-   ```
-   Copy .env.example to .env
-   Fill out the APP_ section
-   Fill out the DB_ section
-   Fill out the MAIL_ section
+3. Set up .env</br>
+   Copy .env.example to .env</br>
 
-   You will need an API key from szunetnapok.hu to be able to use the Fill holidays function
-   Add SZUNETNAPOK_API="API_KEY" to the end of file
-   ```
+   Fill out the APP_ section</br>
+   Fill out the DB_ section</br>
+   Fill out the MAIL_ section</br>
 
+   You will need an API key from szunetnapok.hu to be able to use the Fill holidays function</br>
+   Add SZUNETNAPOK_API="API_KEY" to the end of file</br>
+   
+5. Run migration
+    ```
+    php artisan migrate
+    ```
+    or to include some dummy data
+   ```
+    php artisan migrate --seed
+   ```
+   
+## Implemented features
+<div id="implemented-features"></div>
+
+### User interface
+<div id="user-interface"></div>
+<ul>
+    <li>Book appointments (can only see time slots as "booked" if not their own)</li>
+    <ul>
+        <li>Book the earliest available appointment for specific job types, on one click</li>
+        <li>Select a start time, and the system show the options that fit until the next appointment, or day close</li>
+        <li>Add notes to the appointment</li>
+    </ul>
+    <li>Edit own appointments</li>
+    <li>View booking history</li>
+</ul>
+
+### Admin interface
+<div id="user-interface"></div>
+<ul>
+    <li>Edit or ban users</li>
+    <li>Set working hours, default: 8:00-16:00</li>
+    <li>Set vacations: full day</li>
+    <li>Public holidays, default: closed</li>
+    <li>Edit appointments</li>
+    <li>Add notes to appointments (visible only to admin)</li>
+    <li>Add notes to appointments (visible to clients)</li>
+    <li>Add and edit work categories, set durations</li>
+    <li>Automatically mark booked appointments as successful after the time slot ends; can be manually changed to unsuccessful</li>
+</ul>
 
 [Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
 [Laravel-url]: https://laravel.com
